@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://garmentiq.ly.gd.edu.kg/sitemap.xml
