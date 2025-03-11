@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST Digit Classifier</title>
+</head>
+<body>
+    <h2>Upload an Image of a Digit</h2>
+    <input type="file" id="fileInput">
+    <button onclick="uploadImage()">Upload</button>
+    <p id="result"></p>
+
+    <script>
+        function uploadImage() {
+            let fileInput = document.getElementById('fileInput');
+            let file = fileInput.files[0];
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = "Predicted Digit: " + data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
