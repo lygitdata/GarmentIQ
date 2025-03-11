@@ -3,42 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MNIST Predictor</title>
+    <title>MNIST Digit Classifier</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        input, button { margin: 10px; padding: 8px; }
+        img { max-width: 200px; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <h1>MNIST Digit Recognizer</h1>
-    <label for="server-url">Enter Localhost URL:</label>
-    <input type="text" id="server-url" placeholder="http://127.0.0.1:5000">
-    <br><br>
-    <input type="file" id="file-input" accept="image/*">
+    <h2>MNIST Digit Classifier</h2>
+
+    <!-- Input field for API URL -->
+    <label for="apiUrl">Enter API URL:</label>
+    <input type="text" id="apiUrl" value="http://127.0.0.1:5000/predict" placeholder="Enter API URL">
+
+    <br>
+
+    <!-- File upload for image -->
+    <input type="file" id="imageUpload" accept="image/*">
+    <br>
+    <img id="preview" style="display: none;">
+    <br>
+
+    <!-- Submit button -->
     <button onclick="uploadImage()">Predict</button>
-    <p id="result"></p>
+    
+    <h3>Prediction: <span id="result">Waiting...</span></h3>
 
     <script>
+        // Show image preview
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let img = document.getElementById('preview');
+                img.src = reader.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        });
+
+        // Function to send image to API
         function uploadImage() {
-            const serverUrl = document.getElementById('server-url').value;
-            const fileInput = document.getElementById('file-input');
-            const resultText = document.getElementById('result');
-            
-            if (!serverUrl || !fileInput.files.length) {
-                alert("Please enter server URL and select an image.");
+            let apiUrl = document.getElementById('apiUrl').value;
+            let fileInput = document.getElementById('imageUpload').files[0];
+
+            if (!fileInput) {
+                alert("Please select an image first!");
                 return;
             }
-            
-            const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-            
-            fetch(serverUrl + "/predict", {
+
+            let formData = new FormData();
+            formData.append("file", fileInput);
+
+            fetch(apiUrl, {
                 method: "POST",
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                resultText.innerText = "Predicted Digit: " + data.prediction;
+                document.getElementById('result').innerText = data.prediction;
             })
             .catch(error => {
                 console.error("Error:", error);
-                resultText.innerText = "Error predicting digit.";
+                document.getElementById('result').innerText = "Error!";
             });
         }
     </script>
