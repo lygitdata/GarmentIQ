@@ -3,30 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MNIST Digit Classifier</title>
+    <title>MNIST Predictor</title>
 </head>
 <body>
-    <h2>Upload an Image of a Digit</h2>
-    <input type="file" id="fileInput">
-    <button onclick="uploadImage()">Upload</button>
+    <h1>MNIST Digit Recognizer</h1>
+    <label for="server-url">Enter Localhost URL:</label>
+    <input type="text" id="server-url" placeholder="http://127.0.0.1:5000">
+    <br><br>
+    <input type="file" id="file-input" accept="image/*">
+    <button onclick="uploadImage()">Predict</button>
     <p id="result"></p>
 
     <script>
         function uploadImage() {
-            let fileInput = document.getElementById('fileInput');
-            let file = fileInput.files[0];
-            let formData = new FormData();
-            formData.append("file", file);
-
-            fetch('/predict', {
-                method: 'POST',
+            const serverUrl = document.getElementById('server-url').value;
+            const fileInput = document.getElementById('file-input');
+            const resultText = document.getElementById('result');
+            
+            if (!serverUrl || !fileInput.files.length) {
+                alert("Please enter server URL and select an image.");
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            
+            fetch(serverUrl + "/predict", {
+                method: "POST",
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('result').innerText = "Predicted Digit: " + data.prediction;
+                resultText.innerText = "Predicted Digit: " + data.prediction;
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error("Error:", error);
+                resultText.innerText = "Error predicting digit.";
+            });
         }
     </script>
 </body>
