@@ -36,7 +36,7 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - Cleaned dataset: 14,874 images in total (13,362 images in train set; 1,485 images in test set)
 
-  `R` was used to clean the dataset, please see code below:
+  `R` was used to clean the dataset, please see code below. Make sure you have the images and `styles.csv` downloaded and put in the same directory as the R script before running the code.
 
   ```r
   rm(list = ls())
