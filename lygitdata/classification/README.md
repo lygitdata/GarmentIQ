@@ -2,6 +2,8 @@
 
 Last update: 03/12/2025
 
+WARNING: This demonstration uses your local machine's computing power. We are not in charge for any consequence of using this demonstration.
+
 **Demonstration**: https://garmentiq.ly.gd.edu.kg/lygitdata/classification/demo.html
 
 **Setup guide video**:
