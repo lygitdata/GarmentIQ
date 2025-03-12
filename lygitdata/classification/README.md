@@ -26,11 +26,11 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - Training time: ~ 1 hour on Colab with free plan GPU
 
-- Test accuracy: 93.74%
+- Test accuracy: 94.14%
 
-- Test F1 score: 0.9336
+- Test F1 score: 0.9395
 
-- Test cross entropy: 0.1785
+- Test cross entropy: 0.1624
 
 - Raw dataset: https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small
 
