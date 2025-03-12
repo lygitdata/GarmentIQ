@@ -22,6 +22,16 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - 5 types of garments: Kurtas, Pants, Shirts, Shorts, Tops
 
+- Model size in .pth format: 16.9 MB
+
+- Training time: ~ 1 hour on Colab with free plan GPU
+
+- Test accuracy: 93.74%
+
+- Test F1 score: 0.9336
+
+- Test cross entropy: 0.1785
+
 - Raw dataset: https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small
 
 - Cleaned dataset: 14,874 images in total (13,362 images in train set; 1,485 images in test set)
@@ -100,17 +110,4 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
   
   # Output the cleaned styles as apparel.csv
   write.csv(apparel, "apparel.csv", row.names = FALSE)
-  
-  # Zip the image folder as a whole (Windows)
-  system("powershell Compress-Archive -Path valid_images -DestinationPath valid_images.zip")
   ```
-
-- Model size in .pth format: 16.9 MB
-
-- Training time: ~ 1 hour on Colab with free plan GPU
-
-- Test accuracy: 93.74%
-
-- Test F1 score: 0.9336
-
-- Test cross entropy: 0.1785
