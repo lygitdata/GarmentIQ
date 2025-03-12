@@ -1,6 +1,6 @@
 # A simple CNN model for garment classification
 
-- Demo webpage: ![](https://garmentiq.ly.gd.edu.kg/lygitdata/classification/demo.html)
+- Demo webpage: [](https://garmentiq.ly.gd.edu.kg/lygitdata/classification/demo.html)
 
 - 5 types of garments: Kurtas, Pants, Shirts, Shorts, Tops
 
