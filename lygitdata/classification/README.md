@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/918d2a4b-6099-43ad-994b-e2ee392de6c6
 
 **Download link**: https://drive.google.com/file/d/1zHclZ1TJKcnrCo5Ln1ZC43ouQbl7tsAQ/view?usp=drive_link
 
-Download the zip file, then unzip it. You will see a folder named `dsl`, please upload the whole folder to your Google Drive root directory. Then open the notebook under `classification/main..pynb`.
+Download the zip file, then unzip it. You will see a folder named `dsl`, please upload the whole folder to your Google Drive root directory. Then open the notebook under `classification/main.ipynb`.
 
 ## Technical detail
 
