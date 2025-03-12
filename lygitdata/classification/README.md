@@ -4,13 +4,15 @@ Last update: 03/12/2025
 
 WARNING: This demonstration uses your local machine's computing power. We are not in charge for any consequence of using this demonstration.
 
-**Demonstration**: https://garmentiq.ly.gd.edu.kg/lygitdata/classification/demo.html
+## Demonstration 
+
+**Link**: https://garmentiq.ly.gd.edu.kg/lygitdata/classification/demo.html
 
 **Setup guide video**:
 
 https://github.com/user-attachments/assets/918d2a4b-6099-43ad-994b-e2ee392de6c6
 
-**Technical detail**:
+## Technical detail
 
 - 5 types of garments: Kurtas, Pants, Shirts, Shorts, Tops
 
