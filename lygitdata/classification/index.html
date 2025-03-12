@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MNIST Digit Classifier</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="https://static.gd.edu.kg/images/logo.svg">
+    <title>Garment Classifier Demonstration</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELSZ3SFQ2D"></script>
+    <script>
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+        window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "G-ELSZ3SFQ2D")
+    </script>
     <style>
         body {
             margin: 0;
@@ -141,11 +150,38 @@
         <div class="spinner"></div>
         <h2>Connecting to Service</h2>
         <p id="status-text">Initializing connection...</p>
+        <p>
+            Demonstration Setup Instruction:
+            <ol style="text-align: left;">
+                <li>
+                    <a href="https://github.com/lygitdata/GarmentIQ/raw/refs/heads/gh-pages/lygitdata/classification/apparel-classifier.zip" target="_blank" style="color: white;">
+                        Click here to download Docker configuration files.
+                    </a> Then unzip it.
+                </li>
+                <li>
+                    Run command "<code>cd apparel-classifier</code>"" in your Docker terminal. Change the path if needed.
+                </li>
+                <li>
+                    Run command "<code>docker build --no-cache -t apparel-classifier .</code>" in your Docker terminal. This may take 10 - 20 minutes.
+                </li>
+                <li>
+                    Run command "<code>docker run -p 5000:5000 --gpus all --rm apparel-classifier</code>" in your Docker terminal.
+                </li>
+                <li>
+                    <a href="https://github.com/lygitdata/GarmentIQ/raw/refs/heads/gh-pages/lygitdata/classification/test_set.zip" target="_blank" style="color: white;">
+                        Click here to download test images.
+                    </a>
+                </li>
+                <li>
+                    Click on the following button to start. You can drag or select test images to see the effect of the model.
+                </li>
+            </ol>
+        </p>
         <button id="refresh-btn" style="display: none;">Retry Connection</button>
     </div>
 
     <div class="main-content">
-        <h1 style="margin: 0 0 2rem 0; color: #1a1a1a;">MNIST Digit Classifier</h1>
+        <h1 style="margin: 0 0 2rem 0; color: #1a1a1a;">Garment Classifier Demonstration</h1>
         
         <label>
             <div class="upload-area">
