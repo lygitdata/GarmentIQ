@@ -29,7 +29,80 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
   `R` was used to clean the dataset, please see code below:
 
   ```r
+  rm(list = ls())
+  library("tidyverse")
   
+  # Clean data
+  apparel = read.csv("styles.csv")[, c("id", "masterCategory", "subCategory", "articleType")] %>%
+    filter(masterCategory == "Apparel" & (subCategory == "Topwear" | subCategory == "Bottomwear")) %>%
+    filter(masterCategory == "Apparel" & subCategory %in% c("Topwear", "Bottomwear")) %>%
+    filter(complete.cases(.) & !apply(., 1, function(x) any(x == ""))) %>%
+    filter(articleType %in% names(table(articleType)[table(articleType) > 454])) %>%
+    mutate(articleType = recode(articleType,
+                                "Tshirts" = "Shirts", 
+                                "Shirts" = "Shirts", 
+                                "Jeans" = "Pants", 
+                                "Trousers" = "Pants")) %>%
+    select(id, articleType)
+  
+  # Copy the valid images to a new directory
+  new_folder = "valid_images/"
+  dir.create(new_folder, showWarnings = FALSE)
+  valid_ids = as.character(apparel$id)
+  image_files = list.files("images/", pattern = "\\.jpg$", full.names = TRUE)
+  file_ids = tools::file_path_sans_ext(basename(image_files))
+  
+  # Track missing files
+  missing_ids = character(0)
+  copied_ids = character(0)
+  
+  # Copy valid images
+  for (img_path in image_files) {
+    file_id = tools::file_path_sans_ext(basename(img_path))
+    if (file_id %in% valid_ids) {
+      dest_path = file.path(new_folder, basename(img_path))
+      if (file.copy(img_path, dest_path)) {
+        copied_ids = c(copied_ids, file_id)
+      }
+    } else {
+      missing_ids = c(missing_ids, file_id)
+    }
+  }
+  
+  # Find IDs that SHOULD have been copied but had no images
+  expected_but_missing = setdiff(valid_ids, file_ids)
+  
+  # Console report
+  cat("===== Copying Summary =====\n")
+  cat("Successfully copied:", length(copied_ids), "images\n")
+  cat("Images in folder not copied (invalid IDs):", length(missing_ids), "\n")
+  cat("IDs in dataframe missing images:", length(expected_but_missing), "\n\n")
+  
+  if (length(expected_but_missing) > 0) {
+    cat("These valid IDs had no corresponding images:\n")
+    print(expected_but_missing)
+  }
+  
+  if (length(missing_ids) > 0) {
+    cat("\nThese image IDs were ignored (not in dataframe):\n")
+    print(missing_ids)
+  }
+  
+  # Delete those unmatched records
+  apparel = apparel[apparel$id != "39403",]
+  apparel = apparel[apparel$id != "39410",]
+  apparel = apparel[apparel$id != "39401",]
+  apparel = apparel[apparel$id != "39425",]
+  
+  # Verify the image names and id's are exactly the same
+  valid_image_files = sub("\\.jpg$", "", basename(list.files("valid_images/", pattern = "\\.jpg$", full.names = TRUE)))
+  length(intersect(valid_image_files, apparel$id))
+  
+  # Output the cleaned styles as apparel.csv
+  write.csv(apparel, "apparel.csv", row.names = FALSE)
+  
+  # Zip the image folder as a whole (Windows)
+  system("powershell Compress-Archive -Path valid_images -DestinationPath valid_images.zip")
   ```
 
 - Model size in .pth format: 16.9 MB
