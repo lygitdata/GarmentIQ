@@ -18,7 +18,7 @@ https://github.com/user-attachments/assets/918d2a4b-6099-43ad-994b-e2ee392de6c6
 
 - Model size in .pth format: 16.9 MB
 
-- Training time: ~ 1 hour on Colab with GPU
+- Training time: ~ 1 hour on Colab with free plan GPU
 
 - Test accuracy: 93.74%
 
