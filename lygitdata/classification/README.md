@@ -40,7 +40,24 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 ## Model Metrics on Test Set
 
+- Cross entropy: 0.0881
+  
+- Accuracy: 0.9801
 
+- F1 Score: 0.9791
+
+Classification Report:
+                precision    recall  f1-score   support
+
+         Dress       0.94      0.71      0.81        45
+         Pants       0.98      0.98      0.98       226
+         Skirt       0.58      0.92      0.71        12
+Sleeveless top       0.00      0.00      0.00         4
+           Top       0.99      0.99      0.99      1171
+
+      accuracy                           0.98      1458
+     macro avg       0.70      0.72      0.70      1458
+  weighted avg       0.98      0.98      0.98      1458
 
 ## Data Information
 
