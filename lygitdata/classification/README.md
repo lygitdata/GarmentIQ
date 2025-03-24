@@ -26,7 +26,10 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - Training time: ~ 4 hour on Colab with free plan GPU
 
-- **Issues**: 1) Small sample size for `Sleeveless top`; 2) a few misleading images in `Skirt`; 3) cannot find requested garment type for overalls.
+- **Issues**:
+    1. Cannot find requested garment type for overalls in the raw data.
+    2. Small sample size for `Sleeveless top`, some sweaters can be included in this type, but manually inspection and modification on more than 200 sweater images are required.
+    3. A few misleading images in `Skirt`.
 
 ## Model Metrics
 
