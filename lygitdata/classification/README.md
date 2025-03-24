@@ -38,13 +38,9 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
     2. Small sample size for `Sleeveless top`, some sweaters can be included in this type, but manually inspection and modification on more than 200 sweater images are required.
     3. A few misleading images in `Skirt`.
 
-## Model Metrics
+## Model Metrics on Test Set
 
-- Test accuracy: TBD
 
-- Test F1 score: TBD
-
-- Test cross entropy: TBD
 
 ## Data Information
 
