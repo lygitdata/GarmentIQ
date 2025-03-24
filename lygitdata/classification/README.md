@@ -46,6 +46,7 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - F1 Score: 0.9791
 
+```
 Classification Report:
                 precision    recall  f1-score   support
 
@@ -58,6 +59,7 @@ Sleeveless top       0.00      0.00      0.00         4
       accuracy                           0.98      1458
      macro avg       0.70      0.72      0.70      1458
   weighted avg       0.98      0.98      0.98      1458
+```
 
 ## Data Information
 
