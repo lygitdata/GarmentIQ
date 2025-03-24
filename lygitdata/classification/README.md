@@ -26,11 +26,17 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - Training time: ~ 4 hour on Colab with free plan GPU
 
+- **Issues**: 1) Small sample size for `Sleeveless top`; 2) a few misleading images in `Skirt`; 3) cannot find requested garment type for overalls.
+
+## Model Metrics
+
 - Test accuracy: TBD
 
 - Test F1 score: TBD
 
 - Test cross entropy: TBD
+
+## Data Information
 
 - Raw dataset: https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small
 
