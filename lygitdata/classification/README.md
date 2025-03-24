@@ -20,9 +20,16 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 ## Technical detail
 
-- 5 types of garments: `Dress` (sample size 449), `Pants` (sample size 2,257), `Skirt` (sample size 125), `Sleeveless top` (sample size 37), `Top` (sample size 11,709)
+- 5 types of garments:
+    - `Dress` (sample size 449)
+    - `Pants` (sample size 2,257)
+    - `Skirt` (sample size 125)
+    - `Sleeveless top` (sample size 37)
+    - `Top` (sample size 11,709)
 
 - Model size in .pth format: 16.9 MB
+
+- Trainable parameters of the model: ~ 4.4 million
 
 - Training time: ~ 4 hour on Colab with free plan GPU
 
