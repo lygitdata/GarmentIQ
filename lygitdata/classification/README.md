@@ -1,6 +1,6 @@
 # A simple CNN model for garment classification
 
-Last update: 03/12/2025
+Last update: 03/24/2025
 
 WARNING: This demonstration uses your local machine's computing power. We are not in charge for any consequence of using this demonstration.
 
@@ -20,21 +20,23 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 ## Technical detail
 
-- 5 types of garments: Kurtas, Pants, Shirts, Shorts, Tops
+- 5 types of garments: `Dress` (sample size 449), `Pants` (sample size 2,257), `Skirt` (sample size 125), `Sleeveless top` (sample size 37), `Top` (sample size 11,709)
 
 - Model size in .pth format: 16.9 MB
 
-- Training time: ~ 1 hour on Colab with free plan GPU
+- Training time: ~ 4 hour on Colab with free plan GPU
 
-- Test accuracy: 94.14%
+- Test accuracy: TBD
 
-- Test F1 score: 0.9395
+- Test F1 score: TBD
 
-- Test cross entropy: 0.1624
+- Test cross entropy: TBD
 
 - Raw dataset: https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small
 
-- Cleaned dataset: 14,874 images in total (13,362 images in train set; 1,485 images in test set)
+- Cleaned dataset: 14,577 images in total (13,119 images in train set; 1,458 images in test set)
+
+  You do not need to run the following code to run the demo.
 
   `R` was used to clean the dataset, please see code below. Make sure you have the images in the folder `images` and `styles.csv` downloaded and put in the same directory as the R script before running the code.
 
@@ -43,17 +45,58 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
   library("tidyverse")
   
   # Clean data
-  apparel = read.csv("styles.csv")[, c("id", "masterCategory", "subCategory", "articleType")] %>%
-    filter(masterCategory == "Apparel" & (subCategory == "Topwear" | subCategory == "Bottomwear")) %>%
-    filter(masterCategory == "Apparel" & subCategory %in% c("Topwear", "Bottomwear")) %>%
-    filter(complete.cases(.) & !apply(., 1, function(x) any(x == ""))) %>%
-    filter(articleType %in% names(table(articleType)[table(articleType) > 454])) %>%
-    mutate(articleType = recode(articleType,
-                                "Tshirts" = "Shirts", 
-                                "Shirts" = "Shirts", 
-                                "Jeans" = "Pants", 
-                                "Trousers" = "Pants")) %>%
-    select(id, articleType)
+  apparel = read.csv("styles.csv") %>%
+    filter(masterCategory == "Apparel") %>%
+    filter(subCategory %in% c("Bottomwear", "Dress", "Topwear")) %>%
+    mutate(articleType = ifelse(
+      grepl("sleeveless", productDisplayName, ignore.case = TRUE),
+      "sleeveless",
+      articleType
+    )) %>%
+    select(id, articleType)%>%
+    filter(complete.cases(.) &
+             !apply(., 1, function(x)
+               any(x == ""))) %>%
+    filter(
+      articleType %in% c(
+        "Skirts",
+        "sleeveless",
+        "Dresses",
+        "Jumpsuit",
+        "Jackets",
+        "Shirts",
+        "Tops",
+        "Tshirts",
+        "Jeans",
+        "Capris",
+        "Jeggings",
+        "Leggings",
+        "Shorts",
+        "Track Pants",
+        "Trousers"
+      )
+    ) %>%
+    mutate(
+      articleType = case_when(
+        articleType == "Skirts" ~ "Skirt",
+        articleType == "sleeveless" ~ "Sleeveless top",
+        articleType %in% c("Dresses", "Jumpsuit") ~ "Dress",
+        articleType %in% c("Jackets", "Shirts", "Tops", "Tshirts") ~ "Top",
+        articleType %in% c(
+          "Jeans",
+          "Capris",
+          "Jeggings",
+          "Leggings",
+          "Shorts",
+          "Track Pants",
+          "Trousers"
+        ) ~ "Pants",
+      )
+    )
+    
+  
+  # See statistics summary
+  summary(as.factor(apparel$articleType))
   
   # Copy the valid images to a new directory
   new_folder = "valid_images/"
@@ -82,32 +125,22 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
   # Find IDs that SHOULD have been copied but had no images
   expected_but_missing = setdiff(valid_ids, file_ids)
   
-  # Console report
-  cat("===== Copying Summary =====\n")
-  cat("Successfully copied:", length(copied_ids), "images\n")
-  cat("Images in folder not copied (invalid IDs):", length(missing_ids), "\n")
-  cat("IDs in dataframe missing images:", length(expected_but_missing), "\n\n")
-  
-  if (length(expected_but_missing) > 0) {
-    cat("These valid IDs had no corresponding images:\n")
-    print(expected_but_missing)
-  }
-  
-  if (length(missing_ids) > 0) {
-    cat("\nThese image IDs were ignored (not in dataframe):\n")
-    print(missing_ids)
-  }
-  
   # Delete those unmatched records
-  apparel = apparel[apparel$id != "39403",]
-  apparel = apparel[apparel$id != "39410",]
-  apparel = apparel[apparel$id != "39401",]
-  apparel = apparel[apparel$id != "39425",]
+  if (length(expected_but_missing) > 0) {
+    for (i in expected_but_missing) {
+      apparel = apparel[apparel$id != i,]
+    }
+  }
   
   # Verify the image names and id's are exactly the same
-  valid_image_files = sub("\\.jpg$", "", basename(list.files("valid_images/", pattern = "\\.jpg$", full.names = TRUE)))
+  valid_image_files = sub("\\.jpg$", "", basename(
+    list.files("valid_images/", pattern = "\\.jpg$", full.names = TRUE)
+  ))
   length(intersect(valid_image_files, apparel$id))
   
   # Output the cleaned styles as apparel.csv
   write.csv(apparel, "apparel.csv", row.names = FALSE)
+  
+  # See statistics summary
+  summary(as.factor(apparel$articleType))
   ```
