@@ -1,6 +1,6 @@
 # A simple CNN model for garment classification
 
-Last update: 03/24/2025
+Last update: 03/25/2025
 
 WARNING: This demonstration uses your local machine's computing power. We are not in charge for any consequence of using this demonstration.
 
@@ -35,8 +35,9 @@ Download the zip file, then unzip it. You will see a folder named `dsl`, please 
 
 - **Issues**:
     1. Cannot find requested garment type for overalls in the raw data.
-    2. Small sample size for `Sleeveless top`, some sweaters can be included in this type, but manually inspection and modification on more than 200 sweater images are required.
-    3. A few misleading images in `Skirt`.
+    2. There are only 15 jumpsuits, which is too few. Currently it is included in the type `Dress`, but this might have negative effect to the model as the shape of a jumpsuit is different from a dress.
+    3. Small sample size for `Sleeveless top`, some sweaters can be included in this type, but manually inspection and modification on more than 200 sweater images are required.
+    4. A few misleading images in `Skirt`.
 
 ## Model Metrics on Test Set
 
