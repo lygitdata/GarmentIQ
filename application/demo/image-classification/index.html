@@ -67,6 +67,82 @@
                     url('/asset/fonts/inter-v12-latin-700.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
+
+            .spinner {
+                width: 30px;
+                height: 30px;
+                border: 4px solid rgba(0, 0, 0, 0.3);
+                border-top-color: black;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 1rem 0;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .preview-container {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 1rem 0;
+            }
+
+            .preview-item {
+                position: relative;
+                max-width: 100px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .preview-item img {
+                width: 100%;
+                height: auto;
+            }
+
+            #result {
+                font-size: 2.5rem;
+                color: #007bff;
+                margin: 1rem 0;
+                font-weight: bold;
+            }
+
+            .main-content {
+                background: white;
+                padding: 2rem;
+                border-radius: 16px;
+                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                margin: 2rem;
+                display: none;
+            }
+
+            .upload-area {
+                width: 100%;
+                border: 2px dashed #007bff;
+                border-radius: 12px;
+                padding: 2.5rem;
+                margin: 1rem 0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .upload-area:hover {
+                background: rgba(0, 123, 255, 0.05);
+                border-color: #0056b3;
+            }
+
+            #preview {
+                max-width: 200px;
+                margin: 1rem auto;
+                border-radius: 8px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                display: none;
+            }
         </style>
     </head>
     <body data-bs-spy="scroll" data-bs-target="#navScroll">
@@ -79,8 +155,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
             </div>
         </nav>
         <main>
@@ -100,15 +175,52 @@
                         </div>
                         <div class="row d-flex align-items-start mt-5 border-top pt-5" data-aos="fade">
                             <div class="col-12">
-                                <p>Demo here.</p>
+                                <div id="runtime-overlay">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <h2>Connecting to Runtime</h2>
+                                        <div class="spinner"></div>
+                                    </div>
+                                    <p id="status-text">Initializing connection...</p>
+                                    <p> Demonstration Setup Instruction:
+                                    <ol style="text-align: left;">
+                                        <li>
+                                            <a href="demo1.zip" target="_blank" class="link-fancy"> Click here to download Docker configuration files. </a> Then unzip it.
+                                        </li>
+                                        <li> Run command " <code>cd apparel-classifier</code>" in your Docker terminal. Change the path if needed. </li>
+                                        <li> Run command " <code>docker build -t apparel-classifier .</code>" in your Docker terminal. This may take 10 - 20 minutes. </li>
+                                        <li> Run command " <code>docker run -p 5000:5000 --gpus all --rm apparel-classifier</code>" in your Docker terminal. </li>
+                                        <li>
+                                            <a href="demo1_test_set.zip" target="_blank" class="link-fancy"> Click here to download test images. </a>
+                                        </li>
+                                        <li> Click on the following button to start. You can drag or select test images to see the effect of the model. </li>
+                                    </ol>
+                                    </p>
+                                    <button id="refresh-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Retry Connection</button>
+                                </div>
+                                <div class="main-content">
+                                    <label style="width: 100%;">
+                                        <div class="upload-area">
+                                            <!-- Add multiple attribute -->
+                                            <input type="file" id="imageUpload" accept="image/*" hidden multiple>
+                                            <div style="color: #007bff;"> 📁 Click to upload images </div>
+                                            <div style="margin-top: 0.5rem;"> Supported formats: PNG, JPG, JPEG (multiple selection enabled) </div>
+                                        </div>
+                                    </label>
+                                    <!-- Change to preview container -->
+                                    <div class="preview-container" id="previewContainer"></div>
+                                    <button onclick="uploadImage()" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Analyze Images</button>
+                                    <div style="margin-top: 2rem;">
+                                        <div>Prediction Results</div>
+                                        <div id="result">NA</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-        <footer id="footer">
-        </footer>
+        <footer id="footer"></footer>
         <script src="/asset/js/headerMenu.js"></script>
         <script src="/asset/js/footer.js"></script>
         <script src="/asset/js/bootstrap.bundle.min.js"></script>
@@ -133,6 +245,110 @@
                 }
                 console.log(scrollpos)
             })
+        </script>
+        <script>
+            const API_URL = 'http://127.0.0.1:5000/predict';
+            const HEALTH_URL = 'http://127.0.0.1:5000/health';
+            const EXPECTED_TOKEN = 'fe9def684914b305540615b3bba461fbf8ea58f460c72b1fe128d3cef93fe4f8';
+            let isServerReady = false;
+            const overlay = document.getElementById('runtime-overlay');
+            const statusText = document.getElementById('status-text');
+            const refreshBtn = document.getElementById('refresh-btn');
+            // Initial check
+            checkServerStatus();
+            document.getElementById('imageUpload').addEventListener('change', function(e) {
+                const container = document.getElementById('previewContainer');
+                container.innerHTML = ''; // Clear previous previews
+                // Create array of promises that resolve in order
+                const files = Array.from(e.target.files);
+                const readers = files.map(file => {
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve({
+                            content: reader.result,
+                            index: files.indexOf(file)
+                        });
+                        reader.readAsDataURL(file);
+                    });
+                });
+                // Create placeholder elements first
+                const placeholders = files.map((_, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'preview-item';
+                    div.innerHTML = `
+                                                            <div class="loading-spinner"></div>`;
+                    container.appendChild(div);
+                    return {
+                        div,
+                        index
+                    };
+                });
+                // Process in parallel but maintain order
+                Promise.all(readers).then(results => {
+                    results.forEach(({
+                        content,
+                        index
+                    }) => {
+                        const img = document.createElement('img');
+                        img.src = content;
+                        placeholders[index].div.innerHTML = '';
+                        placeholders[index].div.appendChild(img);
+                    });
+                });
+            });
+            // Server status check
+            async function checkServerStatus() {
+                try {
+                    statusText.textContent = "Checking server status...";
+                    refreshBtn.style.display = 'none';
+                    const response = await fetch(HEALTH_URL);
+                    if (!response.ok) throw new Error('Server not responding');
+                    const data = await response.json();
+                    if (data.token !== EXPECTED_TOKEN) throw new Error('Security verification failed');
+                    // Success
+                    isServerReady = true;
+                    overlay.style.display = 'none';
+                    document.querySelector('.main-content').style.display = 'block';
+                } catch (error) {
+                    statusText.textContent = `Error: ${error.message}`;
+                    refreshBtn.style.display = 'block';
+                    isServerReady = false;
+                }
+            }
+            // Image analysis
+            async function uploadImage() {
+                if (!isServerReady) {
+                    alert('Service connection not established');
+                    return;
+                }
+                const files = document.getElementById('imageUpload').files;
+                if (!files.length) {
+                    alert("Please select images first!");
+                    return;
+                }
+                try {
+                    document.getElementById('result').textContent = '⏳ Analyzing...';
+                    const predictions = [];
+                    // Process files sequentially
+                    for (const file of files) {
+                        const formData = new FormData();
+                        formData.append("file", file);
+                        const response = await fetch(API_URL, {
+                            method: "POST",
+                            body: formData
+                        });
+                        if (!response.ok) throw new Error('Analysis failed');
+                        const data = await response.json();
+                        predictions.push(data.prediction);
+                    }
+                    document.getElementById('result').textContent = predictions.join(', ');
+                } catch (error) {
+                    console.error("Error:", error);
+                    document.getElementById('result').textContent = '❌ Error processing some images';
+                }
+            }
+            // Event listeners
+            refreshBtn.addEventListener('click', checkServerStatus);
         </script>
     </body>
 </html>
