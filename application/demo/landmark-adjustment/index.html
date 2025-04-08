@@ -30,6 +30,7 @@
         <meta name="twitter:description" content="GarmentIQ - Demo | Garment landmark adjustment">
         <meta name="twitter:image" content="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg">
         <link rel="stylesheet" href="/asset/css/theme.min.css">
+        <link rel="stylesheet" href="/asset/css/demo/landmark-adjustment.css">
         <style>
             /* inter-300 - latin */
             @font-face {
@@ -79,8 +80,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
             </div>
         </nav>
         <main>
@@ -90,7 +90,7 @@
                         <div class="row">
                             <div class="col-12 py-vh-4">
                                 <h1 class="display-huge fw-bold lh-1" data-aos="fade-down">Demo 5: Garment landmark adjustment</h1>
-                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 04/07/2025</span>
+                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 04/08/2025</span>
                                 <div class="mt-4 d-flex justify-content-center" data-aos="fade-down" data-aos-delay="200">
                                     <svg viewbox="0 0 29 107" xmlns="http://www.w3.org/2000/svg" style="width:10px;" data-aos="fade-down">
                                         <path d="M15.425 106.639l13.116-12.42c.55-.446.615-1.23.144-1.751a1.363 1.363 0 0 0-1.993 0l-10.887 10.296V1.242C15.805.556 15.218 0 14.493 0c-.724 0-1.311.556-1.311 1.242v101.522L2.308 92.468a1.363 1.363 0 0 0-1.85-.136 1.197 1.197 0 0 0 0 1.887l13.117 12.42a1.364 1.364 0 0 0 1.85 0z" fill="#000" fill-rule="evenodd"></path>
@@ -100,19 +100,38 @@
                         </div>
                         <div class="row d-flex align-items-start mt-5 border-top pt-5" data-aos="fade">
                             <div class="col-12">
-                                <p>Demo here.</p>
+                                <div class="container" data-aos="fade">
+                                    <label style="width: 100%;">
+                                        <div class="upload-area">
+                                            <input type="file" id="imageInput" accept=".jpg,.jpeg,.png" hidden>
+                                            <div style="color: #007bff;"> 📁 Click to choose an image </div>
+                                            <div style="margin-top: 0.5rem;"> Supported formats: PNG, JPG, JPEG</div>
+                                        </div>
+                                    </label>
+                                    <div class="controls">
+                                        <button onclick="zoom(1.2)">Zoom In</button>
+                                        <button onclick="zoom(0.8)">Zoom Out</button>
+                                        <button id="dragModeButton" onclick="toggleDragMode()"> Drag Mode ( <span id="dragStatus">Off</span>) </button>
+                                        <button id="removeModeButton" onclick="toggleRemoveMode()"> Remove Landmark Mode ( <span id="removeStatus">Off</span>) </button>
+                                        <button onclick="resetLandmarks()">Reset Landmarks</button>
+                                        <br>
+                                        <button onclick="exportImage()">Export Annotated Image</button>
+                                        <button onclick="exportMetadata()">Export Metadata</button>
+                                    </div>
+                                    <canvas id="landmarkCanvas"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-        <footer id="footer">
-        </footer>
+        <footer id="footer"></footer>
         <script src="/asset/js/headerMenu.js"></script>
         <script src="/asset/js/footer.js"></script>
         <script src="/asset/js/bootstrap.bundle.min.js"></script>
         <script src="/asset/js/aos.js"></script>
+        <script src="/asset/js/demo/landmark-adjustment.js"></script>
         <script>
             AOS.init({
                 duration: 800, // values from 0 to 3000, with step 50ms
