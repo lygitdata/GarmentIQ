@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p class="text-center" style="margin-top: 50px;"> &copy; GarmentIQ.ly.gd.edu.kg </p>
                 <p class="text-center" xmlns:cc="http://creativecommons.org/ns#"> This webpage is licensed under <a href="https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" class="link-fancy" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution 4.0 International <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
                         <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
-                    </a>
+                    </a>, unless otherwise specified.
                 </p>
                 <p class="text-center">Last update of this website: 04/08/2025</p>
                 <p class="text-center">
