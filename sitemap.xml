@@ -9,8 +9,29 @@
 
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/</loc>
-  <lastmod>2023-12-04T01:28:30+00:00</lastmod>
+  <lastmod>2025-04-08T11:35:49+00:00</lastmod>
   <priority>1.00</priority>
 </url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/application/</loc>
+  <lastmod>2025-04-08T11:35:50+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/</loc>
+  <lastmod>2025-04-08T11:35:50+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/</loc>
+  <lastmod>2025-04-08T11:35:50+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/application/demo/</loc>
+  <lastmod>2025-04-08T11:35:50+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
 
 </urlset>
