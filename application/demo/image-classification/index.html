@@ -30,6 +30,7 @@
         <meta name="twitter:description" content="GarmentIQ - Demo | Garment image classification">
         <meta name="twitter:image" content="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg">
         <link rel="stylesheet" href="/asset/css/theme.min.css">
+        <link rel="stylesheet" href="/asset/css/demo/image-classification.css">
         <style>
             /* inter-300 - latin */
             @font-face {
@@ -66,82 +67,6 @@
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
                     url('/asset/fonts/inter-v12-latin-700.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-            }
-
-            .spinner {
-                width: 30px;
-                height: 30px;
-                border: 4px solid rgba(0, 0, 0, 0.3);
-                border-top-color: black;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin: 1rem 0;
-            }
-
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-
-            .preview-container {
-                display: flex;
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-                margin: 1rem 0;
-            }
-
-            .preview-item {
-                position: relative;
-                max-width: 100px;
-                overflow: hidden;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .preview-item img {
-                width: 100%;
-                height: auto;
-            }
-
-            #result {
-                font-size: 2.5rem;
-                color: #007bff;
-                margin: 1rem 0;
-                font-weight: bold;
-            }
-
-            .main-content {
-                background: white;
-                padding: 2rem;
-                border-radius: 16px;
-                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-                width: 100%;
-                margin: 2rem;
-                display: none;
-            }
-
-            .upload-area {
-                width: 100%;
-                border: 2px dashed #007bff;
-                border-radius: 12px;
-                padding: 2.5rem;
-                margin: 1rem 0;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-
-            .upload-area:hover {
-                background: rgba(0, 123, 255, 0.05);
-                border-color: #0056b3;
-            }
-
-            #preview {
-                max-width: 200px;
-                margin: 1rem auto;
-                border-radius: 8px;
-                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-                display: none;
             }
         </style>
     </head>
@@ -226,6 +151,7 @@
         <script src="/asset/js/footer.js"></script>
         <script src="/asset/js/bootstrap.bundle.min.js"></script>
         <script src="/asset/js/aos.js"></script>
+        <script src="/asset/js/demo/image-classification.js"></script>
         <script>
             AOS.init({
                 duration: 800, // values from 0 to 3000, with step 50ms
@@ -246,110 +172,6 @@
                 }
                 console.log(scrollpos)
             })
-        </script>
-        <script>
-            const API_URL = 'http://127.0.0.1:5000/predict';
-            const HEALTH_URL = 'http://127.0.0.1:5000/health';
-            const EXPECTED_TOKEN = 'fe9def684914b305540615b3bba461fbf8ea58f460c72b1fe128d3cef93fe4f8';
-            let isServerReady = false;
-            const overlay = document.getElementById('runtime-overlay');
-            const statusText = document.getElementById('status-text');
-            const refreshBtn = document.getElementById('refresh-btn');
-            // Initial check
-            checkServerStatus();
-            document.getElementById('imageUpload').addEventListener('change', function(e) {
-                const container = document.getElementById('previewContainer');
-                container.innerHTML = ''; // Clear previous previews
-                // Create array of promises that resolve in order
-                const files = Array.from(e.target.files);
-                const readers = files.map(file => {
-                    return new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve({
-                            content: reader.result,
-                            index: files.indexOf(file)
-                        });
-                        reader.readAsDataURL(file);
-                    });
-                });
-                // Create placeholder elements first
-                const placeholders = files.map((_, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'preview-item';
-                    div.innerHTML = `
-                                                            <div class="loading-spinner"></div>`;
-                    container.appendChild(div);
-                    return {
-                        div,
-                        index
-                    };
-                });
-                // Process in parallel but maintain order
-                Promise.all(readers).then(results => {
-                    results.forEach(({
-                        content,
-                        index
-                    }) => {
-                        const img = document.createElement('img');
-                        img.src = content;
-                        placeholders[index].div.innerHTML = '';
-                        placeholders[index].div.appendChild(img);
-                    });
-                });
-            });
-            // Server status check
-            async function checkServerStatus() {
-                try {
-                    statusText.textContent = "Checking server status...";
-                    refreshBtn.style.display = 'none';
-                    const response = await fetch(HEALTH_URL);
-                    if (!response.ok) throw new Error('Server not responding');
-                    const data = await response.json();
-                    if (data.token !== EXPECTED_TOKEN) throw new Error('Security verification failed');
-                    // Success
-                    isServerReady = true;
-                    overlay.style.display = 'none';
-                    document.querySelector('.main-content').style.display = 'block';
-                } catch (error) {
-                    statusText.textContent = `Error: ${error.message}`;
-                    refreshBtn.style.display = 'block';
-                    isServerReady = false;
-                }
-            }
-            // Image analysis
-            async function uploadImage() {
-                if (!isServerReady) {
-                    alert('Service connection not established');
-                    return;
-                }
-                const files = document.getElementById('imageUpload').files;
-                if (!files.length) {
-                    alert("Please select images first!");
-                    return;
-                }
-                try {
-                    document.getElementById('result').textContent = '⏳ Analyzing...';
-                    const predictions = [];
-                    // Process files sequentially
-                    for (const file of files) {
-                        const formData = new FormData();
-                        formData.append("file", file);
-                        const response = await fetch(API_URL, {
-                            method: "POST",
-                            body: formData
-                        });
-                        if (!response.ok) throw new Error('Analysis failed');
-                        const data = await response.json();
-                        predictions.push(data.prediction);
-                    }
-                    document.getElementById('result').textContent = predictions.join(', ');
-                } catch (error) {
-                    console.error("Error:", error);
-                    document.getElementById('result').textContent = '❌ Error processing some images';
-                }
-            }
-            // Event listeners
-            refreshBtn.addEventListener('click', checkServerStatus);
         </script>
     </body>
 </html>
