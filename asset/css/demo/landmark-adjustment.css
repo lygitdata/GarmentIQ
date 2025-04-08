@@ -1,0 +1,61 @@
+.controls {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    text-align: center;
+}
+/* Canvas styling */
+#landmarkCanvas {
+    width: 100%; /* Take full width of container */
+    height: 550px; /* Fixed height */
+    border: 1px solid #ccc;
+    margin: 0 auto; /* Center canvas if container is wider */
+    cursor: crosshair; /* Default cursor */
+    background-color: #f0f0f0; /* Light grey background */
+    display: block; /* Prevent extra space below */
+}
+/* Control buttons styling */
+.controls button,
+.controls input[type="file"] {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #eee;
+}
+.controls button:hover {
+    background-color: #ddd;
+}
+.controls button.active {
+    background-color: #a0a0a0;
+    font-weight: bold;
+    color: white;
+    border-color: #888;
+}
+#imageInput {
+     display: block;
+     margin: 10px auto;
+}
+#dragStatus, #removeStatus {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 25px; /* Prevent layout shift */
+}
+.upload-area {
+    width: 100%;
+    border: 2px dashed #007bff;
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin: 1rem 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+    background: rgba(0, 123, 255, 0.05);
+    border-color: #0056b3;
+}
