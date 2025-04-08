@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p class="text-center">
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/privacy-policy/">Privacy Policy</a>
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/cookie-policy/">Cookie Policy</a>
+                    <a class="link-fancy" target="_blank" href="https://garmentiq.ly.gd.edu.kg/sitemap.xml">Site Map</a>
                 </p>
                 <p class="text-center" style="margin-top: 50px; font-size: 8px;"> Website template provided by <a href="https://templatedeck.com" class="link-fancy" target="_blank">templatedeck.com</a>. </p>
             </div>
