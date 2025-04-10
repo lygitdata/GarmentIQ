@@ -56,9 +56,9 @@ def train_test_split(
 
         return {
             "train_images": f"{train_out}/images",
-            "train_metadata": f"{train_out}/metadata.csv",
+            "train_metadata": pd.read_csv(f"{train_out}/metadata.csv"),
             "test_images": f"{test_out}/images",
-            "test_metadata": f"{test_out}/metadata.csv",
+            "test_metadata": pd.read_csv(f"{test_out}/metadata.csv"),
         }
 
     # If no test zip is provided, split from train data
@@ -112,9 +112,9 @@ def train_test_split(
 
     return {
         "train_images": f"{train_out}/images",
-        "train_metadata": f"{train_out}/metadata.csv",
+        "train_metadata": pd.read_csv(f"{train_out}/metadata.csv"),
         "test_images": f"{test_out}/images",
-        "test_metadata": f"{test_out}/metadata.csv",
+        "test_metadata": pd.read_csv(f"{test_out}/metadata.csv"),
     }
 
     # If any mismatch found, remove the output directory and raise an error
