@@ -37,7 +37,7 @@ def train_pytorch_nn(
     :type dataset_class: Callable
     :param dataset_args: Dictionary with dataset components:
         - 'metadata_df' (pandas.DataFrame): Metadata with labels, used for stratification.
-        - 'raw_label' (array-like): Raw class labels used by StratifiedKFold.
+        - 'raw_labels' (array-like): Raw class labels used by StratifiedKFold.
         - 'cached_images' (torch.Tensor): Preprocessed image tensor.
         - 'cached_labels' (torch.Tensor): Corresponding labels.
     :type dataset_args: dict
@@ -82,7 +82,7 @@ def train_pytorch_nn(
 
     # Loop through each fold
     for fold, (train_idx, val_idx) in enumerate(
-        kfold.split(dataset_args["metadata_df"], dataset_args["raw_label"])
+        kfold.split(dataset_args["metadata_df"], dataset_args["raw_labels"])
     ):
         print(f"\nFold {fold + 1}/{param['n_fold']}")
 
