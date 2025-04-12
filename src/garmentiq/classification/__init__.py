@@ -12,3 +12,4 @@ from .utils import (
     validate_train_param,
     validate_test_param,
 )
+from .model_definition import CNN
