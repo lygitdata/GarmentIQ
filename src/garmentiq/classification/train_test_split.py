@@ -16,6 +16,35 @@ def train_test_split(
     seed: int = 88,
     verbose: bool = False,
 ):
+    """
+    Prepares training and testing datasets from zipped image data and associated metadata.
+
+    This function handles two modes:
+    1. **Two-Zip Mode**: If both `train_zip_dir` and `test_zip_dir` are provided, it unzips and validates both datasets.
+    2. **Split Mode**: If only `train_zip_dir` is provided, it splits the data into training and testing sets based on the specified `test_size`.
+
+    The function ensures the presence of the required folder structure (`images/` and `metadata.csv`),
+    verifies that image files match the metadata, and optionally prints dataset summaries.
+
+    :param output_dir: Directory where the processed datasets will be saved.
+    :type output_dir: str
+    :param train_zip_dir: Path to the ZIP file containing training data.
+    :type train_zip_dir: str
+    :param test_zip_dir: Optional path to the ZIP file containing testing data. If not provided, the function performs a split.
+    :type test_zip_dir: Optional[str]
+    :param test_size: Proportion of data to use for testing if splitting from training data. Ignored if `test_zip_dir` is provided.
+    :type test_size: float
+    :param seed: Random seed used for reproducible splitting of training data.
+    :type seed: int
+    :param verbose: Whether to print dataset summary statistics.
+    :type verbose: bool
+
+    :raises FileNotFoundError: If required files or folders are missing.
+    :raises ValueError: If metadata is missing required columns or if filename validation fails.
+
+    :returns: A dictionary with paths and loaded DataFrames for training and testing images and metadata.
+    :rtype: dict
+    """
     os.makedirs(output_dir, exist_ok=True)
 
     # Unzip train data
