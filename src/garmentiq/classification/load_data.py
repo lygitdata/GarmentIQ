@@ -11,6 +11,7 @@ from garmentiq.classification.utils import (
     validate_train_param,
     validate_test_param,
 )
+from tqdm.notebook import tqdm
 
 
 def load_data(
