@@ -33,14 +33,32 @@ async function startModelLoading() {
             }
         };
 
-        xhr.onload = async function() {
+        xhr.onload = async function () {
             if (xhr.status === 200) {
                 const modelData = xhr.response;
-                session = await ort.InferenceSession.create(modelData);
-                modelLoaded = true;
-                console.log('ONNX model loaded.');
-
-                // Hide loading section, show main content
+        
+                try {
+                    // Set wasm paths (optional if using CDN) and WebGL execution provider
+                    ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/';
+                    await ort.env.setExecutionProviders(['webgl']); // Try GPU via WebGL
+        
+                    session = await ort.InferenceSession.create(modelData, {
+                        executionProviders: ['webgl'] // Use GPU backend
+                    });
+        
+                    console.log('ONNX model loaded with WebGL (GPU) backend.');
+                } catch (err) {
+                    console.warn('WebGL backend failed, falling back to CPU (wasm):', err);
+                    
+                    // Fall back to CPU (wasm) if WebGL is unavailable
+                    session = await ort.InferenceSession.create(modelData, {
+                        executionProviders: ['wasm']
+                    });
+        
+                    console.log('ONNX model loaded with WASM (CPU) backend.');
+                }
+        
+                // Show UI
                 loadingSection.style.display = 'none';
                 mainContent.style.display = 'block';
             } else {
