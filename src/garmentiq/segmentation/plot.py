@@ -22,7 +22,7 @@ def plot(image_np: np.ndarray, figsize: tuple = (6, 6)):
     plt.figure(figsize=figsize)
 
     # If the image is 2D (grayscale), use 'gray' colormap for a black & white mask
-    if image.ndim == 2:
+    if image_np.ndim == 2:
         plt.imshow(image_np, cmap="gray")
     else:
         plt.imshow(image_np)
