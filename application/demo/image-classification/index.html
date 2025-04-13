@@ -101,10 +101,15 @@
                         <div class="row d-flex align-items-start mt-5 border-top pt-5" data-aos="fade">
                             <div class="col-12">
                                 <a href="https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
-                                <div id="start-loading-btn" data-aos="fade">
+                                <div id="model-selector" class="my-4 text-center" data-aos="fade">
+                                    <h5>Select a model to start:</h5>
+                                    <div id="model-tabs" class="btn-group" role="group" aria-label="Model selection">
+                                    </div>
+                                </div>
+                                <div id="start-loading-container" data-aos="fade">
                                     <center>
-                                        <button id="start-loading-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">
-                                          Start loading the model
+                                        <button id="start-loading-model-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5" disabled>
+                                            Load the model to start
                                         </button>
                                     </center>
                                 </div>
