@@ -9,9 +9,9 @@ const classes = ['long sleeve dress', 'long sleeve top', 'short sleeve dress',
     'trousers', 'vest', 'vest dress'
 ];
 const modelChoices = {
-    "CNN-3 (fastest, least capable)": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/cnn_3.onnx",
-    "CNN-4 (medium, moderate capable)": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/cnn_4.onnx",
-    "Tiny ViT (slowest, most capable)": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/tiny_vit.onnx"
+    "CNN-3": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/cnn_3.onnx",
+    "CNN-4": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/cnn_4.onnx",
+    "Tiny ViT": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/tiny_vit.onnx"
 };
 
 const tabsContainer = document.getElementById("model-tabs");
