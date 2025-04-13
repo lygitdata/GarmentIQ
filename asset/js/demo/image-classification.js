@@ -1,6 +1,17 @@
 // image-classification.js
 
-document.getElementById('start-loading-btn').addEventListener('click', startModelLoading);
+function captchaSolved(token) {
+    document.getElementById("startBtn").disabled = false;
+}
+
+function captchaExpired() {
+    document.getElementById("startBtn").disabled = true;
+}
+
+// Optional: Add event listener for button click
+document.getElementById("startBtn").addEventListener("click", function () {
+    startModelLoading()
+});
 
 let session = null;
 const classes = ['long sleeve dress', 'long sleeve top', 'short sleeve dress',
