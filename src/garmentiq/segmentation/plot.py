@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 def plot(image: np.ndarray, figsize: tuple = (6, 6)):
     """
