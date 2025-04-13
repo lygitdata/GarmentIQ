@@ -68,6 +68,46 @@
                     url('/asset/fonts/inter-v12-latin-700.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
+            .custom-table-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 2rem;
+            }
+        
+            .custom-table-title {
+                text-align: center;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+                font-weight: 600;
+            }
+        
+            .custom-table {
+                min-width: 700px;
+                border-collapse: collapse;
+                font-size: 1rem;
+            }
+        
+            .custom-table thead {
+                background-color: #343a40;
+                color: white;
+            }
+        
+            .custom-table th, .custom-table td {
+                padding: 0.75rem 1rem;
+                text-align: center;
+            }
+        
+            .custom-table tbody tr:nth-child(odd) {
+                background-color: #f2f2f2;
+            }
+        
+            .custom-table tbody tr:nth-child(even) {
+                background-color: #e0e0e0;
+            }
+        
+            .custom-table tbody tr:hover {
+                background-color: #d6d6d6;
+            }
         </style>
     </head>
     <body data-bs-spy="scroll" data-bs-target="#navScroll">
@@ -105,45 +145,49 @@
                                     <h5>Select a model to start:</h5>
                                     <div id="model-tabs" class="btn-group" role="group" aria-label="Model selection">
                                     </div>
-                                    <h5>Model comparison table</h4>
-                                    <table class="table table-bordered table-hover table-striped align-middle text-center shadow">
-                                        <thead class="table-dark">
-                                            <tr>
-                                                <th>Model Name</th>
-                                                <th># Parameters</th>
-                                                <th>Model Size</th>
-                                                <th>Test Cross Entropy</th>
-                                                <th>Test Accuracy</th>
-                                                <th>Test F1 Score</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>CNN-3</td>
-                                                <td>4.43 million</td>
-                                                <td>16.9 MB</td>
-                                                <td>0.1778</td>
-                                                <td>0.9455</td>
-                                                <td>0.9455</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CNN-4</td>
-                                                <td>17.81 million</td>
-                                                <td>67.9 MB</td>
-                                                <td>0.1611</td>
-                                                <td>0.9533</td>
-                                                <td>0.9533</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tiny ViT</td>
-                                                <td>5.48 million</td>
-                                                <td>21.1 MB</td>
-                                                <td>0.1347</td>
-                                                <td>0.9576</td>
-                                                <td>0.9576</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="custom-table-container">
+                                        <div>
+                                            <div class="custom-table-title">Model Comparison Table</div>
+                                            <table class="custom-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Model Name</th>
+                                                        <th># Parameters</th>
+                                                        <th>Model Size</th>
+                                                        <th>Test Cross Entropy</th>
+                                                        <th>Test Accuracy</th>
+                                                        <th>Test F1 Score</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>CNN-3</td>
+                                                        <td>4.43 million</td>
+                                                        <td><b>16.9 MB</b></td>
+                                                        <td>0.1778</td>
+                                                        <td>0.9455</td>
+                                                        <td>0.9455</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>CNN-4</td>
+                                                        <td>17.81 million</td>
+                                                        <td>67.9 MB</td>
+                                                        <td>0.1611</td>
+                                                        <td>0.9533</td>
+                                                        <td>0.9533</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tiny ViT</td>
+                                                        <td>5.48 million</td>
+                                                        <td>21.1 MB</td>
+                                                        <td><b>0.1347</b></td>
+                                                        <td><b>0.9576</b></td>
+                                                        <td><b>0.9576</b></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div id="start-loading-container" data-aos="fade">
                                     <center>
