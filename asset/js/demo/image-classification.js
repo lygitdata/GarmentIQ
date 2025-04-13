@@ -40,7 +40,8 @@ async function startModelLoading() {
 
     // Show loading section
     loadingSection.style.display = 'block';
-    document.getElementById('start-loading-model-btn').style.display = 'none'; // Hide the start button
+    document.getElementById('start-loading-model-btn').style.display = 'none'; 
+    document.getElementById('model-selector').style.display = 'none'; 
 
     try {
         let modelLoaded = false;
