@@ -1,102 +1,178 @@
-const API_URL = 'http://127.0.0.1:5000/predict';
-const HEALTH_URL = 'http://127.0.0.1:5000/health';
-const EXPECTED_TOKEN = 'fe9def684914b305540615b3bba461fbf8ea58f460c72b1fe128d3cef93fe4f8';
-let isServerReady = false;
-const overlay = document.getElementById('runtime-overlay');
-const statusText = document.getElementById('status-text');
-const refreshBtn = document.getElementById('refresh-btn');
-// Initial check
-checkServerStatus();
-document.getElementById('imageUpload').addEventListener('change', function(e) {
-    const container = document.getElementById('previewContainer');
-    container.innerHTML = ''; // Clear previous previews
-    // Create array of promises that resolve in order
-    const files = Array.from(e.target.files);
-    const readers = files.map(file => {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve({
-                content: reader.result,
-                index: files.indexOf(file)
-            });
-            reader.readAsDataURL(file);
-        });
-    });
-    // Create placeholder elements first
-    const placeholders = files.map((_, index) => {
-        const div = document.createElement('div');
-        div.className = 'preview-item';
-        div.innerHTML = `
-                                                <div class="loading-spinner"></div>`;
-        container.appendChild(div);
-        return {
-            div,
-            index
+// image-classification.js
+
+document.getElementById('start-loading-btn').addEventListener('click', startModelLoading);
+
+let session = null;
+const classes = ['long sleeve dress', 'long sleeve top', 'short sleeve dress',
+    'short sleeve top', 'shorts', 'skirt',
+    'trousers', 'vest', 'vest dress'
+];
+
+async function startModelLoading() {
+    const loadingSection = document.getElementById('model-loading');
+    const mainContent = document.getElementById('main-content');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    // Show loading section
+    loadingSection.style.display = 'block';
+    document.getElementById('start-loading-btn').style.display = 'none'; // Hide the start button
+
+    try {
+        let modelLoaded = false;
+        const modelUrl = 'https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/tiny_vit.onnx';
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', modelUrl, true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onprogress = (event) => {
+            if (event.lengthComputable) {
+                let percentLoaded = Math.round((event.loaded / event.total) * 100);
+                progressBar.value = percentLoaded;
+                progressText.textContent = `${percentLoaded}% loaded`;
+            }
         };
+
+        xhr.onload = async function() {
+            if (xhr.status === 200) {
+                const modelData = xhr.response;
+                session = await ort.InferenceSession.create(modelData);
+                modelLoaded = true;
+                console.log('ONNX model loaded.');
+
+                // Hide loading section, show main content
+                loadingSection.style.display = 'none';
+                mainContent.style.display = 'block';
+            } else {
+                throw new Error('Failed to load model');
+            }
+        };
+
+        xhr.onerror = function() {
+            throw new Error('Failed to fetch model');
+        };
+
+        xhr.send();
+    } catch (error) {
+        console.error('Failed to load ONNX model:', error);
+        loadingSection.innerHTML = `<p class="text-danger fw-bold">⚠️ Failed to load model. Please try again later.</p>`;
+    }
+}
+
+
+
+// Set up event listeners for file input and button
+const imageInput = document.getElementById('imageUpload');
+const previewContainer = document.getElementById('previewContainer');
+const resultBox = document.getElementById('result');
+const analyzeButton = document.getElementById('analyzeButton');
+const spinner = document.getElementById('result-spinner');
+let files = []; // Store the files
+
+// Handle image uploads and show previews
+imageInput.addEventListener('change', function(e) {
+    const selectedFiles = Array.from(e.target.files);
+    files = selectedFiles; // Store the selected files
+
+    // Clear preview area
+    previewContainer.innerHTML = '';
+
+    // Preview the images
+    selectedFiles.forEach(async (file) => {
+        const img = await loadImageFromFile(file);
+        img.classList.add('preview-item');
+        previewContainer.appendChild(img);
     });
-    // Process in parallel but maintain order
-    Promise.all(readers).then(results => {
-        results.forEach(({
-            content,
-            index
-        }) => {
-            const img = document.createElement('img');
-            img.src = content;
-            placeholders[index].div.innerHTML = '';
-            placeholders[index].div.appendChild(img);
-        });
-    });
+
+    // Reset result box text
+    resultBox.textContent = 'Ready to analyze images. Please click on "Analyze Images" button.';
 });
-// Server status check
-async function checkServerStatus() {
-    try {
-        statusText.textContent = "Checking server status...";
-        refreshBtn.style.display = 'none';
-        const response = await fetch(HEALTH_URL);
-        if (!response.ok) throw new Error('Server not responding');
-        const data = await response.json();
-        if (data.token !== EXPECTED_TOKEN) throw new Error('Security verification failed');
-        // Success
-        isServerReady = true;
-        overlay.style.display = 'none';
-        document.querySelector('.main-content').style.display = 'block';
-    } catch (error) {
-        statusText.textContent = `Error: ${error.message}`;
-        refreshBtn.style.display = 'block';
-        isServerReady = false;
-    }
+
+// Function to load image from file
+async function loadImageFromFile(file) {
+    const img = document.createElement('img');
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    return new Promise(resolve => {
+        img.onload = () => resolve(img);
+    });
 }
-// Image analysis
-async function uploadImage() {
-    if (!isServerReady) {
-        alert('Service connection not established');
+
+// Analyze images when the button is clicked
+analyzeButton.addEventListener('click', async function() {
+    if (files.length === 0) {
+        resultBox.textContent = 'Please upload images first.';
         return;
     }
-    const files = document.getElementById('imageUpload').files;
-    if (!files.length) {
-        alert("Please select images first!");
-        return;
+
+    spinner.style.display = 'block';
+
+    resultBox.textContent = 'Analyzing images...';
+
+    const predictions = [];
+
+    // Process and analyze each image
+    for (const file of files) {
+        const img = await loadImageFromFile(file); // Load image
+        const prediction = await runModel(img); // Run model on image
+        predictions.push(prediction);
     }
-    try {
-        document.getElementById('result').textContent = '⏳ Analyzing...';
-        const predictions = [];
-        // Process files sequentially
-        for (const file of files) {
-            const formData = new FormData();
-            formData.append("file", file);
-            const response = await fetch(API_URL, {
-                method: "POST",
-                body: formData
-            });
-            if (!response.ok) throw new Error('Analysis failed');
-            const data = await response.json();
-            predictions.push(data.prediction);
+
+    // Display predictions
+    resultBox.textContent = predictions.join(', ');
+    spinner.style.display = 'none';
+});
+
+// Function to run model on the image
+async function runModel(imageElement) {
+    if (!session) {
+        console.error('ONNX model not loaded yet.');
+        return 'Error';
+    }
+
+    const inputTensor = preprocessImage(imageElement); // Preprocess the image
+    const feeds = {
+        input: inputTensor
+    }; // Pass the tensor to the model
+    const results = await session.run(feeds); // Run the model
+    const output = results.output.data; // Get output data
+    return processOutput(output); // Process and return output
+}
+
+// Function to preprocess the image
+function preprocessImage(image) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 184; // Target image width
+    canvas.height = 120; // Target image height
+    ctx.drawImage(image, 0, 0, 184, 120);
+
+    const imageData = ctx.getImageData(0, 0, 184, 120);
+    const data = imageData.data;
+    const floatData = new Float32Array(3 * 120 * 184);
+
+    for (let i = 0; i < 120; i++) {
+        for (let j = 0; j < 184; j++) {
+            const idx = (i * 184 + j) * 4;
+            const r = data[idx] / 255;
+            const g = data[idx + 1] / 255;
+            const b = data[idx + 2] / 255;
+
+            // Normalize the pixel data
+            floatData[i * 184 + j] = (r - 0.8047) / 0.2957; // Normalize Red channel
+            floatData[120 * 184 + i * 184 + j] = (g - 0.7808) / 0.3077; // Normalize Green channel
+            floatData[2 * 120 * 184 + i * 184 + j] = (b - 0.7769) / 0.3081; // Normalize Blue channel
         }
-        document.getElementById('result').textContent = predictions.join(', ');
-    } catch (error) {
-        console.error("Error:", error);
-        document.getElementById('result').textContent = '❌ Error processing some images';
     }
+
+    return new ort.Tensor('float32', floatData, [1, 3, 120, 184]); // Return tensor for model input
 }
-// Event listeners
-refreshBtn.addEventListener('click', checkServerStatus);
+
+// Function to process the output of the model
+function processOutput(outputData) {
+    const maxIdx = outputData.indexOf(Math.max(...outputData));
+    return classes[maxIdx] || `Class ${maxIdx}`; // Return the class with max probability
+}
