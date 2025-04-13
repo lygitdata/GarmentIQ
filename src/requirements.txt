@@ -5,3 +5,6 @@ torch==2.6.0+cu124
 torchvision==0.21.0+cu124
 scikit-learn==1.6.1
 Pillow==11.1.0
+matplotlib==3.10.0
+transformers==4.50.3
+kornia==0.8.0
