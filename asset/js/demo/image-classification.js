@@ -70,16 +70,21 @@ const spinner = document.getElementById('result-spinner');
 let files = []; // Store the files
 
 // Handle image uploads and show previews
-imageInput.addEventListener('change', function(e) {
+imageInput.addEventListener('change', async function(e) {
     const selectedFiles = Array.from(e.target.files);
-    files = selectedFiles; // Store the selected files
+    
+    // Sort files by filename before storing
+    selectedFiles.sort((a, b) => a.name.localeCompare(b.name));
+    files = selectedFiles; // Store the sorted files
 
     // Clear preview area
     previewContainer.innerHTML = '';
 
-    // Preview the images
-    selectedFiles.forEach(async (file) => {
-        const img = await loadImageFromFile(file);
+    // Load and preview images in sorted order
+    const imagePromises = selectedFiles.map(file => loadImageFromFile(file));
+    const images = await Promise.all(imagePromises);
+    
+    images.forEach(img => {
         img.classList.add('preview-item');
         previewContainer.appendChild(img);
     });
@@ -113,11 +118,9 @@ analyzeButton.addEventListener('click', async function() {
     resultBox.textContent = 'Analyzing images...';
 
     const predictions = [];
-
-    // Process and analyze each image
     for (const file of files) {
-        const img = await loadImageFromFile(file); // Load image
-        const prediction = await runModel(img); // Run model on image
+        const img = await loadImageFromFile(file);
+        const prediction = await runModel(img);
         predictions.push(prediction);
     }
 
