@@ -1,12 +1,36 @@
 // image-classification.js
 
-document.getElementById('start-loading-btn').addEventListener('click', startModelLoading);
+document.getElementById('start-loading-model-btn').addEventListener('click', startModelLoading);
 
 let session = null;
+let selectedModelUrl = null;
 const classes = ['long sleeve dress', 'long sleeve top', 'short sleeve dress',
     'short sleeve top', 'shorts', 'skirt',
     'trousers', 'vest', 'vest dress'
 ];
+const modelChoices = {
+    "CNN-3 (fastest, least capable)": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/cnn_3.onnx",
+    "CNN-4 (medium, moderate capable)": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/cnn_4.onnx",
+    "Tiny ViT (slowest, most capable)": "https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/models/tiny_vit.onnx"
+};
+
+const tabsContainer = document.getElementById("model-tabs");
+Object.entries(modelChoices).forEach(([modelName, modelUrl]) => {
+    const button = document.createElement("button");
+    button.className = "btn btn-outline-primary";
+    button.innerText = modelName;
+
+    button.onclick = () => {
+        // Highlight selected model tab
+        document.querySelectorAll("#model-tabs button").forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        selectedModelUrl = modelUrl;
+        document.getElementById("start-loading-model-btn").disabled = false; // Enable load button
+    };
+
+    tabsContainer.appendChild(button);
+});
 
 async function startModelLoading() {
     const loadingSection = document.getElementById('model-loading');
@@ -20,7 +44,11 @@ async function startModelLoading() {
 
     try {
         let modelLoaded = false;
-        const modelUrl = 'https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/tiny_vit.onnx';
+        if (!selectedModelUrl) {
+            alert("Please select a model first.");
+            return;
+        }
+        const modelUrl = selectedModelUrl;
         let xhr = new XMLHttpRequest();
         xhr.open('GET', modelUrl, true);
         xhr.responseType = 'arraybuffer';
