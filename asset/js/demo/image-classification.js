@@ -38,27 +38,26 @@ async function startModelLoading() {
                 const modelData = xhr.response;
         
                 try {
-                    // Set wasm paths (optional if using CDN) and WebGL execution provider
+                    // Optional: Set wasm paths if using fallback
                     ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/';
-                    await ort.env.setExecutionProviders(['webgl']); // Try GPU via WebGL
         
+                    // Try WebGL (GPU)
                     session = await ort.InferenceSession.create(modelData, {
-                        executionProviders: ['webgl'] // Use GPU backend
+                        executionProviders: ['webgl']
                     });
         
-                    console.log('ONNX model loaded with WebGL (GPU) backend.');
+                    console.log('✅ ONNX model loaded with WebGL (GPU) backend.');
                 } catch (err) {
-                    console.warn('WebGL backend failed, falling back to CPU (wasm):', err);
-                    
-                    // Fall back to CPU (wasm) if WebGL is unavailable
+                    console.warn('⚠️ WebGL backend failed, falling back to CPU (wasm):', err);
+        
+                    // Fallback to WASM (CPU)
                     session = await ort.InferenceSession.create(modelData, {
                         executionProviders: ['wasm']
                     });
         
-                    console.log('ONNX model loaded with WASM (CPU) backend.');
+                    console.log('✅ ONNX model loaded with WASM (CPU) backend.');
                 }
         
-                // Show UI
                 loadingSection.style.display = 'none';
                 mainContent.style.display = 'block';
             } else {
