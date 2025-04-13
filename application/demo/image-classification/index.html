@@ -90,7 +90,7 @@
                         <div class="row">
                             <div class="col-12 py-vh-4">
                                 <h1 class="display-huge fw-bold lh-1" data-aos="fade-down">Demo 1: Garment image classification</h1>
-                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 04/08/2025</span>
+                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 04/13/2025</span>
                                 <div class="mt-4 d-flex justify-content-center" data-aos="fade-down" data-aos-delay="200">
                                     <svg viewbox="0 0 29 107" xmlns="http://www.w3.org/2000/svg" style="width:10px;" data-aos="fade-down">
                                         <path d="M15.425 106.639l13.116-12.42c.55-.446.615-1.23.144-1.751a1.363 1.363 0 0 0-1.993 0l-10.887 10.296V1.242C15.805.556 15.218 0 14.493 0c-.724 0-1.311.556-1.311 1.242v101.522L2.308 92.468a1.363 1.363 0 0 0-1.85-.136 1.197 1.197 0 0 0 0 1.887l13.117 12.42a1.364 1.364 0 0 0 1.85 0z" fill="#000" fill-rule="evenodd"></path>
@@ -101,29 +101,22 @@
                         <div class="row d-flex align-items-start mt-5 border-top pt-5" data-aos="fade">
                             <div class="col-12">
                                 <a href="https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
-                                <div id="runtime-overlay">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <h2>Connecting to Runtime</h2>
-                                        <div class="spinner"></div>
-                                    </div>
-                                    <p id="status-text">Initializing connection...</p>
-                                    <p> Demonstration Setup Instruction:
-                                    <ol style="text-align: left;">
-                                        <li>
-                                            <a href="demo1.zip" target="_blank" class="link-fancy"> Click here to download Docker configuration files. </a> Then unzip it.
-                                        </li>
-                                        <li> Run command " <code>cd apparel-classifier</code>" in your Docker terminal. Change the path if needed. </li>
-                                        <li> Run command " <code>docker build -t apparel-classifier .</code>" in your Docker terminal. This may take 10 - 20 minutes. </li>
-                                        <li> Run command " <code>docker run -p 5000:5000 --gpus all --rm apparel-classifier</code>" in your Docker terminal. </li>
-                                        <li>
-                                            <a href="demo1_test_set.zip" target="_blank" class="link-fancy"> Click here to download test images. </a>
-                                        </li>
-                                        <li> Click on the following button to start. You can drag or select test images to see the effect of the model. </li>
-                                    </ol>
-                                    </p>
-                                    <button id="refresh-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Retry Connection</button>
+                                <div id="start-loading-btn" data-aos="fade">
+                                    <center>
+                                        <button class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Start</button>
+                                    </center>
                                 </div>
-                                <div class="main-content">
+                                <div id="model-loading" style="display: none;" data-aos="fade">
+                                    <center>
+                                        <div class="spinner"></div>
+                                    </center>
+                                    <p class="mt-3 fs-5 fw-medium text-center">Loading model, please wait...</p>
+                                    <div id="progress-container">
+                                        <progress id="progress-bar" value="0" max="100" style="width: 100%;"></progress>
+                                        <p id="progress-text" class="text-center">0% loaded</p>
+                                    </div>
+                                </div>
+                                <div class="main-content" id="main-content" data-aos="fade">
                                     <label style="width: 100%;">
                                         <div class="upload-area">
                                             <!-- Add multiple attribute -->
@@ -134,10 +127,15 @@
                                     </label>
                                     <!-- Change to preview container -->
                                     <div class="preview-container" id="previewContainer"></div>
-                                    <button onclick="uploadImage()" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Analyze Images</button>
+                                    <button id="analyzeButton" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Analyze Images</button>
                                     <div style="margin-top: 2rem;">
-                                        <div>Prediction Results</div>
-                                        <div id="result">NA</div>
+                                        <div>Prediction Result(s)</div>
+                                        <div id="result-container">
+                                            <center>
+                                                <div id="result-spinner" class="spinner" style="display: none;"></div>
+                                            </center>
+                                            <div id="result">Please upload images to start.</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -151,6 +149,8 @@
         <script src="/asset/js/footer.js"></script>
         <script src="/asset/js/bootstrap.bundle.min.js"></script>
         <script src="/asset/js/aos.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer></script>
         <script src="/asset/js/demo/image-classification.js"></script>
         <script>
             AOS.init({
@@ -172,6 +172,14 @@
                 }
                 console.log(scrollpos)
             })
+            window.onloadTurnstileCallback = function() {
+                turnstile.render("#model-loading", {
+                    sitekey: "0x4AAAAAAABt_pRJnW48F_dm",
+                    callback: function(token) {
+                        console.log(`Challenge Success ${token}`);
+                    },
+                });
+            };
         </script>
     </body>
 </html>
