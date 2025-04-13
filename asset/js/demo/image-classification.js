@@ -90,7 +90,7 @@ imageInput.addEventListener('change', async function(e) {
     });
 
     // Reset result box text
-    resultBox.textContent = 'Ready to analyze images. Please click on "Analyze Images" button.';
+    resultBox.textContent = 'Ready to analyze images.';
 });
 
 // Function to load image from file
