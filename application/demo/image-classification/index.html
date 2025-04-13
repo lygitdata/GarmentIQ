@@ -103,7 +103,7 @@
                                 <a href="https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
                                 <div id="start-loading-btn" data-aos="fade">
                                     <center>
-                                        <button class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Start</button>
+                                        <button class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Start to load the model</button>
                                     </center>
                                 </div>
                                 <div id="model-loading" style="display: none;" data-aos="fade">
@@ -150,7 +150,6 @@
         <script src="/asset/js/bootstrap.bundle.min.js"></script>
         <script src="/asset/js/aos.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer></script>
         <script src="/asset/js/demo/image-classification.js"></script>
         <script>
             AOS.init({
@@ -172,14 +171,6 @@
                 }
                 console.log(scrollpos)
             })
-            window.onloadTurnstileCallback = function() {
-                turnstile.render("#model-loading", {
-                    sitekey: "0x4AAAAAAABt_pRJnW48F_dm",
-                    callback: function(token) {
-                        console.log(`Challenge Success ${token}`);
-                    },
-                });
-            };
         </script>
     </body>
 </html>
