@@ -120,7 +120,7 @@ class CNN4(nn.Module):
 
 class tinyViT(nn.Module):
     def __init__(self, num_classes, img_size, patch_size):
-        super(ViTClassifier, self).__init__()
+        super(tinyViT, self).__init__()
         self.backbone = timm.create_model(
             "deit_tiny_patch16_224",
             pretrained=True,
