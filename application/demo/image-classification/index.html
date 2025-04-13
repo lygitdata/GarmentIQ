@@ -105,45 +105,50 @@
                                     <h5>Select a model to start:</h5>
                                     <div id="model-tabs" class="btn-group" role="group" aria-label="Model selection">
                                     </div>
-                                    <table>
-                                        <tr>
-                                            <th>Model name</th>
-                                            <th># parameters</th>
-                                            <th>Model size</th>
-                                            <th>Test cross entropy</th>
-                                            <th>Test accuracy</th>
-                                            <th>Test F1 score</th>
-                                        </tr>
-                                        <tr>
-                                            <td>CNN-3</td>
-                                            <td>4.43 million</td>
-                                            <td>16.9 MB</td>
-                                            <td>0.1778</td>
-                                            <td>0.9455</td>
-                                            <td>0.9455</td>
-                                        </tr>
-                                        <tr>
-                                            <td>CNN-4</td>
-                                            <td>17.81 million</td>
-                                            <td>67.9 MB</td>
-                                            <td>0.1611</td>
-                                            <td>0.9533</td>
-                                            <td>0.9533</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tiny ViT</td>
-                                            <td>5.48 million</td>
-                                            <td>21.1 MB</td>
-                                            <td>0.1347</td>
-                                            <td>0.9576</td>
-                                            <td>0.9576</td>
-                                        </tr>
+                                    <h5>Model comparison table</h4>
+                                    <table class="table table-bordered table-hover table-striped align-middle text-center shadow">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Model Name</th>
+                                                <th># Parameters</th>
+                                                <th>Model Size</th>
+                                                <th>Test Cross Entropy</th>
+                                                <th>Test Accuracy</th>
+                                                <th>Test F1 Score</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>CNN-3</td>
+                                                <td>4.43 million</td>
+                                                <td>16.9 MB</td>
+                                                <td>0.1778</td>
+                                                <td>0.9455</td>
+                                                <td>0.9455</td>
+                                            </tr>
+                                            <tr>
+                                                <td>CNN-4</td>
+                                                <td>17.81 million</td>
+                                                <td>67.9 MB</td>
+                                                <td>0.1611</td>
+                                                <td>0.9533</td>
+                                                <td>0.9533</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tiny ViT</td>
+                                                <td>5.48 million</td>
+                                                <td>21.1 MB</td>
+                                                <td>0.1347</td>
+                                                <td>0.9576</td>
+                                                <td>0.9576</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                                 <div id="start-loading-container" data-aos="fade">
                                     <center>
                                         <button id="start-loading-model-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5" disabled>
-                                            Load the model to start
+                                            Load the model
                                         </button>
                                     </center>
                                 </div>
