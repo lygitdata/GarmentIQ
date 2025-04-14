@@ -96,6 +96,9 @@ def test_pytorch_nn(
     test_acc = accuracy_score(all_labels, all_preds)
     test_f1 = f1_score(all_labels, all_preds, average="weighted")
 
+    del model
+    torch.cuda.empty_cache()
+
     print(f"Test Loss: {test_loss:.4f}")
     print(f"Test Accuracy: {test_acc:.4f}")
     print(f"Test F1 Score: {test_f1:.4f}")

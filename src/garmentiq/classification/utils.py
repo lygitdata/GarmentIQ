@@ -179,3 +179,22 @@ def validate_test_param(param: dict):
             raise TypeError(
                 f"param['{key}'] must be of type {expected_type}, got {type(param[key])}"
             )
+
+def validate_pred_param(param: dict):
+    # --- Optional fields with default values and expected types
+    optional_keys = {
+        "device": (
+            torch.device,
+            torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+        ),
+        "batch_size": (int, 64),
+    }
+
+    # --- Apply defaults and type-check optional keys
+    for key, (expected_type, default) in optional_keys.items():
+        if key not in param:
+            param[key] = default
+        elif expected_type is not None and not isinstance(param[key], expected_type):
+            raise TypeError(
+                f"param['{key}'] must be of type {expected_type}, got {type(param[key])}"
+            )

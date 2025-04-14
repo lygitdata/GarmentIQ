@@ -163,4 +163,7 @@ def train_pytorch_nn(
                 print(f"Early stopping at epoch {epoch+1} (fold {fold + 1})")
                 break
 
+    del model
+    torch.cuda.empty_cache()
+
     print(f"\nTraining completed. Best model saved at: {best_model_path}")
