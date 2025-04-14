@@ -15,7 +15,7 @@
 
 We need more image data to train our classification model and prepare for a landmark detection task. The [Fashion Product Images Dataset](https://doi.org/10.34740/kaggle/ds/139630) lacks several garment categories we require. Therefore, it's essential to supplement our dataset with additional images from external sources. 
 
-Our scraped data has already been uploaded to Kaggle for better accessibility - [Nordstrom & Myntra Clothes Image Data - GarmentIQ](https://doi.org/10.34740/kaggle/dsv/7099732).
+Our scraped data has already been uploaded to Kaggle for better accessibility - [Nordstrom & Myntra Clothes Image Data - GarmentIQ](https://doi.org/10.34740/kaggle/ds/7099732).
 
 ## Why Choose Nordstrom?
 
