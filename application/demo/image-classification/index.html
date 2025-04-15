@@ -73,37 +73,43 @@
                 justify-content: center;
                 margin-top: 2rem;
                 text-align: center;
+                overflow-x: auto; /* Enables horizontal scroll on small screens */
+                padding: 0 1rem; /* Add some horizontal padding */
             }
-        
+            
+            .custom-table-wrapper {
+                max-width: 500px; /* Ensures the table doesn't shrink too much */
+            }
+            
             .custom-table-title {
                 text-align: center;
                 margin-bottom: 1rem;
             }
-        
+            
             .custom-table {
-                min-width: 700px;
+                width: 100%;
                 border-collapse: collapse;
                 font-size: 1rem;
             }
-        
+            
             .custom-table thead {
                 background-color: #343a40;
                 color: white;
             }
-        
+            
             .custom-table th, .custom-table td {
                 padding: 0.75rem 1rem;
                 text-align: center;
             }
-        
+            
             .custom-table tbody tr:nth-child(odd) {
                 background-color: #f2f2f2;
             }
-        
+            
             .custom-table tbody tr:nth-child(even) {
                 background-color: #e0e0e0;
             }
-        
+            
             .custom-table tbody tr:hover {
                 background-color: #d6d6d6;
             }
@@ -146,7 +152,7 @@
                                     <div id="model-tabs" class="btn-group" role="group" aria-label="Model selection">
                                     </div>
                                     <div class="custom-table-container">
-                                        <div>
+                                        <div class="custom-table-wrapper">
                                             <h6 class="custom-table-title">Model Comparison Table</h6>
                                             <table class="custom-table">
                                                 <thead>
