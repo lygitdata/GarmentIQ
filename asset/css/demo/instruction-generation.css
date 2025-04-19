@@ -1,0 +1,93 @@
+/* Garment selector styling (no change) */
+#garmentSelector {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 15px auto;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#garmentSelector:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+    outline: none;
+}
+
+/* Style the DIV container like the old canvas */
+#garmentContainer {
+    width: 100%;
+    height: 550px; /* Or adjust as needed */
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    display: flex; /* Use flexbox to center the SVG */
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Keep if needed for absolute positioning inside */
+    overflow: hidden; /* Keep if needed */
+    margin-top: 15px; /* Add some space */
+}
+
+/* SVG hidden by default */
+#garmentContainer svg {
+    display: none; /* Hide SVGs by default */
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Control buttons styling (no change) */
+.controls {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    text-align: center;
+}
+.controls button,
+.controls input[type="file"] {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #eee;
+}
+.controls button:hover {
+    background-color: #ddd;
+}
+.controls button.active {
+    background-color: #a0a0a0;
+    font-weight: bold;
+    color: white;
+    border-color: #888;
+}
+
+/* Ensure selected landmarks are visible */
+.landmark circle.selected {
+  fill: red; /* Example: Make selected landmarks red */
+  stroke: darkred;
+  stroke-width: 2px;
+}
+
+.point {
+  cursor: pointer;
+  fill: #3399ff;
+  stroke: black;
+  stroke-width: 1px;
+}
+.selected {
+  fill: orange;
+}
+.label {
+  font-size: 5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
