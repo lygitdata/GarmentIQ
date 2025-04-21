@@ -1,0 +1,84 @@
+{
+  "short_sleeve_top": {
+    "chest": {
+      "description": "Measure from one side to the other, at armhole height",
+      "direct":true,
+      "points":{
+          "start":{
+              "type": "detected",
+              "index":12,
+              "semantic":"armpit_left"
+          } ,
+          "end":{
+              "type":"detected",
+              "index":20,
+              "semantic":"armpit_right" 
+          } 
+      } 
+    },
+    "front_length": {
+      "description": "Measure from the cut of the shoulder to the bottom of the garment",
+      "direct":false,
+      "points":{
+          "start":{
+              "type": "detected",
+              "index":2,
+              "semantic":"neck_left_outer"
+          } ,
+          "end":{
+              "type":"derived",
+              "method":"perpendicularly intersect with segmentation mask boundary"
+          } 
+      } 
+    },
+    "sleeve_length": {
+      "description": "Measure from the cut of the sleeve (shoulder) to end of sleeve",
+      "direct":true,
+      "points":{
+          "start":{
+              "type": "detected",
+              "index":7,
+              "semantic":"shoulder_left_top"
+          } ,
+          "end":{
+              "type":"detected",
+              "index":9,
+              "semantic":"cuff_left_outer"
+          } 
+      } 
+    },
+    "back_width": {
+      "description": "Measure from shoulder to shoulder on the back",
+      "direct":true,
+      "points":{
+          "start":{
+              "type": "detected",
+              "index":7,
+              "semantic":"shoulder_left_top"
+          } ,
+          "end":{
+              "type":"detected",
+              "index":25,
+              "semantic":"shoulder_right_top"
+          } 
+      } 
+    },
+    "arm_width": {
+      "description": "Measure perpendicular to the sleeve, from the armhole",
+      "direct":false,
+      "points":{
+          "start":{
+              "type": "detected",
+              "index":12,
+              "semantic":"armpit_left"
+          } ,
+          "end":{
+              "type":"derived",
+              "method":"perpendicularly intersect with regression",
+              "points":[7,8,9] ,
+              "semantic": ["shoulder_left_top","sleeve_left_outer_mid","cuff_left_outer"]
+          } 
+      } 
+     }
+  }
+}
