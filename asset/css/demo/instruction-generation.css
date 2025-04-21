@@ -19,26 +19,41 @@
     outline: none;
 }
 
-/* Style the DIV container like the old canvas */
-#garmentContainer {
+/* Style the DIV container */
+/* Updated ID */
+#garmentDisplayContainer {
     width: 100%;
     height: 550px; /* Or adjust as needed */
     border: 1px solid #ccc;
     background-color: #f0f0f0;
-    display: flex; /* Use flexbox to center the SVG */
+    display: flex; /* Use flexbox to help center the initial SVG */
     justify-content: center;
     align-items: center;
-    position: relative; /* Keep if needed for absolute positioning inside */
-    overflow: hidden; /* Keep if needed */
+    position: relative; /* Needed for absolute positioning or other techniques if used */
+    overflow: hidden; /* Crucial to hide parts of SVG outside bounds */
     margin-top: 15px; /* Add some space */
+    cursor: default; /* Default cursor, will be changed by JS */
 }
 
-/* SVG hidden by default */
-#garmentContainer svg {
+/* SVG styling */
+#garmentDisplayContainer svg {
     display: none; /* Hide SVGs by default */
-    max-width: 100%;
-    max-height: 100%;
+    max-width: none;  /* Allow SVG to be larger than container when zoomed */
+    max-height: none; /* Allow SVG to be larger than container when zoomed */
+    width: 100%;      /* Start at container width */
+    height: 100%;     /* Start at container height */
+    object-fit: contain; /* Ensure initial view fits */
+    transform-origin: 0 0; /* IMPORTANT: Scale/Translate from top-left */
+    transition: opacity 0.3s ease; /* For smooth showing/hiding if needed */
+    opacity: 0; /* Start hidden for transition */
 }
+
+/* SVG shown state */
+#garmentDisplayContainer svg.show {
+     display: block; /* Make it visible */
+     opacity: 1;
+}
+
 
 /* Control buttons styling (no change) */
 .controls {
@@ -49,8 +64,7 @@
     border-radius: 5px;
     text-align: center;
 }
-.controls button,
-.controls input[type="file"] {
+.controls button { /* Apply to all buttons */
     margin: 5px;
     padding: 8px 12px;
     font-size: 0.9rem;
@@ -62,6 +76,7 @@
 .controls button:hover {
     background-color: #ddd;
 }
+/* Style for active drag button */
 .controls button.active {
     background-color: #a0a0a0;
     font-weight: bold;
@@ -69,25 +84,36 @@
     border-color: #888;
 }
 
-/* Ensure selected landmarks are visible */
+/* Ensure selected landmarks are visible (no change) */
 .landmark circle.selected {
-  fill: red; /* Example: Make selected landmarks red */
-  stroke: darkred;
-  stroke-width: 2px;
+  fill: orange; /* Use the existing 'selected' color */
+  /* stroke: darkred; */ /* Optional: darker stroke */
+  /* stroke-width: 2px; */ /* Optional: thicker stroke */
 }
 
+/* Styles for landmark points and labels (no change) */
 .point {
   cursor: pointer;
   fill: #3399ff;
   stroke: black;
   stroke-width: 1px;
 }
-.selected {
+/* Removed .selected here as it's handled by .landmark circle.selected */
+/* .selected {
   fill: orange;
-}
+} */
 .label {
   font-size: 4px;
   text-anchor: middle;
   dominant-baseline: middle;
-  pointer-events: none;
+  pointer-events: none; /* Labels shouldn't interfere with clicks */
+  fill: black; /* Ensure label text is visible */
+  stroke: none; /* Avoid stroke on text */
+}
+
+/* Added status span styling */
+#dragStatus {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 25px; /* Prevent layout shift */
 }
