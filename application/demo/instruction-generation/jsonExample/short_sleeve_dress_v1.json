@@ -1,0 +1,53 @@
+{"short_sleeve_dress": {
+  "chest": {
+    "description": "Measure from one side to the other, at armhole height.",
+    "direct": true,
+    "points": {
+      "start": { "type": "detected", "index": 12, "semantic": "armpit_left" },
+      "end": { "type": "detected", "index": 24, "semantic": "armpit_right" }
+    }
+  },
+  "waist": {
+    "description": "Measure the narrowest part of the waist from side to side.",
+    "direct": true,
+    "points": {
+      "start": { "type": "detected", "index": 14, "semantic": "waist_left" },
+      "end": { "type": "detected", "index": 22, "semantic": "waist_right" }
+    }
+  },
+  "hips": {
+    "description": "Measure the widest part of the hips from side to side.",
+    "direct": true,
+    "points": {
+      "start": { "type": "detected", "index": 15, "semantic": "hip_left" },
+      "end": { "type": "detected", "index": 21, "semantic": "hip_right" }
+    }
+  },
+  "full_length": {
+    "description": "Measure from the highest part of the garment to the bottom of the garment.",
+    "direct": true,
+    "points": {
+      "start": { "type": "detected", "index": 2, "semantic": "neck_left_oute" },
+      "end": { "type": "derived", "method":"perpendicularly intersect with segmentation mask boundary"}
+    }
+  },
+  "sleeve_length": {
+    "description": "Measure from the cut of the sleeve with the shoulder to the bottom of the sleeve.",
+    "direct": true,
+    "points": {
+      "start": { "type": "detected", "index": 7, "semantic": "shoulder_left_topp" },
+      "end": { "type": "detected", "index": 9, "semantic": "cuff_left_outer" }
+    }
+  },
+  "arm_width": {
+    "description": "Measure perpendicular to the sleeve, from the armhole.",
+    "direct": true,
+    "points": {
+      "start": { "type": "detected", "index": 12, "semantic": "armpit_lef" },
+      "end": { "type": "derived", "method":"perpendicularly intersect with regression",
+              "points":[7,8,9] ,
+              "semantic": ["shoulder_left_top","sleeve_left_outer_mid","cuff_left_outer"] }
+    }
+  }
+}
+}
