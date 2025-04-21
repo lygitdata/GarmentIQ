@@ -86,7 +86,7 @@
   fill: orange;
 }
 .label {
-  font-size: 5px;
+  font-size: 4px;
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
