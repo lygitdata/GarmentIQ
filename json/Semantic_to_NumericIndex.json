@@ -1,0 +1,230 @@
+{
+  "short_sleeve_top": {
+    "neck_center": 1,
+    "neck_left_outer": 2,
+    "neck_left_inner": 3,
+    "neck_bottom": 4,
+    "neck_right_inner": 5,
+    "neck_right_outer": 6,
+    
+    "shoulder_left_top": 7,
+    "sleeve_left_outer_mid": 8,
+    "cuff_left_outer": 9,
+    "cuff_left_inner": 10,
+    "sleeve_left_inner_mid": 11,
+    "armpit_left": 12,
+    
+    "side_seam_left_upper": 13,
+    "side_seam_left_upper_mid": 14,
+    "hem_left": 15,
+    "hem_center": 16,
+    "hem_right": 17,
+    "side_seam_right_lower": 18,
+    "side_seam_right_upper": 19,
+    
+    "armpit_right": 20,
+    "sleeve_right_inner_mid": 21,
+    "cuff_right_inner": 22,
+    "cuff_right_outer": 23,
+    "sleeve_right_outer_mid": 24,
+    "shoulder_right_top": 25
+  }
+,
+  "long_sleeve_top": {
+    "neck_center": 1,
+    "neck_left_outer": 2,
+    "neck_left_inner": 3,
+    "neck_bottom": 4,
+    "neck_right_inner": 5,
+    "neck_right_outer": 6,
+
+    "shoulder_left_top": 7,
+    "sleeve_outer_left_upper": 8,
+    "sleeve_outer_left_mid": 9,
+    "sleeve_outer_left_lower": 10,
+    "cuff_left_outer": 11,
+    "cuff_left_inner": 12,
+
+    "sleeve_inner_left_lower": 13,
+    "sleeve_inner_left_mid": 14,
+    "sleeve_inner_left_upper": 15,
+    "armpit_left": 16,
+
+    "side_seam_left_upper": 17,
+    "side_seam_left_lower": 18,
+
+    "hem_left": 19,
+    "hem_center": 20,
+    "hem_right": 21,
+
+    "side_seam_right_lower": 22,
+    "side_seam_right_upper": 23,
+
+    "armpit_right": 24,
+    "sleeve_inner_right_upper": 25,
+    "sleeve_inner_right_mid": 26,
+    "sleeve_inner_right_lower": 27,
+
+    "cuff_right_inner": 28,
+    "cuff_right_outer": 29,
+    "sleeve_outer_right_lower": 30,
+    "sleeve_outer_right_mid": 31,
+    "sleeve_outer_right_top": 32,
+    "shoulder_right_top": 33
+  }
+ ,
+  "vest": {
+    "neck_center": 1,
+    "neck_left_outer": 2,
+    "neck_left_inner": 3,
+    "neck_bottom": 4,
+    "neck_right_inner": 5,
+    "neck_right_outer": 6,
+
+    "shoulder_left_top": 7,
+
+    "side_seam_left_upper": 8,
+    "side_seam_left_lower": 9,
+    
+    "hem_left": 10,
+    "hem_center": 11,
+    "hem_right": 12,
+
+    "side_seam_right_mid": 13,
+    "side_seam_right_upper": 14,
+    
+    "shoulder_right": 15
+  }
+,
+  "shorts": {
+    "waist_left": 1,
+    "waist_center": 2,
+    "waist_right": 3,
+    "side_seam_left_mid": 4,
+    "hem_left_outer": 5,
+    "hem_left_inner": 6,
+    "crotch_apex": 7,
+    "hem_riht_inner": 8,
+    "hem_right_outer": 9,
+    "side_seam_right_mid": 10
+  },
+  "trousers": {
+    "waist_left": 1,
+    "waist_center": 2,
+    "waist_right": 3,
+    "side_seam_left_upper": 4,
+    "side_seam_left_lower": 5,
+    "hem_left_outer": 6,
+    "hem_left_inner": 7,
+    "left_leg_inner_mid": 8,
+    "crotch_apex": 9,
+    "right_leg_inner_mid": 10,
+    "hem_right_inner": 11,
+    "hem_right_outer": 12,
+    "outer_right_seam_lower": 13,
+    "outer_right_seam_upper": 14
+  }
+ ,
+  "skirt": {
+    "waist_left": 1,
+    "waist_center": 2,
+    "waist_right": 3,
+    "side_seam_left": 4,
+    "hem_left": 5,
+    "hem_center": 6,
+    "hem_right": 7,
+    "side_seam_right": 8
+  }
+,
+  "short_sleeve_dress": {
+    "neck_center": 1,
+    "neck_left_outer": 2,
+    "neck_left_inner": 3,
+    "neck_bottom": 4,
+    "neck_right_inner": 5,
+    "neck_right_outer": 6,
+
+    "shoulder_left_top": 7,
+    "sleeve_left_outer_mid": 8,
+    "cuff_left_outer": 9,
+    "cuff_left_inner": 10,
+    "sleeve_left_inner_mid": 11,
+    "armpit_left": 12,
+    
+    "side_seam_left_upper": 13,
+    "waist_left": 14,
+    "hip_left": 15,
+    "side_seam_left_lower": 16,
+ 
+    "hem_left": 17,
+    "hem_center": 18,
+    "hem_right": 19,
+
+    "side_seam_right_lower":20,
+    "hip_right": 21,
+    "wast_right": 22,
+    "side_seam_right_upper": 23,
+    
+    "armpit_right": 24,
+    "sleeve_right_inner_mid": 25,
+    "cuff_right_inner": 26,
+    "cuff_right_outer": 27,
+    "sleeve_left_ouer_mid": 28,
+    "shoulder_right_top": 29
+  },
+  "long_sleeve_dress": {
+    "neck_center": 1,
+    "neck_left_outer": 2,
+    "neck_left_inner": 3,
+    "neck_bottom": 4,
+    "neck_right_inner": 5,
+    "neck_right_outer": 6,
+    
+    "shoulder_left_top": 7,
+    "sleeve_outer_left_upper": 8,
+    "sleeve_outer_left_mid": 9,
+    "sleeve_outer_left_lower": 10,
+    "cuff_left_outer": 11,
+    "cuff_left_inner": 12,
+
+    "sleeve_inner_left_lower": 13,
+    "sleeve_inner_left_mid": 14,
+    "sleeve_inner_left_upper": 15,
+
+    "armpit_left": 16,
+    
+    "side_seam_left_upper": 17,
+    "side_seam_left_upper_mid": 18,
+    "waist_left": 19,
+    "side_seam_left_lower": 20,
+    
+    "hem_left": 21,
+    "hem_center": 22,
+    "hem_right": 23,
+    
+    "side_seam_right_lower":24,
+    "waist_right": 25,
+    "side_seam_right_upper_mid": 26,
+    "side_seam_right_upper": 27,
+    
+    "armpit_right": 28,
+    
+    "sleeve_inner_right_upper": 29,
+    "sleeve_inner_right_mid": 30,
+    "sleeve_inner_right_lower": 31,
+
+    "cuff_right_inner": 32,
+    "cuff_right_outer": 33,
+    "sleeve_outer_right_lower": 34,
+    "sleeve_outer_right_mid": 35,
+    "sleeve_outer_right_top": 36,
+    "shoulder_right_top": 37
+  }
+}
+
+
+
+
+
+
+
