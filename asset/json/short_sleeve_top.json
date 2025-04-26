@@ -1,0 +1,70 @@
+{
+	"short sleeve top" : {
+		"landmarks" : {
+			"2" : {
+				"predefined": true,
+				"description": "neck_left_outer"
+			},
+			"7" : {
+				"predefined": true,
+				"description": "shoulder_left_top"
+			},
+			"8" : {
+				"predefined": true,
+				"description": "sleeve_left_outer_mid"
+			},
+			"9" : {
+				"predefined": true,
+				"description": "cuff_left_outer"
+			},
+			"11" : {
+				"predefined": true,
+				"description": "sleeve_left_inner_mid"
+			},
+			"12" : {
+				"predefined": true,
+				"description": "armpit_left"
+			},
+			"20" : {
+				"predefined": true,
+				"description": "armpit_right"
+			},
+			"26" : {
+				"predefined": false,
+				"neighbors" : ["15", "16"],
+				"description": "bottom_left_middle"
+			}
+		},
+		"measurements" : {
+			"chest" : {
+				"landmarks" : {
+				 	"start" : "12", 
+				 	"end" : "20"
+				},
+				"description" : "Measure from one side to the other, at armhole height."
+			},
+			"sleeve_length" : {
+				"landmarks" : {
+				 	"start" : "7", 
+				 	"end" : "9"
+				},
+				"description" : "Measure from the cut of the sleeve with the shoulder to the bottom of the sleeve."
+			},
+			"sleeve_width" : {
+				"landmarks" : {
+				 	"start" : "8", 
+				 	"end" : "11"
+				}, 
+				"description" : "Measure perpendicular to the sleeve, from the armhole."
+			},
+			"front_length" : {
+				"landmarks" : {
+				 	"start" : "2", 
+				 	"end" : "26"
+				}, 
+				"description" : "Measure from the cut of the shoulder to the bottom of the garment.",
+				"angle" : 180
+			}
+		}
+	}
+}
