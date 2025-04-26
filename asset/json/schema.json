@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Garment Measurement Schema",
+  "type": "object",
+  "description": "One or more garments, each with landmarks and measurements",
+  "patternProperties": {
+    "^.+$": { "$ref": "#/definitions/garment" }
+  },
+  "additionalProperties": false,
+
+  "definitions": {
+    "garment": {
+      "type": "object",
+      "required": ["landmarks", "measurements"],
+      "properties": {
+        "landmarks": { "$ref": "#/definitions/landmarks" },
+        "measurements": { "$ref": "#/definitions/measurements" }
+      },
+      "additionalProperties": false
+    },
+
+    "landmarks": {
+      "type": "object",
+      "description": "Map of point-IDs → landmark definitions",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[0-9]+$": { "$ref": "#/definitions/landmark" }
+      },
+      "additionalProperties": false
+    },
+
+    "landmark": {
+      "type": "object",
+      "required": ["predefined"],
+      "properties": {
+        "predefined": {
+          "type": "boolean",
+          "description": "true=model-detected; false=customized"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional semantic label"
+        },
+        "neighbors": {
+          "type": "array",
+          "description": "Exactly two nearby landmark-IDs (strings)",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "measurements": {
+      "type": "object",
+      "description": "Map of measurement-names → measurement defs",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z0-9_]+$": { "$ref": "#/definitions/measurement" }
+      },
+      "additionalProperties": false
+    },
+
+    "measurement": {
+      "type": "object",
+      "required": ["landmarks"],
+      "properties": {
+        "landmarks": {
+          "type": "object",
+          "required": ["start", "end"],
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional human-readable note"
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 360,
+          "description": "Optional: 0–360° for custom-point math"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
