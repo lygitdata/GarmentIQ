@@ -4,34 +4,44 @@
   "type": "object",
   "description": "One or more garments, each with landmarks and measurements",
   "patternProperties": {
-    "^.+$": { "$ref": "#/definitions/garment" }
+    "^.+$": {
+      "$ref": "#/definitions/garment"
+    }
   },
   "additionalProperties": false,
-
   "definitions": {
     "garment": {
       "type": "object",
-      "required": ["landmarks", "measurements"],
+      "required": [
+        "landmarks",
+        "measurements"
+      ],
       "properties": {
-        "landmarks": { "$ref": "#/definitions/landmarks" },
-        "measurements": { "$ref": "#/definitions/measurements" }
+        "landmarks": {
+          "$ref": "#/definitions/landmarks"
+        },
+        "measurements": {
+          "$ref": "#/definitions/measurements"
+        }
       },
       "additionalProperties": false
     },
-
     "landmarks": {
       "type": "object",
       "description": "Map of point-IDs → landmark definitions",
       "minProperties": 1,
       "patternProperties": {
-        "^[0-9]+$": { "$ref": "#/definitions/landmark" }
+        "^[0-9]+$": {
+          "$ref": "#/definitions/landmark"
+        }
       },
       "additionalProperties": false
     },
-
     "landmark": {
       "type": "object",
-      "required": ["predefined"],
+      "required": [
+        "predefined"
+      ],
       "properties": {
         "predefined": {
           "type": "boolean",
@@ -54,24 +64,29 @@
       },
       "additionalProperties": false
     },
-
     "measurements": {
       "type": "object",
       "description": "Map of measurement-names → measurement defs",
       "minProperties": 1,
       "patternProperties": {
-        "^[a-z0-9_]+$": { "$ref": "#/definitions/measurement" }
+        "^[a-z0-9_]+$": {
+          "$ref": "#/definitions/measurement"
+        }
       },
       "additionalProperties": false
     },
-
     "measurement": {
       "type": "object",
-      "required": ["landmarks"],
+      "required": [
+        "landmarks"
+      ],
       "properties": {
         "landmarks": {
           "type": "object",
-          "required": ["start", "end"],
+          "required": [
+            "start",
+            "end"
+          ],
           "properties": {
             "start": {
               "type": "string",
