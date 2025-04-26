@@ -32,8 +32,14 @@
       "26": {
         "predefined": false,
         "neighbors": [
-          "15",
-          "16"
+          "15": {
+            "predefined": true,
+            "description": "hem_left"
+          },
+          "16": {
+            "predefined": true,
+            "description": "hem_center"
+          }
         ],
         "description": "bottom_left_middle"
       }
