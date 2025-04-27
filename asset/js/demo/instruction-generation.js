@@ -750,7 +750,7 @@ async function exportMeasurementsAsPDF() {
 
 		const wrapped = pdf.splitTextToSize(desc, cols.desc);
 		pdf.text(wrapped, margin + cols.start + cols.end + cols.name, yPos);
-		yPos += wrapped.length * 3;
+		yPos += wrapped.length * 4.25;
 
 		if (yPos > pageH - margin) {
 			pdf.addPage();
