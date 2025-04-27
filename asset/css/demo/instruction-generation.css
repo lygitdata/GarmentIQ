@@ -21,6 +21,61 @@
 
 /* Style the DIV container */
 /* Updated ID */
+#garmentPreviewContainer {
+    display: block;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+#garmentPreview {
+    display: block;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+#garmentLandmarkContainer {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#garmentMeasurementContainer {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#garmentMeasurementDisplayContainer {
+    width: 100%;
+    height: 550px; /* Or adjust as needed */
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    display: flex; /* Use flexbox to help center the initial SVG */
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Needed for absolute positioning or other techniques if used */
+    overflow: hidden; /* Crucial to hide parts of SVG outside bounds */
+    margin-top: 15px; /* Add some space */
+    cursor: default; /* Default cursor, will be changed by JS */
+}
+
+/* SVG styling */
+#garmentMeasurementDisplayContainer svg {
+    display: block;
+    max-width: none;  /* Allow SVG to be larger than container when zoomed */
+    max-height: none; /* Allow SVG to be larger than container when zoomed */
+    width: 100%;      /* Start at container width */
+    height: 100%;     /* Start at container height */
+    object-fit: contain; /* Ensure initial view fits */
+    transform-origin: 0 0; /* IMPORTANT: Scale/Translate from top-left */
+    transition: opacity 0.3s ease; /* For smooth showing/hiding if needed */
+    opacity: 1;
+}
+
 #garmentDisplayContainer {
     width: 100%;
     height: 550px; /* Or adjust as needed */
@@ -111,9 +166,108 @@
   stroke: none; /* Avoid stroke on text */
 }
 
-/* Added status span styling */
-#dragStatus {
-    font-weight: bold;
-    display: inline-block;
-    min-width: 25px; /* Prevent layout shift */
+/* Container for custom landmarks description */
+#garmentCustomLandmarkName {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 300px;
+}
+
+#garmentCustomLandmarkNameList {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#garmentCustomLandmarkNameList li {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#garmentCustomLandmarkNameList li:hover {
+  background-color: #eaeaea;
+}
+
+#garmentCustomLandmarkNameList label {
+  font-weight: bold;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+#garmentCustomLandmarkNameList input {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+#garmentCustomLandmarkNameList input:focus {
+  outline: none;
+  border-color: #4d90fe;
+  box-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
+}
+
+#garmentMeasurementDetailTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+#garmentMeasurementDetailTable th, 
+#garmentMeasurementDetailTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#garmentMeasurementDetailTable th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+#garmentMeasurementDetailTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#garmentMeasurementDetailTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+#garmentMeasurementDetailTable input[type="text"] {
+  width: 90%;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* Set specific widths for Name and Description columns */
+#garmentMeasurementDetailTable th:nth-child(1),
+#garmentMeasurementDetailTable td:nth-child(1),
+#garmentMeasurementDetailTable th:nth-child(2),
+#garmentMeasurementDetailTable td:nth-child(2),
+#garmentMeasurementDetailTable th:nth-child(3),
+#garmentMeasurementDetailTable td:nth-child(3) {
+  width: 10%;
+}
+
+#garmentMeasurementDetailTable th:nth-child(4),
+#garmentMeasurementDetailTable td:nth-child(4) {
+  width: 25%;
+}
+
+#garmentMeasurementDetailTable th:nth-child(5),
+#garmentMeasurementDetailTable td:nth-child(5) {
+  width: 65%;
 }
