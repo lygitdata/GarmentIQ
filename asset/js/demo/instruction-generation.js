@@ -1,605 +1,762 @@
-// --- DOM Element References ---
-const garmentContainer = document.getElementById('garmentDisplayContainer');
-const dragModeButton = document.getElementById('dragModeButton');
-const dragStatus = document.getElementById('dragStatus');
-const zoomInButton = document.getElementById('zoomInButton');
-const zoomOutButton = document.getElementById('zoomOutButton');
 const garmentSelector = document.getElementById('garmentSelector');
+const garmentDisplayContainer = document.getElementById('garmentDisplayContainer');
+const selectedPoints = new Map();
+let savedSelection = {};
+const toggleBtn = document.getElementById('toggleCustomLandmarks');
+let customLandmarkMode = false;
+toggleBtn.addEventListener('click', toggleCustomLandmarksMode);
 
-// --- State Variables ---
-const selectedPoints = new Map(); // Stores selected landmark IDs per garment { svgId: Set(landmarkId) }
+// Helper functions
+function nextButton(currentElement, nextElement) {
+	const current = document.getElementById(currentElement);
+	const next = document.getElementById(nextElement);
 
-// Zoom/Pan State
-let scale = 1;
-let offsetX = 0;
-let offsetY = 0;
-let isDragging = false;
-let dragStartX = 0;
-let dragStartY = 0;
-let initialOffsetX = 0;
-let initialOffsetY = 0;
-let dragMode = false;
-let justFinishedDrag = false; // Flag to prevent click immediately after drag
-
-// --- Constants ---
-const BUTTON_ZOOM_FACTOR = 1.2; // Zoom factor for button clicks & scroll
-const MIN_SCALE = 0.2;        // Minimum zoom scale allowed
-const MAX_SCALE = 10;         // Maximum zoom scale allowed
-
-// --- Helper Functions ---
-
-/**
- * Gets mouse coordinates relative to a container element.
- * @param {MouseEvent} evt - The mouse event.
- * @param {HTMLElement} container - The container element.
- * @returns {{x: number, y: number}} Coordinates relative to the container.
- */
-function getMousePos(evt, container) {
-    const rect = container.getBoundingClientRect();
-    return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    };
+	current.style.display = 'none';
+	next.style.display = 'block';
 }
 
-/**
- * Finds the currently visible SVG element within the container.
- * @returns {SVGElement | null} The active SVG element or null if none is found.
- */
+function backButton(currentElement, backElement) {
+	const current = document.getElementById(currentElement);
+	const back = document.getElementById(backElement);
+
+	current.style.display = 'none';
+	back.style.display = 'block';
+}
+
 function getActiveSvg() {
-    return garmentContainer.querySelector('svg.show');
+	return garmentDisplayContainer.querySelector('svg.show');
 }
 
-/**
- * Applies the current scale and offset transformations to the active SVG.
- */
 function applyTransform() {
-    const activeSvg = getActiveSvg();
-    if (activeSvg) {
-        activeSvg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-    }
+	const activeSvg = getActiveSvg();
+	if (activeSvg) {
+		activeSvg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+	}
 }
 
-/**
- * Converts screen coordinates (relative to the container) into the SVG's internal coordinate system.
- * Assumes SVG transform-origin is (0, 0).
- * @param {number} screenX - X coordinate relative to the container.
- * @param {number} screenY - Y coordinate relative to the container.
- * @returns {{x: number, y: number}} Coordinates in the SVG's internal space.
- */
 function screenToSvgCoords(screenX, screenY) {
-    return {
-        x: (screenX - offsetX) / scale,
-        y: (screenY - offsetY) / scale
-    };
+	return {
+		x: (screenX - offsetX) / scale,
+		y: (screenY - offsetY) / scale
+	};
 }
 
-/**
- * Updates the text, class, and disabled state of control buttons (Drag mode, Zoom).
- * Also updates the cursor style for the container.
- */
-function updateButtonStates() {
-    // Drag Mode Button
-    dragStatus.textContent = dragMode ? "On" : "Off";
-    dragModeButton.classList.toggle("active", dragMode);
+// Function(s) for garmentPreviewContainer
+function previewGarment() {
+	const selectedGarmentId = garmentSelector.value;
 
-    // Container Cursor
-    if (dragMode) {
-        garmentContainer.style.cursor = isDragging ? "grabbing" : "grab";
-    } else {
-        // Use default cursor, letting landmarks handle their pointer if needed
-        garmentContainer.style.cursor = "default";
-    }
+	if (selectedGarmentId) {
+		const formattedGarmentId = selectedGarmentId.replace(/ /g, "_");
+		const garmentPreviewContainer = document.getElementById("garmentPreview");
 
-    // Zoom Buttons (Disable at limits)
-    zoomInButton.disabled = scale >= MAX_SCALE;
-    zoomOutButton.disabled = scale <= MIN_SCALE;
+		garmentPreviewContainer.innerHTML = '';
+
+		const svgImage = document.createElement("img");
+		svgImage.src = `https://garmentiq.ly.gd.edu.kg/asset/img/garment_example/${formattedGarmentId}.svg`;
+		svgImage.alt = selectedGarmentId;
+
+		svgImage.style.width = "auto";
+		svgImage.style.height = "325px";
+
+		garmentPreviewContainer.appendChild(svgImage);
+		document.getElementById('garmentPreviewContainerNextButton').style.display = "block";
+	} else {
+		console.log("No garment selected.")
+	}
 }
 
-// --- Core Application Logic ---
-
-/**
- * Hides the currently visible SVG, shows the selected one, resets view,
- * and restores landmark selections for the newly shown SVG.
- */
-function showGarment() {
-    const selectedGarmentId = garmentSelector.value;
-
-    // Hide and reset transform on the previously shown SVG
-    const previousSvg = getActiveSvg();
-    if (previousSvg) {
-        previousSvg.style.transform = 'none'; // Reset transform explicitly
-        previousSvg.classList.remove('show');
-        previousSvg.style.display = 'none'; // Ensure it's hidden
-    }
-
-    // Reset landmark selection UI (circles)
-    document.querySelectorAll('#garmentDisplayContainer .point').forEach(c => c.classList.remove('selected'));
-
-    // Reset zoom/pan state for the new view
-    scale = 1;
-    offsetX = 0;
-    offsetY = 0;
-    isDragging = false; // Ensure dragging stops
-    justFinishedDrag = false;
-
-    // Apply default transform (effectively none) and update ALL button states
-    applyTransform(); // Needed even if no SVG is shown yet, to set initial state for buttons
-    updateButtonStates();
-
-    // Show the selected SVG and restore its selections
-    if (selectedGarmentId) {
-        const selectedSvg = document.getElementById(selectedGarmentId);
-        if (selectedSvg) {
-            selectedSvg.style.display = 'block'; // Make it visible first
-            // Apply the freshly reset transform before adding 'show' class
-            selectedSvg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-            // Use setTimeout to allow display:block to render before adding class for transition
-            setTimeout(() => {
-                selectedSvg.classList.add('show') // Add class to trigger transition/make active
-            }, 10);
-
-            // Restore selections for this garment from the map
-            const currentSelections = selectedPoints.get(selectedGarmentId);
-            if (currentSelections) {
-                currentSelections.forEach(id => {
-                    // Query within the specific SVG for safety
-                    const circle = selectedSvg.querySelector(`.landmark[data-id="${id}"] circle.point`);
-                    if (circle) {
-                        circle.classList.add('selected');
-                    }
-                });
-            }
-        } else {
-            console.warn(`SVG element with ID "${selectedGarmentId}" not found.`);
-        }
-    }
+function backToSelectEmpty() {
+	selectedPoints.clear();
 }
 
+// Function(s) for garmentLandmarkContainer
+function showGarmentToSelect() {
+	scale = 1;
+	offsetX = 0;
+	offsetY = 0;
 
-/**
- * Generates and triggers download of a JSON file containing the selected landmark IDs and descriptions.
- */
-function generateJsonBlob() {
-    const garment = garmentSelector.value;
-    if (!garment) {
-        alert("Please choose a garment first.");
-        return;
-    };
+	applyTransform();
 
-    const output = {};
-    output[garment] = {}; // Use garment ID as the key
+	const selectedGarmentId = garmentSelector.value;
 
-    const svg = document.getElementById(garment);
-    if (!svg) {
-        console.error(`Cannot find SVG for garment: ${garment}`);
-        return;
-    }
+	if (selectedGarmentId) {
+		const allSvgs = document.querySelectorAll('#garmentDisplayContainer svg');
+		allSvgs.forEach(svg => {
+			svg.style.display = 'none';
+		});
 
-    const currentSelections = selectedPoints.get(garment);
-    if (!currentSelections || currentSelections.size === 0) {
-        alert("Please select at least one landmark before exporting JSON.");
-        return;
-    }
+		const selectedSvg = document.getElementById(selectedGarmentId);
+		if (selectedSvg) {
+			selectedSvg.style.display = 'block';
+			selectedSvg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+			setTimeout(() => {
+				selectedSvg.classList.add('show');
+			}, 10);
 
-    // Populate the output object with selected landmark descriptions and IDs
-    svg.querySelectorAll('.landmark').forEach(group => {
-        const id = parseInt(group.dataset.id);
-        const desc = group.dataset.description;
-        if (currentSelections.has(id)) {
-            output[garment][desc] = id; // Map description to ID
-        }
-    });
-
-
-    const blob = new Blob([JSON.stringify(output, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    // Sanitize filename slightly
-    const safeGarmentName = garment.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    link.download = `${safeGarmentName}_measurement_schema.json`;
-    document.body.appendChild(link); // Required for Firefox
-    link.click();
-    document.body.removeChild(link); // Clean up link element
-    setTimeout(() => URL.revokeObjectURL(url), 100); // Clean up object URL after download starts
+			const currentSelections = selectedPoints.get(selectedGarmentId);
+			if (currentSelections) {
+				currentSelections.forEach(id => {
+					const circle = selectedSvg.querySelector(`.landmark[data-id="${id}"] circle.point`);
+					if (circle) {
+						circle.classList.add('selected');
+					}
+				});
+			}
+		} else {
+			console.warn(`SVG element with ID "${selectedGarmentId}" not found.`);
+		}
+	} else {
+		console.log("No garment selected.");
+	}
 }
 
-/**
- * Generates and triggers download of a PDF file showing the SVG garment
- * with selected landmarks highlighted and listed.
- * Requires jsPDF library and optionally canvg for better SVG rendering.
- */
-async function exportToPDF() {
-    const garment = garmentSelector.value;
-    if (!garment) {
-         alert("Please choose a garment first.");
-         return;
-    }
-
-    const svg = document.getElementById(garment);
-    if (!svg) {
-        console.error(`Cannot find SVG for garment: ${garment}`);
-        return;
-    }
-
-    // Check if any landmark is selected
-    const selections = selectedPoints.get(garment);
-    if (!selections || selections.size === 0) {
-        alert("Please select at least one landmark before exporting PDF.");
-        return;
-    }
-
-    // --- PDF Generation ---
-    // Create a clone WITHOUT the current view transform for export
-    const clone = svg.cloneNode(true);
-    clone.style.display = "block"; // Ensure it's displayable
-    clone.style.transform = 'none'; // Remove view transforms
-    clone.removeAttribute('class'); // Remove 'show' class if present
-    // Ensure selected class is on the clone for rendering
-    selections.forEach(id => {
-         const circle = clone.querySelector(`.landmark[data-id="${id}"] circle.point`);
-         if (circle) circle.classList.add('selected');
-    });
-
-    const svgString = new XMLSerializer().serializeToString(clone);
-
-    // --- jsPDF Initialization ---
-    // Ensure jsPDF is loaded (assuming it's included via <script>)
-    if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
-        alert("jsPDF library is not loaded. Cannot export to PDF.");
-        console.error("jsPDF not found. Make sure it's included in your HTML.");
-        return;
-    }
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF(); // Default: Portrait, mm, A4
-
-    // --- PDF Content ---
-    const capitalizedGarment = garment.charAt(0).toUpperCase() + garment.slice(1).replace(/_/g, ' ');
-    const title = `${capitalizedGarment} Measurement Schema`;
-    const margin = 15; // Page margin in mm
-    const availableWidth = pdf.internal.pageSize.getWidth() - 2 * margin;
-
-    pdf.setFontSize(16);
-    pdf.text(title, margin, margin + 5); // Add title with margin
-
-    // --- Render SVG to PDF ---
-    // Use Canvas rendering for better reliability/compatibility
-    try {
-        const canvas = document.createElement("canvas");
-        const svgWidth = svg.viewBox.baseVal.width;
-        const svgHeight = svg.viewBox.baseVal.height;
-        const ratio = svgWidth / svgHeight
-
-        // Calculate image dimensions in PDF (mm)
-        const pdfImageWidth = 100; 
-        const pdfImageHeight = 100 / ratio;
-
-        // Render canvas larger for better resolution
-        const renderScale = 8;
-        canvas.width = pdfImageWidth * renderScale;
-        canvas.height = pdfImageHeight * renderScale;
-        const ctx = canvas.getContext("2d");
-        ctx.fillStyle = 'white'; // Set background
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Use canvg if available (recommended: include it via <script>)
-        if (typeof canvg !== 'undefined' && typeof canvg.Canvg !== 'undefined') {
-             const v = await canvg.Canvg.fromString(ctx, svgString, {
-                 ignoreMouse: true,
-                 ignoreAnimation: true,
-                 ignoreDimensions: true, // Let canvg determine size based on SVG content/viewBox
-                 scaleWidth: canvas.width,
-                 scaleHeight: canvas.height,
-                 offsetX: 0,
-                 offsetY: 0
-             });
-             await v.render();
-             console.log("SVG rendered with Canvg.");
-        } else {
-             // Basic fallback: Render SVG string to Image, then draw Image to Canvas
-            console.warn("Canvg not found. Using basic SVG rendering for PDF (may have issues).");
-            const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-            const url = URL.createObjectURL(svgBlob);
-            const img = new Image();
-
-            await new Promise((resolve, reject) => {
-                img.onload = () => {
-                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                     URL.revokeObjectURL(url);
-                     resolve();
-                 };
-                 img.onerror = (err) => {
-                     URL.revokeObjectURL(url);
-                     console.error("Failed to load SVG blob into image for PDF.", err);
-                     reject(new Error("Failed to load SVG blob into image."));
-                 };
-                 img.src = url;
-            });
-        }
-
-        const imgData = canvas.toDataURL("image/png"); // Get image data from canvas
-        pdf.addImage(imgData, "PNG", margin, margin + 15, pdfImageWidth, pdfImageHeight); // Add image below title
-
-    } catch (error) {
-        console.error("Error rendering SVG to canvas for PDF:", error);
-        alert("An error occurred while preparing the image for the PDF. Check console.");
-        // Optionally, still try to save PDF without image? Or just return.
-        return;
-    }
-    // --- End SVG Rendering ---
-
-    // --- Add List of Selected Points ---
-    let y = pdf.internal.pageSize.getHeight() + margin * 2; // Start Y below the image + spacing
-    const maxY = pdf.internal.pageSize.getHeight() - margin; // Max Y for content on page
-
-    y += 7; // Line height + spacing
-
-    pdf.setFontSize(10);
-    let pointCount = 0;
-    svg.querySelectorAll('.landmark').forEach(group => {
-        const id = parseInt(group.dataset.id);
-        const desc = group.dataset.description;
-        if (selections.has(id)) {
-            // Check if adding text exceeds page height
-            if (y > maxY) {
-                 pdf.addPage();
-                 y = margin; // Reset y for new page (start from top margin)
-                 pdf.setFontSize(10); // Reset font size for new page
-            }
-            pdf.text(`  - ${id}: ${desc}`, margin, y); // Format: ID: Description
-            y += 5; // Smaller line height for list
-            pointCount++;
-        }
-    });
-
-    if (pointCount === 0) { // Should be caught earlier, but double check
-        alert("No landmarks were selected for the PDF export.");
-        return;
-    }
-
-    // --- Save PDF ---
-    const safeGarmentName = garment.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    pdf.save(`${safeGarmentName}_measurement_schema.pdf`);
-}
-
-
-/**
- * Selects all available landmarks on the currently shown SVG.
- */
 function selectAllLandmarks() {
-    const garment = garmentSelector.value;
-    if (!garment) return;
+	const garment = garmentSelector.value;
+	if (!garment) return;
 
-    const svg = document.getElementById(garment);
-    if (!svg) return;
+	const svg = document.getElementById(garment);
+	if (!svg) return;
 
-    // Ensure a set exists for this garment
-    if (!selectedPoints.has(garment)) {
-        selectedPoints.set(garment, new Set());
-    }
-    const currentSelections = selectedPoints.get(garment);
+	if (!selectedPoints.has(garment)) {
+		selectedPoints.set(garment, new Set());
+	}
+	const currentSelections = selectedPoints.get(garment);
 
-    // Iterate through landmarks in the SVG
-    svg.querySelectorAll('.landmark').forEach(group => {
-        const id = parseInt(group.dataset.id);
-        const circle = group.querySelector('circle.point');
-        // Add to set and update style if not already selected
-        if (!currentSelections.has(id)) {
-            currentSelections.add(id);
-            if (circle) circle.classList.add('selected');
-        }
-    });
+	svg.querySelectorAll('.landmark').forEach(group => {
+		const id = parseInt(group.dataset.id);
+		const circle = group.querySelector('circle.point');
+		if (!currentSelections.has(id)) {
+			currentSelections.add(id);
+			if (circle) circle.classList.add('selected');
+		}
+	});
 }
 
-/**
- * Deselects all landmarks on the currently shown SVG.
- */
 function resetLandmarks() {
-    const garment = garmentSelector.value;
-    if (!garment) return;
+	const garment = garmentSelector.value;
+	if (!garment) return;
 
-    const svg = document.getElementById(garment);
-     if (!svg) return;
+	const svg = document.getElementById(garment);
+	if (!svg) return;
 
-    const currentSelections = selectedPoints.get(garment);
-    if (currentSelections) {
-        // Get all landmark IDs that are currently selected
-        const idsToRemove = Array.from(currentSelections);
+	const currentSelections = selectedPoints.get(garment);
+	if (currentSelections) {
+		const idsToRemove = Array.from(currentSelections);
 
-        idsToRemove.forEach(id => {
-            const circle = svg.querySelector(`.landmark[data-id="${id}"] circle.point`);
-            if (circle) {
-                circle.classList.remove('selected');
-            }
-            currentSelections.delete(id); // Remove from the Set
-        });
-    }
+		idsToRemove.forEach(id => {
+			const circle = svg.querySelector(`.landmark[data-id="${id}"] circle.point`);
+			if (circle) {
+				circle.classList.remove('selected');
+			}
+			currentSelections.delete(id);
+		});
+	}
 }
 
-/**
- * Zooms the view by a given factor, centered on specific screen coordinates.
- * @param {number} factor - Zoom factor (e.g., 1.2 for zoom in, 1/1.2 for zoom out).
- * @param {number} zoomCenterX - X coordinate for the zoom center (relative to container).
- * @param {number} zoomCenterY - Y coordinate for the zoom center (relative to container).
- */
-function zoom(factor, zoomCenterX, zoomCenterY) {
-    const activeSvg = getActiveSvg();
-    if (!activeSvg) return;
+garmentDisplayContainer.addEventListener('click', (e) => {
+	const landmarkGroup = e.target.closest('.landmark');
+	if (!landmarkGroup) return;
 
-    const newScale = scale * factor;
+	const circle = landmarkGroup.querySelector('circle.point');
+	if (!circle || !landmarkGroup.contains(e.target)) return;
 
-    // Check limits BEFORE applying
-    if (newScale < MIN_SCALE || newScale > MAX_SCALE) {
-        // Optionally clamp scale here if desired
-        // scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
-        updateButtonStates(); // Update buttons even if zoom didn't change
-        return; // Don't zoom beyond limits
-    }
+	const id = parseInt(landmarkGroup.dataset.id);
+	const svg = landmarkGroup.closest('svg');
+	if (!svg) return;
+	const svgId = svg.id;
 
-    // Calculate SVG coordinates under the zoom center BEFORE zoom
-    const svgCoordsBeforeZoom = screenToSvgCoords(zoomCenterX, zoomCenterY);
+	if (!selectedPoints.has(svgId)) selectedPoints.set(svgId, new Set());
+	const set = selectedPoints.get(svgId);
 
-    // Apply zoom factor
-    scale = newScale;
+	if (set.has(id)) {
+		set.delete(id);
+		circle.classList.remove('selected');
+	} else {
+		set.add(id);
+		circle.classList.add('selected');
+	}
+});
 
-    // Calculate new offset to keep the point under the cursor stationary
-    offsetX = zoomCenterX - (svgCoordsBeforeZoom.x * scale);
-    offsetY = zoomCenterY - (svgCoordsBeforeZoom.y * scale);
+function toggleCustomLandmarksMode() {
+	const svgId = garmentSelector.value;
+	const svg = document.getElementById(svgId);
+	if (!svg) return console.error(`SVG "#${svgId}" not found`);
 
-    applyTransform();
-    updateButtonStates(); // Update zoom button disabled status
+	customLandmarkMode = !customLandmarkMode;
+	toggleBtn.textContent = `Custom Landmarks Mode (${customLandmarkMode ? 'On' : 'Off'})`;
+	svg.style.cursor = customLandmarkMode ? 'crosshair' : 'default';
+
+	if (customLandmarkMode)
+		svg.addEventListener('click', handleCustomLandmarkClick);
+	else
+		svg.removeEventListener('click', handleCustomLandmarkClick);
 }
 
-/**
- * Toggles the drag mode on/off.
- */
-function toggleDragMode() {
-    dragMode = !dragMode;
-    isDragging = false; // Ensure dragging stops if mode changes while dragging
-    updateButtonStates();
-    // No redraw needed, just cursor/state update
+function handleCustomLandmarkClick(event) {
+	event.preventDefault();
+	const svg = event.currentTarget;
+
+	const pt = svg.createSVGPoint();
+	pt.x = event.clientX;
+	pt.y = event.clientY;
+	const {
+		x,
+		y
+	} = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+	const clickedG = event.target.closest('g.landmark[data-custom="true"]');
+	if (clickedG) {
+		removeCustom(clickedG, svg);
+	} else if (!event.target.closest('g.landmark')) {
+		addCustom(x, y, svg);
+	}
 }
 
+function addCustom(x, y, svg) {
+	const predefinedCount = svg.querySelectorAll('g.landmark:not([data-custom])').length;
+	const customCount = svg.querySelectorAll('g.landmark[data-custom]').length;
+	const newId = predefinedCount + customCount + 1;
+	const desc = `custom_landmark`;
 
-// --- Event Listeners Setup ---
+	// Create the <g>
+	const g = document.createElementNS(svg.namespaceURI, 'g');
+	g.setAttribute('class', 'landmark');
+	g.setAttribute('data-id', newId);
+	g.setAttribute('data-custom', 'true');
+	g.setAttribute('data-description', desc);
 
-// Listener for Garment Selection Change
-garmentSelector.addEventListener('change', showGarment);
+	// Circle
+	const c = document.createElementNS(svg.namespaceURI, 'circle');
+	c.setAttribute('class', 'point');
+	c.setAttribute('cx', x);
+	c.setAttribute('cy', y);
+	c.setAttribute('r', '3.5');
 
-// Listeners for Landmark Clicks (using event delegation on the container)
-garmentContainer.addEventListener('click', (e) => {
-    // Check if the click target is a landmark circle or inside a landmark group
-    const landmarkGroup = e.target.closest('.landmark');
-    if (!landmarkGroup) return; // Click wasn't on or inside a landmark group
+	const t = document.createElementNS(svg.namespaceURI, 'text');
+	t.setAttribute('class', 'label');
+	t.setAttribute('x', x);
+	t.setAttribute('y', y);
+	t.textContent = newId;
 
-    // Ensure it's the correct circle if target is inside group but not circle itself
-    const circle = landmarkGroup.querySelector('circle.point');
-    if (!circle || !landmarkGroup.contains(e.target)) return; // Ensure click is relevant
+	g.append(c, t);
+	svg.appendChild(g);
 
-    const id = parseInt(landmarkGroup.dataset.id);
-    const svg = landmarkGroup.closest('svg');
-    if (!svg) return;
-    const svgId = svg.id;
+	addDescriptionListItem(newId, desc);
+}
 
-    // Prevent selection if dragging just finished or if drag mode is on
-    if (justFinishedDrag || dragMode) {
-        // console.log("Selection skipped due to drag/mode");
-        return; // Do nothing
-    }
+function removeCustom(g, svg) {
+	const removedId = Number(g.dataset.id);
+	g.remove();
+	removeDescriptionListItem(removedId);
 
-    // Add/Remove from selection
-    if (!selectedPoints.has(svgId)) selectedPoints.set(svgId, new Set());
-    const set = selectedPoints.get(svgId);
+	const laterGs = Array.from(svg.querySelectorAll('g.landmark[data-custom]'))
+		.filter(el => Number(el.dataset.id) > removedId)
+		.sort((a, b) => Number(a.dataset.id) - Number(b.dataset.id));
+	laterGs.forEach(el => {
+		const oldId = Number(el.dataset.id);
+		const newId = oldId - 1;
+		el.dataset.id = newId;
+		el.querySelector('text.label').textContent = newId;
+	});
 
-    if (set.has(id)) {
-        set.delete(id);
-        circle.classList.remove('selected');
-    } else {
-        set.add(id);
-        circle.classList.add('selected');
-    }
-});
+	renumberDescriptionListItemsAfter(removedId);
+}
 
+function addDescriptionListItem(id, description) {
+	const ul = document.getElementById('garmentCustomLandmarkNameList');
+	const li = document.createElement('li');
+	li.dataset.id = id;
 
-// Listeners for Drag/Pan on the Container
-garmentContainer.addEventListener("mousedown", function(e) {
-    const activeSvg = getActiveSvg();
-    if (!activeSvg || !dragMode) return; // Only drag if mode is on
+	const label = document.createElement('label');
+	label.htmlFor = `desc-${id}`;
+	label.textContent = `${id}: `;
 
-    // Prevent initiating drag if the click target is specifically a landmark circle
-    if (e.target.classList.contains('point') || e.target.closest('.landmark')) {
-        // console.log("Drag prevented: click on landmark.");
-        return;
-    }
+	const input = document.createElement('input');
+	input.type = 'text';
+	input.id = `desc-${id}`;
+	input.value = description;
 
-    isDragging = true;
-    justFinishedDrag = false;
-    const pos = getMousePos(e, garmentContainer);
-    dragStartX = pos.x;
-    dragStartY = pos.y;
-    initialOffsetX = offsetX;
-    initialOffsetY = offsetY;
-    updateButtonStates(); // Updates cursor to grabbing
-    e.preventDefault(); // Prevent text selection, etc.
-});
+	input.addEventListener('input', e => {
+		const uid = Number(e.target.closest('li').dataset.id);
+		const svg = document.getElementById(garmentSelector.value);
+		const g = svg.querySelector(`g.landmark[data-id="${uid}"][data-custom="true"]`);
+		if (g) g.dataset.description = e.target.value;
+	});
 
-garmentContainer.addEventListener("mousemove", function(e) {
-    if (!isDragging || !dragMode) return;
-    const activeSvg = getActiveSvg();
-    if (!activeSvg) { isDragging = false; updateButtonStates(); return; } // Safety check
+	li.append(label, input);
+	ul.appendChild(li);
+}
 
-    const pos = getMousePos(e, garmentContainer);
-    const dx = pos.x - dragStartX;
-    const dy = pos.y - dragStartY;
-    offsetX = initialOffsetX + dx;
-    offsetY = initialOffsetY + dy;
-    applyTransform();
-    e.preventDefault(); // Prevent issues during drag
-});
+function removeDescriptionListItem(id) {
+	const ul = document.getElementById('garmentCustomLandmarkNameList');
+	const li = ul.querySelector(`li[data-id="${id}"]`);
+	if (li) li.remove();
+}
 
-garmentContainer.addEventListener("mouseup", function(e) {
-    if (!isDragging || !dragMode) return;
+function renumberDescriptionListItemsAfter(removedId) {
+	const ul = document.getElementById('garmentCustomLandmarkNameList');
+	const lis = Array.from(ul.querySelectorAll('li'))
+		.filter(li => Number(li.dataset.id) > removedId)
+		.sort((a, b) => Number(a.dataset.id) - Number(b.dataset.id));
 
-    const pos = getMousePos(e, garmentContainer);
-    const dx = pos.x - dragStartX;
-    const dy = pos.y - dragStartY;
-    // Set flag if mouse moved significantly
-    justFinishedDrag = (Math.abs(dx) > 3 || Math.abs(dy) > 3);
+	lis.forEach(li => {
+		const oldId = Number(li.dataset.id);
+		const newId = oldId - 1;
+		li.dataset.id = newId;
 
-    isDragging = false;
-    updateButtonStates(); // Updates cursor back to grab
-    e.preventDefault();
+		const label = li.querySelector('label');
+		label.textContent = `${newId}: `;
+		label.htmlFor = `desc-${newId}`;
+		const input = li.querySelector('input');
+		input.id = `desc-${newId}`;
+	});
+}
 
-    // Reset the flag shortly after mouseup allows click event (if any) to check it
-    if (justFinishedDrag) {
-        setTimeout(() => { justFinishedDrag = false; }, 50);
-    }
-});
+function _getCoords(g) {
+	const c = g.querySelector('circle.point');
+	return [
+		parseFloat(c.getAttribute('cx')),
+		parseFloat(c.getAttribute('cy'))
+	];
+}
 
-garmentContainer.addEventListener("mouseleave", function(e) {
-    if (isDragging && dragMode) { // Only act if dragging was in progress
-        isDragging = false;
-        justFinishedDrag = true; // Leaving container ends the drag action
-        updateButtonStates();
-        // Reset flag shortly after
-        setTimeout(() => { justFinishedDrag = false; }, 50);
-    }
-});
+function _nearestPredefined(svg, customG, N = 2) {
+	const [x0, y0] = _getCoords(customG);
+	const predefs = Array.from(svg.querySelectorAll('g.landmark:not([data-custom="true"])'));
+	const withDist = predefs.map(g => {
+		const [x, y] = _getCoords(g);
+		const dx = x - x0,
+			dy = y - y0;
+		return {
+			id: g.dataset.id,
+			d2: dx * dx + dy * dy
+		};
+	});
+	return withDist
+		.sort((a, b) => a.d2 - b.d2)
+		.slice(0, N)
+		.map(o => o.id);
+}
 
-// Listener for Scroll Wheel Zoom on the Container
-garmentContainer.addEventListener('wheel', function(e) {
-    const activeSvg = getActiveSvg();
-    if (!activeSvg) return; // Don't zoom if no SVG is visible
+function saveSelection() {
+	savedSelection = {};
+	console.log(selectedPoints);
+	selectedPoints.forEach((idSet, garmentName) => {
+		const svg = document.getElementById(garmentName);
+		if (!svg) {
+			console.warn(`SVG "#${garmentName}" not found — skipping`);
+			return;
+		}
 
-    e.preventDefault(); // Prevent page scrolling
+		savedSelection[garmentName] = {
+			landmarks: {},
+			measurements: {}
+		};
 
-    const factor = e.deltaY < 0 ? BUTTON_ZOOM_FACTOR : 1 / BUTTON_ZOOM_FACTOR;
-    const pos = getMousePos(e, garmentContainer);
-    zoom(factor, pos.x, pos.y);
-}, { passive: false }); // Need passive: false to preventDefault
+		const sortedIds = Array.from(idSet)
+			.map(Number)
+			.sort((a, b) => a - b)
+			.map(String);
 
-// Listeners for Zoom Buttons
-zoomInButton.addEventListener('click', function() {
-    const activeSvg = getActiveSvg();
-    if (!activeSvg) return;
-    const centerX = garmentContainer.clientWidth / 2;
-    const centerY = garmentContainer.clientHeight / 2;
-    zoom(BUTTON_ZOOM_FACTOR, centerX, centerY);
-});
+		sortedIds.forEach(id => {
+			const g = svg.querySelector(`g.landmark[data-id="${id}"]`);
+			if (!g) return;
 
-zoomOutButton.addEventListener('click', function() {
-    const activeSvg = getActiveSvg();
-    if (!activeSvg) return;
-    const centerX = garmentContainer.clientWidth / 2;
-    const centerY = garmentContainer.clientHeight / 2;
-    zoom(1 / BUTTON_ZOOM_FACTOR, centerX, centerY);
-});
+			const isCustom = g.dataset.custom === 'true';
+			const predefined = !isCustom;
+			const description = g.dataset.description || '';
+			const [x, y] = _getCoords(g);
 
-// Listener for Drag Mode Button
-dragModeButton.addEventListener('click', toggleDragMode);
+			const entry = {
+				predefined,
+				description,
+				x,
+				y
+			};
 
-// --- Initial Page Load Setup ---
-document.addEventListener('DOMContentLoaded', () => {
-    showGarment(); // Initial call to set up based on default dropdown value
-});
+			if (isCustom) {
+				const neighborIds = _nearestPredefined(svg, g, 2);
+				entry.neighbors = {};
+				neighborIds.forEach(nid => {
+					const ng = svg.querySelector(`g.landmark[data-id="${nid}"]`);
+					const [nx, ny] = _getCoords(ng);
+					entry.neighbors[nid] = {
+						predefined: true,
+						description: ng.dataset.description || '',
+						x: nx,
+						y: ny
+					};
+				});
+			}
+
+			savedSelection[garmentName].landmarks[id] = entry;
+		});
+	});
+	console.log(savedSelection);
+}
+
+// Function(s) for garmentMeasurementContainer
+function showGarmentWithSelection() {
+	const selectedGarmentId = garmentSelector.value;
+	const container = document.getElementById('garmentMeasurementDisplayContainer');
+	if (!container) {
+		console.error('#garmentMeasurementDisplayContainer not found');
+		return;
+	}
+
+	container.querySelectorAll('svg').forEach(svg => {
+		svg.style.display = svg.id === selectedGarmentId ? '' : 'none';
+	});
+
+	const svg = container.querySelector(`svg[id="${selectedGarmentId}"]`);
+	const landmarkData = (savedSelection[selectedGarmentId] || {}).landmarks;
+	if (!svg || !landmarkData) return;
+
+	const ns = svg.namespaceURI;
+
+	svg.querySelectorAll('g.landmark').forEach(g => g.remove());
+
+	Object.keys(landmarkData)
+		.map(id => Number(id))
+		.sort((a, b) => a - b)
+		.forEach(idNum => {
+			const id = String(idNum);
+			const info = landmarkData[id];
+
+			// group
+			const g = document.createElementNS(ns, 'g');
+			g.setAttribute('class', 'landmark');
+			g.dataset.id = id;
+			g.dataset.description = info.description;
+			if (!info.predefined) g.dataset.custom = 'true';
+
+			// circle
+			const c = document.createElementNS(ns, 'circle');
+			c.setAttribute('class', 'point');
+			c.setAttribute('cx', info.x);
+			c.setAttribute('cy', info.y);
+			c.setAttribute('r', 3.5);
+
+			// label
+			const t = document.createElementNS(ns, 'text');
+			t.setAttribute('class', 'label');
+			t.setAttribute('x', info.x);
+			t.setAttribute('y', info.y);
+			t.textContent = id;
+
+			g.append(c, t);
+			svg.appendChild(g);
+		});
+}
+
+function generateMeasurementDetailTable() {
+	const garmentName = garmentSelector.value;
+	const landmarkData = savedSelection[garmentName]?.landmarks;
+	if (!landmarkData) return;
+
+	// get sorted list of IDs
+	const ids = Object.keys(landmarkData)
+		.map(Number)
+		.sort((a, b) => a - b)
+		.map(String);
+
+	const table = document.getElementById('garmentMeasurementDetailTable');
+
+	const container = document.getElementById('garmentMeasurementDisplayContainer');
+	const currentSvg = container.querySelector(`svg[id="${garmentName}"]`);
+	if (currentSvg) {
+		currentSvg.querySelectorAll('line[id^="line-"]').forEach(line => line.remove());
+	}
+
+	// remove all rows except the header
+	while (table.rows.length > 1) {
+		table.deleteRow(1);
+	}
+
+	// for each pair (i < j) add a row
+	for (let i = 0; i < ids.length; i++) {
+		for (let j = i + 1; j < ids.length; j++) {
+			const start = ids[i],
+				end = ids[j];
+			const row = table.insertRow(-1);
+
+			// Measure checkbox
+			const cellChk = row.insertCell();
+			const chk = document.createElement('input');
+			chk.type = 'checkbox';
+			chk.dataset.start = start;
+			chk.dataset.end = end;
+			chk.addEventListener('change', onMeasureToggle);
+			cellChk.appendChild(chk);
+
+			// Start, End
+			row.insertCell().textContent = start;
+			row.insertCell().textContent = end;
+
+			// Name input
+			const cellName = row.insertCell();
+			const nameInput = document.createElement('input');
+			nameInput.type = 'text';
+			nameInput.placeholder = 'Name';
+			cellName.appendChild(nameInput);
+
+			// Description input
+			const cellDesc = row.insertCell();
+			const descInput = document.createElement('input');
+			descInput.type = 'text';
+			descInput.placeholder = 'Description';
+			cellDesc.appendChild(descInput);
+		}
+	}
+}
+
+function onMeasureToggle(e) {
+	const chk = e.target;
+	const start = chk.dataset.start;
+	const end = chk.dataset.end;
+	const garmentName = garmentSelector.value;
+
+	if (chk.checked) {
+		addMeasurementLine(garmentName, start, end);
+	} else {
+		removeMeasurementLine(garmentName, start, end);
+	}
+}
+
+function addMeasurementLine(garmentName, start, end) {
+	const container = document.getElementById('garmentMeasurementDisplayContainer');
+	const svg = container.querySelector(`svg[id="${garmentName}"]`);
+	if (!svg) return;
+
+	const getCircle = id => svg.querySelector(`g.landmark[data-id="${id}"] circle.point`);
+	const c1 = getCircle(start),
+		c2 = getCircle(end);
+	if (!c1 || !c2) return;
+
+	const x1 = c1.cx.baseVal.value,
+		y1 = c1.cy.baseVal.value;
+	const x2 = c2.cx.baseVal.value,
+		y2 = c2.cy.baseVal.value;
+
+	// ensure <g id="measurementLines">
+	let linesG = svg.querySelector('g#measurementLines');
+	if (!linesG) {
+		linesG = document.createElementNS(svg.namespaceURI, 'g');
+		linesG.id = 'measurementLines';
+		svg.appendChild(linesG);
+	}
+
+	// create the <line>
+	const line = document.createElementNS(svg.namespaceURI, 'line');
+	line.id = `line-${start}-${end}`;
+	line.setAttribute('x1', x1);
+	line.setAttribute('y1', y1);
+	line.setAttribute('x2', x2);
+	line.setAttribute('y2', y2);
+	line.setAttribute('stroke', 'blue');
+	line.setAttribute('stroke-dasharray', '4');
+	linesG.appendChild(line);
+}
+
+function removeMeasurementLine(garmentName, start, end) {
+	const container = document.getElementById('garmentMeasurementDisplayContainer');
+	const svg = container.querySelector(`svg[id="${garmentName}"]`);
+	if (!svg) return;
+	const linesG = svg.querySelector('g#measurementLines');
+	if (!linesG) return;
+	const line = linesG.querySelector(`#line-${start}-${end}`);
+	if (line) line.remove();
+}
+
+function exportMeasurementsAsJSON() {
+	const garmentName = garmentSelector.value;
+	const garmentData = savedSelection[garmentName];
+	if (!garmentData) {
+		alert('No garment selected.');
+		return;
+	}
+
+	const table = document.getElementById('garmentMeasurementDetailTable');
+	const measurements = {};
+
+	for (let i = 1; i < table.rows.length; i++) {
+		const row = table.rows[i];
+		const chk = row.cells[0].querySelector('input[type="checkbox"]');
+		if (!chk || !chk.checked) continue; // Only process checked rows
+
+		const start = row.cells[1].textContent.trim();
+		const end = row.cells[2].textContent.trim();
+		const nameInput = row.cells[3].querySelector('input');
+		const descInput = row.cells[4].querySelector('input');
+
+		const name = nameInput.value.trim();
+		const description = descInput.value.trim();
+
+		if (!name || !description) {
+			alert('Please fill out the Name and Description for all checked measurements.');
+			return;
+		}
+
+		// Add this measurement
+		measurements[name] = {
+			landmarks: {
+				start: start,
+				end: end
+			},
+			description: description
+		};
+	}
+
+	garmentData.measurements = measurements;
+
+	const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedSelection, null, 2));
+	const downloadAnchorNode = document.createElement('a');
+	downloadAnchorNode.setAttribute("href", dataStr);
+	downloadAnchorNode.setAttribute("download", garmentName + ".json"); // filename = garment id
+	document.body.appendChild(downloadAnchorNode); // required for Firefox
+	downloadAnchorNode.click();
+	downloadAnchorNode.remove();
+}
+
+async function exportMeasurementsAsPDF() {
+	const garment = garmentSelector.value;
+	if (!garment) {
+		alert("Please choose a garment first.");
+		return;
+	}
+	const container = document.getElementById('garmentMeasurementDisplayContainer');
+	const svg = container.querySelector(`svg[id="${garment}"]`);
+	if (!svg) {
+		console.error(`Cannot find SVG for garment: ${garment}`);
+		return;
+	}
+
+	const selections = selectedPoints.get(garment);
+	if (!selections || selections.size === 0) {
+		alert("Please select at least one landmark before exporting PDF.");
+		return;
+	}
+
+	const clone = svg.cloneNode(true);
+	clone.style.transform = 'none';
+	selections.forEach(id => {
+		const c = clone.querySelector(`.landmark[data-id="${id}"] circle.point`);
+		if (c) c.classList.add('selected');
+	});
+	const svgString = new XMLSerializer().serializeToString(clone);
+
+	const {
+		jsPDF
+	} = window.jspdf;
+	const pdf = new jsPDF({
+		unit: 'mm',
+		format: 'a4'
+	});
+	const pageW = pdf.internal.pageSize.getWidth();
+	const pageH = pdf.internal.pageSize.getHeight();
+	const margin = 15;
+	let yPos = margin;
+
+	pdf.setFontSize(16);
+	pdf.text(`Measurement instruction: ${garment}`, margin, yPos + 5);
+	yPos += 10;
+	pdf.setFontSize(10);
+	pdf.text("Generated via GarmentIQ.ly.gd.edu.kg - No liability assumed.", margin, yPos + 5);
+	yPos += 15;
+
+	const vb = clone.viewBox.baseVal;
+	const ratio = vb.width / vb.height;
+	const maxImgH = 80;
+	let imgH = maxImgH,
+		imgW = ratio * imgH;
+	const availW = pageW - margin * 2;
+	if (imgW > availW) {
+		imgW = availW;
+		imgH = imgW / ratio;
+	}
+
+	const scale = 5;
+	const canvas = document.createElement('canvas');
+	canvas.width = vb.width * scale;
+	canvas.height = vb.height * scale;
+	const ctx = canvas.getContext('2d');
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	const renderSVG = async () => {
+		if (window.canvg && window.canvg.Canvg) {
+			const v = await window.canvg.Canvg.fromString(ctx, svgString, {
+				ignoreMouse: true,
+				ignoreAnimation: true,
+				scaleWidth: canvas.width,
+				scaleHeight: canvas.height
+			});
+			await v.render();
+		} else {
+			const blob = new Blob([svgString], {
+				type: 'image/svg+xml;charset=utf-8'
+			});
+			const url = URL.createObjectURL(blob);
+			await new Promise((res, rej) => {
+				const img = new Image();
+				img.onload = () => {
+					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+					URL.revokeObjectURL(url);
+					res();
+				};
+				img.onerror = e => {
+					URL.revokeObjectURL(url);
+					console.warn("SVG→Image fallback failed", e);
+					res();
+				};
+				img.src = url;
+			});
+		}
+	};
+
+	await renderSVG();
+
+	const imgData = canvas.toDataURL('image/png');
+	pdf.addImage(imgData, 'PNG', margin, yPos, imgW, imgH);
+	yPos += imgH + 10;
+
+	pdf.setFontSize(10);
+	const cols = {
+		start: 15,
+		end: 15,
+		name: 40,
+		desc: pageW - margin * 2 - (15 + 15 + 40)
+	};
+	pdf.text('Start', margin, yPos);
+	pdf.text('End', margin + cols.start, yPos);
+	pdf.text('Name', margin + cols.start + cols.end, yPos);
+	pdf.text('Description', margin + cols.start + cols.end + cols.name, yPos);
+	yPos += 5;
+
+	const table = document.getElementById('garmentMeasurementDetailTable');
+	for (let i = 1; i < table.rows.length; i++) {
+		const row = table.rows[i];
+		const chk = row.cells[0].querySelector('input[type="checkbox"]');
+		if (!chk || !chk.checked) continue;
+
+		const start = row.cells[1].textContent.trim();
+		const end = row.cells[2].textContent.trim();
+		const name = row.cells[3].querySelector('input').value.trim();
+		const desc = row.cells[4].querySelector('input').value.trim();
+
+		pdf.text(start, margin, yPos);
+		pdf.text(end, margin + cols.start, yPos);
+		pdf.text(name, margin + cols.start + cols.end, yPos);
+
+		const wrapped = pdf.splitTextToSize(desc, cols.desc);
+		pdf.text(wrapped, margin + cols.start + cols.end + cols.name, yPos);
+		yPos += wrapped.length * 3;
+
+		if (yPos > pageH - margin) {
+			pdf.addPage();
+			yPos = margin;
+		}
+	}
+
+	pdf.save(`${garment}.pdf`);
+}
