@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Garment Measurement Schema",
+  "description": "One or more garments, each with landmarks (all required) and measurements (all required)",
   "type": "object",
-  "description": "One or more garments, each with landmarks and measurements",
   "patternProperties": {
     "^.+$": {
       "$ref": "#/definitions/garment"
@@ -28,7 +28,7 @@
     },
     "landmarks": {
       "type": "object",
-      "description": "Map of point-IDs → landmark definitions",
+      "description": "Map of point-ID → landmark",
       "minProperties": 1,
       "patternProperties": {
         "^[0-9]+$": {
@@ -39,34 +39,73 @@
     },
     "landmark": {
       "type": "object",
+      "description": "A single landmark on the garment",
       "required": [
-        "predefined"
+        "predefined",
+        "description",
+        "x",
+        "y"
       ],
       "properties": {
         "predefined": {
           "type": "boolean",
-          "description": "true=model-detected; false=customized"
+          "description": "true = model-detected; false = customized"
         },
         "description": {
           "type": "string",
-          "description": "Optional semantic label"
+          "description": "Semantic label for this point"
+        },
+        "x": {
+          "type": "number",
+          "description": "X-coordinate in image space"
+        },
+        "y": {
+          "type": "number",
+          "description": "Y-coordinate in image space"
         },
         "neighbors": {
-          "type": "array",
-          "description": "Exactly two nearby landmark-IDs (strings)",
-          "items": {
-            "type": "string",
-            "pattern": "^[0-9]+$"
+          "type": "object",
+          "description": "Exactly two nearby landmarks, keyed by their IDs",
+          "minProperties": 2,
+          "maxProperties": 2,
+          "patternProperties": {
+            "^[0-9]+$": {
+              "$ref": "#/definitions/neighborLandmark"
+            }
           },
-          "minItems": 2,
-          "maxItems": 2
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "neighborLandmark": {
+      "type": "object",
+      "description": "A neighboring landmark (same shape as a landmark)",
+      "required": [
+        "predefined",
+        "description",
+        "x",
+        "y"
+      ],
+      "properties": {
+        "predefined": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
         }
       },
       "additionalProperties": false
     },
     "measurements": {
       "type": "object",
-      "description": "Map of measurement-names → measurement defs",
+      "description": "Map of measurement-name → measurement definition",
       "minProperties": 1,
       "patternProperties": {
         "^[a-z0-9_]+$": {
@@ -77,8 +116,10 @@
     },
     "measurement": {
       "type": "object",
+      "description": "Defines how to measure the garment",
       "required": [
-        "landmarks"
+        "landmarks",
+        "description"
       ],
       "properties": {
         "landmarks": {
@@ -90,24 +131,20 @@
           "properties": {
             "start": {
               "type": "string",
-              "pattern": "^[0-9]+$"
+              "pattern": "^[0-9]+$",
+              "description": "ID of the starting landmark"
             },
             "end": {
               "type": "string",
-              "pattern": "^[0-9]+$"
+              "pattern": "^[0-9]+$",
+              "description": "ID of the ending landmark"
             }
           },
           "additionalProperties": false
         },
         "description": {
           "type": "string",
-          "description": "Optional human-readable note"
-        },
-        "angle": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 360,
-          "description": "Optional: 0–360° for custom-point math"
+          "description": "Human-readable note about this measurement"
         }
       },
       "additionalProperties": false
