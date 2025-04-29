@@ -2,3 +2,4 @@
 from garmentiq import utils
 from garmentiq import classification
 from garmentiq import segmentation
+from garmentiq import landmark
