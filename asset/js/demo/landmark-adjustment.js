@@ -368,29 +368,29 @@ function exportImage() {
 }
 
 function exportMetadata() {
-     if (!image.src || !originalWidth) {
-         alert("Please load an image first.");
-         return;
-     }
+    if (!image.src || !originalWidth) {
+        alert("Please load an image first.");
+        return;
+    }
     if (landmarks.length === 0) {
         alert("No landmarks to export.");
         return;
     }
 
-    const metadata = landmarks.map(lm => {
+    const metadata = {};
+
+    landmarks.forEach(lm => {
         const distances = {};
         landmarks.forEach(otherLm => {
             if (lm.id !== otherLm.id) {
                 const dx = lm.x - otherLm.x;
                 const dy = lm.y - otherLm.y;
-                // Calculate distance in original image pixel units
                 distances[otherLm.id] = Math.sqrt(dx * dx + dy * dy);
             }
         });
-        return {
-            id: lm.id,
-            x: lm.x, // Already in original image coordinates
-            y: lm.y, // Already in original image coordinates
+        metadata[lm.id] = {
+            x: lm.x,
+            y: lm.y,
             distances: distances
         };
     });
@@ -400,12 +400,10 @@ function exportMetadata() {
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
-    // Get filename without extension and add .json
     let baseName = imageFileName.includes('.') ? imageFileName.substring(0, imageFileName.lastIndexOf('.')) : imageFileName;
     link.download = baseName + ".json";
     link.href = url;
     link.click();
 
-    // Clean up the object URL
     URL.revokeObjectURL(url);
 }
