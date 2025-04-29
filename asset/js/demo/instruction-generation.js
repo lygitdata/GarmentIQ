@@ -594,6 +594,25 @@ function removeMeasurementLine(garmentName, start, end) {
 	if (line) line.remove();
 }
 
+function clearMeasurementDetailTable() {
+  const table = document.getElementById('garmentMeasurementDetailTable');
+  while (table.rows.length > 1) {
+    table.deleteRow(1);
+  }
+}
+
+function clearMeasurementLines() {
+  const garmentName = garmentSelector.value;
+  const container = document.getElementById('garmentMeasurementDisplayContainer');
+  const svg = container.querySelector(`svg[id="${garmentName}"]`);
+  if (!svg) return;
+
+  const linesG = svg.querySelector('g#measurementLines');
+  if (linesG) {
+    linesG.remove();
+  }
+}
+
 function exportMeasurementsAsJSON() {
 	const garmentName = garmentSelector.value;
 	const garmentData = savedSelection[garmentName];
@@ -604,11 +623,15 @@ function exportMeasurementsAsJSON() {
 
 	const table = document.getElementById('garmentMeasurementDetailTable');
 	const measurements = {};
+	let anyChecked = false;
 
 	for (let i = 1; i < table.rows.length; i++) {
 		const row = table.rows[i];
 		const chk = row.cells[0].querySelector('input[type="checkbox"]');
-		if (!chk || !chk.checked) continue; 
+		if (!chk || !chk.checked) continue;
+
+		anyChecked = true;
+
 		const start = row.cells[1].textContent.trim();
 		const end = row.cells[2].textContent.trim();
 		const nameInput = row.cells[3].querySelector('input');
@@ -622,7 +645,6 @@ function exportMeasurementsAsJSON() {
 			return;
 		}
 
-		// Add this measurement
 		measurements[name] = {
 			landmarks: {
 				start: start,
@@ -630,6 +652,11 @@ function exportMeasurementsAsJSON() {
 			},
 			description: description
 		};
+	}
+
+	if (!anyChecked) {
+		alert('Please select at least one dimension to measure in order to export.');
+		return;
 	}
 
 	garmentData.measurements = measurements;
@@ -771,10 +798,13 @@ async function exportMeasurementsAsPDF() {
 	yPos += 5;
 
 	const table = document.getElementById('garmentMeasurementDetailTable');
+	let anyChecked = false;
 	for (let i = 1; i < table.rows.length; i++) {
 		const row = table.rows[i];
 		const chk = row.cells[0].querySelector('input[type="checkbox"]');
 		if (!chk || !chk.checked) continue;
+
+		anyChecked = true;
 
 		const start = row.cells[1].textContent.trim();
 		const end = row.cells[2].textContent.trim();
@@ -798,6 +828,11 @@ async function exportMeasurementsAsPDF() {
 			pdf.addPage();
 			yPos = margin;
 		}
+	}
+
+	if (!anyChecked) {
+		alert('Please select at least one dimension to measure in order to export.');
+		return;
 	}
 
 	pdf.save(`${garment}.pdf`);
