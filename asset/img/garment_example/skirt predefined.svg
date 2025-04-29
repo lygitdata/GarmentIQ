@@ -1,0 +1,56 @@
+<svg id="skirt" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style type="text/css"><![CDATA[
+          .landmark circle.selected {
+            fill: orange; 
+          }
+          .point {
+            cursor: pointer;
+            fill: #3399ff;
+            stroke: black;
+            stroke-width: 1px;
+          }
+          .label {
+            font-size: 4px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+            fill: black;
+            stroke: none;
+          }
+        ]]></style>
+    </defs>
+    <path d="M60,40 S100,50 140,40 L160,120 Q100,150 40,120 L60,40 Z" fill="none" stroke="black" />
+    <g class="landmark" data-id="1" data-description="waist_left">
+        <circle class="point" cx="60" cy="40" r="3.5" />
+        <text class="label" x="60" y="40">1</text>
+    </g>
+    <g class="landmark" data-id="2" data-description="waist_center">
+        <circle class="point" cx="100" cy="45" r="3.5" />
+        <text class="label" x="100" y="45">2</text>
+    </g>
+    <g class="landmark" data-id="3" data-description="waist_right">
+        <circle class="point" cx="140" cy="40" r="3.5" />
+        <text class="label" x="140" y="40">3</text>
+    </g>
+    <g class="landmark" data-id="4" data-description="side_seam_left">
+        <circle class="point" cx="50" cy="80" r="3.5" />
+        <text class="label" x="50" y="80">4</text>
+    </g>
+    <g class="landmark" data-id="5" data-description="hem_left">
+        <circle class="point" cx="40" cy="120" r="3.5" />
+        <text class="label" x="40" y="120">5</text>
+    </g>
+    <g class="landmark" data-id="6" data-description="hem_center">
+        <circle class="point" cx="100" cy="135" r="3.5" />
+        <text class="label" x="100" y="135">6</text>
+    </g>
+    <g class="landmark" data-id="7" data-description="hem_right">
+        <circle class="point" cx="160" cy="120" r="3.5" />
+        <text class="label" x="160" y="120">7</text>
+    </g>
+    <g class="landmark" data-id="8" data-description="side_seam_right">
+        <circle class="point" cx="150" cy="80" r="3.5" />
+        <text class="label" x="150" y="80">8</text>
+    </g>
+</svg>

@@ -1,0 +1,124 @@
+<svg id="short sleeve top" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style type="text/css"><![CDATA[
+          .landmark circle.selected {
+            fill: orange; 
+          }
+          .point {
+            cursor: pointer;
+            fill: #3399ff;
+            stroke: black;
+            stroke-width: 1px;
+          }
+          .label {
+            font-size: 4px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+            fill: black;
+            stroke: none;
+          }
+        ]]></style>
+    </defs>
+    <path d="M 83 15 L 100 40 L 116 15 L 143 25 Q 155 35 170 50 Q 167 68 157 76 L 140 65 Q 140 100 145 160 Q 100 170 55 160 Q 60 100 60 65 L 45 76 Q 32 68 27 53 Q 45 35 58 25 L 83 15 M 83 15 L 100 23 L 116 15" fill="none" stroke="black" />
+    <g class="landmark" data-id="1" data-description="neck_center">
+        <circle class="point" cx="100" cy="23" r="3.5" />
+        <text class="label" x="100" y="23">1</text>
+    </g>
+    <g class="landmark" data-id="2" data-description="neck_left_outer">
+        <circle class="point" cx="83" cy="15" r="3.5" />
+        <text class="label" x="83" y="15">2</text>
+    </g>
+    <g class="landmark" data-id="3" data-description="neck_left_inner">
+        <circle class="point" cx="91" cy="27" r="3.5" />
+        <text class="label" x="91" y="27">3</text>
+    </g>
+    <g class="landmark" data-id="4" data-description="neck_bottom">
+        <circle class="point" cx="100" cy="40" r="3.5" />
+        <text class="label" x="100" y="40">4</text>
+    </g>
+    <g class="landmark" data-id="5" data-description="neck_right_inner">
+        <circle class="point" cx="108" cy="27" r="3.5" />
+        <text class="label" x="108" y="27">5</text>
+    </g>
+    <g class="landmark" data-id="6" data-description="neck_right_outer">
+        <circle class="point" cx="116" cy="15" r="3.5" />
+        <text class="label" x="116" y="15">6</text>
+    </g>
+    <g class="landmark" data-id="7" data-description="shoulder_left_top">
+        <circle class="point" cx="58" cy="25" r="3.5" />
+        <text class="label" x="58" y="25">7</text>
+    </g>
+    <g class="landmark" data-id="8" data-description="sleeve_left_outer_mid">
+        <circle class="point" cx="40" cy="40" r="3.5" />
+        <text class="label" x="40" y="40">8</text>
+    </g>
+    <g class="landmark" data-id="9" data-description="cuff_left_outer">
+        <circle class="point" cx="27" cy="53" r="3.5" />
+        <text class="label" x="27" y="53">9</text>
+    </g>
+    <g class="landmark" data-id="10" data-description="cuff_left_inner">
+        <circle class="point" cx="45" cy="76" r="3.5" />
+        <text class="label" x="45" y="76">10</text>
+    </g>
+    <g class="landmark" data-id="11" data-description="sleeve_left_inner_mid">
+        <circle class="point" cx="52" cy="70" r="3.5" />
+        <text class="label" x="52" y="70">11</text>
+    </g>
+    <g class="landmark" data-id="12" data-description="armpit_left">
+        <circle class="point" cx="60" cy="65" r="3.5" />
+        <text class="label" x="60" y="65">12</text>
+    </g>
+    <g class="landmark" data-id="13" data-description="side_seam_left_upper">
+        <circle class="point" cx="60" cy="100" r="3.5" />
+        <text class="label" x="60" y="100">13</text>
+    </g>
+    <g class="landmark" data-id="14" data-description="side_seam_left_upper_mid">
+        <circle class="point" cx="58" cy="130" r="3.5" />
+        <text class="label" x="58" y="130">14</text>
+    </g>
+    <g class="landmark" data-id="15" data-description="hem_left">
+        <circle class="point" cx="56" cy="160" r="3.5" />
+        <text class="label" x="56" y="160">15</text>
+    </g>
+    <g class="landmark" data-id="16" data-description="hem_center">
+        <circle class="point" cx="100" cy="165" r="3.5" />
+        <text class="label" x="100" y="165">16</text>
+    </g>
+    <g class="landmark" data-id="17" data-description="hem_right">
+        <circle class="point" cx="145" cy="160" r="3.5" />
+        <text class="label" x="145" y="160">17</text>
+    </g>
+    <g class="landmark" data-id="18" data-description="side_seam_right_lower">
+        <circle class="point" cx="141" cy="100" r="3.5" />
+        <text class="label" x="141" y="100">18</text>
+    </g>
+    <g class="landmark" data-id="19" data-description="side_seam_right_upper">
+        <circle class="point" cx="143" cy="130" r="3.5" />
+        <text class="label" x="143" y="130">19</text>
+    </g>
+    <g class="landmark" data-id="20" data-description="armpit_right">
+        <circle class="point" cx="140" cy="65" r="3.5" />
+        <text class="label" x="140" y="65">20</text>
+    </g>
+    <g class="landmark" data-id="21" data-description="sleeve_right_inner_mid">
+        <circle class="point" cx="149" cy="70" r="3.5" />
+        <text class="label" x="149" y="70">21</text>
+    </g>
+    <g class="landmark" data-id="22" data-description="cuff_right_inner">
+        <circle class="point" cx="157" cy="76" r="3.5" />
+        <text class="label" x="157" y="76">22</text>
+    </g>
+    <g class="landmark" data-id="23" data-description="cuff_right_outer">
+        <circle class="point" cx="170" cy="50" r="3.5" />
+        <text class="label" x="170" y="50">23</text>
+    </g>
+    <g class="landmark" data-id="24" data-description="sleeve_right_outer_mid">
+        <circle class="point" cx="157" cy="39" r="3.5" />
+        <text class="label" x="157" y="39">24</text>
+    </g>
+    <g class="landmark" data-id="25" data-description="shoulder_right_top">
+        <circle class="point" cx="143" cy="25" r="3.5" />
+        <text class="label" x="143" y="25">25</text>
+    </g>
+</svg>

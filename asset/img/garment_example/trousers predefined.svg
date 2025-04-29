@@ -1,0 +1,80 @@
+<svg id="trousers" viewBox="0 0 200 265" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style type="text/css"><![CDATA[
+          .landmark circle.selected {
+            fill: orange; 
+          }
+          .point {
+            cursor: pointer;
+            fill: #3399ff;
+            stroke: black;
+            stroke-width: 1px;
+          }
+          .label {
+            font-size: 4px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+            fill: black;
+            stroke: none;
+          }
+        ]]></style>
+    </defs>
+    <path d="M 50 35 Q 95 43 138 35 L 149 233 Q 142 244 122 237 Q 115 155 94 85 Q 76 155 69 240 Q 52 243 42 238 L 50 35" fill="none" stroke="black" />
+    <g class="landmark" data-id="1" data-description="waist_left">
+        <circle class="point" cx="50" cy="35" r="3.5" />
+        <text class="label" x="50" y="35">1</text>
+    </g>
+    <g class="landmark" data-id="2" data-description="waist_center">
+        <circle class="point" cx="94" cy="39" r="3.5" />
+        <text class="label" x="94" y="39">2</text>
+    </g>
+    <g class="landmark" data-id="3" data-description="waist_right">
+        <circle class="point" cx="138" cy="35" r="3.5" />
+        <text class="label" x="138" y="35">3</text>
+    </g>
+    <g class="landmark" data-id="4" data-description="side_seam_left_upper">
+        <circle class="point" cx="48" cy="80" r="3.5" />
+        <text class="label" x="48" y="80">4</text>
+    </g>
+    <g class="landmark" data-id="5" data-description="side_seam_left_lower">
+        <circle class="point" cx="46" cy="145" r="3.5" />
+        <text class="label" x="46" y="145">5</text>
+    </g>
+    <g class="landmark" data-id="6" data-description="hem_left_outer">
+        <circle class="point" cx="42" cy="238" r="3.5" />
+        <text class="label" x="42" y="238">6</text>
+    </g>
+    <g class="landmark" data-id="7" data-description="hem_left_inner">
+        <circle class="point" cx="69" cy="240" r="3.5" />
+        <text class="label" x="69" y="240">7</text>
+    </g>
+    <g class="landmark" data-id="8" data-description="left_leg_inner_mid">
+        <circle class="point" cx="81" cy="145" r="3.5" />
+        <text class="label" x="81" y="145">8</text>
+    </g>
+    <g class="landmark" data-id="9" data-description="crotch_apex">
+        <circle class="point" cx="94" cy="85" r="3.5" />
+        <text class="label" x="94" y="85">9</text>
+    </g>
+    <g class="landmark" data-id="10" data-description="right_leg_inner_mid">
+        <circle class="point" cx="109" cy="145" r="3.5" />
+        <text class="label" x="109" y="145">10</text>
+    </g>
+    <g class="landmark" data-id="11" data-description="hem_right_inner">
+        <circle class="point" cx="122" cy="237" r="3.5" />
+        <text class="label" x="122" y="237">11</text>
+    </g>
+    <g class="landmark" data-id="12" data-description="hem_right_outer">
+        <circle class="point" cx="149" cy="233" r="3.5" />
+        <text class="label" x="149" y="233">12</text>
+    </g>
+    <g class="landmark" data-id="13" data-description="outer_right_seam_lower">
+        <circle class="point" cx="144" cy="145" r="3.5" />
+        <text class="label" x="144" y="145">13</text>
+    </g>
+    <g class="landmark" data-id="14" data-description="outer_right_seam_upper">
+        <circle class="point" cx="140" cy="80" r="3.5" />
+        <text class="label" x="140" y="80">14</text>
+    </g>
+</svg>
