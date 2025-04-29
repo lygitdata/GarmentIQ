@@ -582,8 +582,7 @@ function exportMeasurementsAsJSON() {
 	for (let i = 1; i < table.rows.length; i++) {
 		const row = table.rows[i];
 		const chk = row.cells[0].querySelector('input[type="checkbox"]');
-		if (!chk || !chk.checked) continue; // Only process checked rows
-
+		if (!chk || !chk.checked) continue; 
 		const start = row.cells[1].textContent.trim();
 		const end = row.cells[2].textContent.trim();
 		const nameInput = row.cells[3].querySelector('input');
@@ -650,7 +649,7 @@ async function exportMeasurementsAsPDF() {
 	} = window.jspdf;
 	const pdf = new jsPDF({
 		unit: 'mm',
-		format: 'a4'
+		format: 'letter'
 	});
 	const pageW = pdf.internal.pageSize.getWidth();
 	const pageH = pdf.internal.pageSize.getHeight();
@@ -661,6 +660,18 @@ async function exportMeasurementsAsPDF() {
 	pdf.text(`Measurement instruction: ${garment}`, margin, yPos + 5);
 	yPos += 10;
 	pdf.setFontSize(10);
+	const now = new Date();
+	const formattedDate = now.toLocaleString('en-US', {
+	  year: 'numeric',
+	  month: '2-digit',
+	  day: '2-digit',
+	  hour: '2-digit',
+	  minute: '2-digit',
+	  second: '2-digit',
+	  hour12: true
+	});
+	pdf.text(`Generated on: ${formattedDate}`, margin, yPos + 5);
+	yPos += 10;
 	pdf.text("Generated via GarmentIQ.ly.gd.edu.kg - No liability assumed.", margin, yPos + 5);
 	yPos += 15;
 
