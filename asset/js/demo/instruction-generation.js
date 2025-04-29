@@ -755,6 +755,11 @@ async function exportMeasurementsAsPDF() {
 		const name = row.cells[3].querySelector('input').value.trim();
 		const desc = row.cells[4].querySelector('input').value.trim();
 
+		if (!name || !desc) {
+			alert('Please fill out the Name and Description for all checked measurements.');
+			return;
+		}
+
 		pdf.text(start, margin, yPos);
 		pdf.text(end, margin + cols.start, yPos);
 		pdf.text(name, margin + cols.start + cols.end, yPos);
