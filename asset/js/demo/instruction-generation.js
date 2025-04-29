@@ -262,6 +262,32 @@ function removeCustom(g, svg) {
 	renumberDescriptionListItemsAfter(removedId);
 }
 
+function removeAllCustom() {
+	const svgId = garmentSelector.value;
+	const svg = document.getElementById(svgId);
+	if (!svg) return console.error(`SVG "#${svgId}" not found`);
+
+	const customGs = svg.querySelectorAll('g.landmark[data-custom="true"]');
+	if (customGs.length === 0) return;
+
+	customGs.forEach(g => {
+		const id = Number(g.dataset.id);
+		g.remove();
+		removeDescriptionListItem(id);
+	});
+
+	const remainingCustomGs = Array.from(svg.querySelectorAll('g.landmark[data-custom="true"]'))
+		.sort((a, b) => Number(a.dataset.id) - Number(b.dataset.id));
+
+	remainingCustomGs.forEach((g, index) => {
+		const newId = index + 1;
+		g.dataset.id = newId;
+		g.querySelector('text.label').textContent = newId;
+	});
+
+	resetDescriptionListItems();
+}
+
 function addDescriptionListItem(id, description) {
 	const ul = document.getElementById('garmentCustomLandmarkNameList');
 	const li = document.createElement('li');
