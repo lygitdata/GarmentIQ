@@ -1,0 +1,119 @@
+{
+  "long sleeve top": {
+    "landmarks": {
+      "2": {
+        "predefined": true,
+        "description": "neck_left_outer",
+        "x": 80,
+        "y": 18
+      },
+      "7": {
+        "predefined": true,
+        "description": "shoulder_left_top",
+        "x": 52,
+        "y": 30
+      },
+      "16": {
+        "predefined": true,
+        "description": "armpit_left",
+        "x": 60,
+        "y": 65
+      },
+      "24": {
+        "predefined": true,
+        "description": "armpit_right",
+        "x": 140,
+        "y": 65
+      },
+      "29": {
+        "predefined": true,
+        "description": "cuff_right_outer",
+        "x": 171,
+        "y": 148
+      },
+      "33": {
+        "predefined": true,
+        "description": "shoulder_right_top",
+        "x": 151,
+        "y": 32
+      },
+      "34": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 75.5771713256836,
+        "y": 163.1652374267578,
+        "neighbors": {
+          "19": {
+            "predefined": true,
+            "description": "hem_left",
+            "x": 55,
+            "y": 160
+          },
+          "20": {
+            "predefined": true,
+            "description": "hem_center",
+            "x": 100,
+            "y": 165
+          }
+        }
+      },
+      "35": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 38.76064682006836,
+        "y": 54.538265228271484,
+        "neighbors": {
+          "8": {
+            "predefined": true,
+            "description": "sleeve_outer_left_upper",
+            "x": 37,
+            "y": 63
+          },
+          "16": {
+            "predefined": true,
+            "description": "armpit_left",
+            "x": 60,
+            "y": 65
+          }
+        }
+      }
+    },
+    "measurements": {
+      "front length": {
+        "landmarks": {
+          "start": "2",
+          "end": "34"
+        },
+        "description": "34: intersection of vertical line from 2 to bottom contour"
+      },
+      "back width": {
+        "landmarks": {
+          "start": "7",
+          "end": "33"
+        },
+        "description": "/"
+      },
+      "chest": {
+        "landmarks": {
+          "start": "16",
+          "end": "24"
+        },
+        "description": "/"
+      },
+      "sleeve width": {
+        "landmarks": {
+          "start": "16",
+          "end": "35"
+        },
+        "description": "35: intersection of perpendicular line from 16 to sleeve contour"
+      },
+      "sleeve length": {
+        "landmarks": {
+          "start": "29",
+          "end": "33"
+        },
+        "description": "/"
+      }
+    }
+  }
+}
