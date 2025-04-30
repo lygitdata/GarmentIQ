@@ -83,7 +83,7 @@ def process_and_save_images(
                 # Save the mask image
                 mask_pil = Image.fromarray(mask_np)
                 mask_pil.save(
-                    os.path.join(mask_dir, f"mask_{os.path.splitext(filename)[0]}.jpg")
+                    os.path.join(mask_dir, f"mask_{os.path.splitext(filename)[0]}.png")
                 )
 
                 if background_color is not None:
@@ -97,7 +97,7 @@ def process_and_save_images(
                     modified_image_pil.save(
                         os.path.join(
                             modified_image_dir,
-                            f"bg_modified_{os.path.splitext(filename)[0]}.jpg",
+                            f"bg_modified_{os.path.splitext(filename)[0]}.png",
                         )
                     )
 
