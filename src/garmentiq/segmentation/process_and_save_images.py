@@ -1,6 +1,6 @@
 import os
 from transformers import AutoModelForImageSegmentation
-from tqdm import tqdm
+from tqdm.notebook import tqdm
 import kornia
 from PIL import Image
 import numpy as np
