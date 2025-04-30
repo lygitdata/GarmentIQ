@@ -17,9 +17,37 @@ def derive_keypoint_coord(
     direction: str,
     line_length_factor: float = 10000.0
     ) -> Optional[Tuple[float, float]]:
+    
     """
     Calculates a target coordinate based on keypoint geometry and mask intersection.
-    (Docstring remains the same as the previous version)
+
+    The target coordinate is found by:
+    1. Defining Line 1 passing through p1. Its direction is either parallel or
+       perpendicular to the line segment p2-p3.
+    2. Defining Line 2 passing through p4 and p5.
+    3. Calculating the intersection (ix, iy) of Line 1 and Line 2.
+    4. Finding the intersection(s) of Line 1 with the boundary of a segmentation mask.
+    5. If Line 1 intersects the mask boundary, the function returns the mask
+       intersection point closest to (ix, iy).
+    6. If Line 1 does not intersect the mask boundary, the function returns (ix, iy).
+
+    Args:
+        p1_id: The index (keypoint_id) of the starting point for Line 1.
+        p2_id: The index of the first point defining the reference direction.
+        p3_id: The index of the second point defining the reference direction.
+        p4_id: The index of the first point defining Line 2.
+        p5_id: The index of the second point defining Line 2.
+        json_path: Path to the JSON file containing keypoint coordinates.
+                   Expected format: {"coordinates": [{"keypoint_id": id, "x": x, "y": y}, ...]}
+        mask_path: Path to the segmentation mask image file (grayscale).
+        direction: "parallel" or "perpendicular". Determines Line 1's direction
+                   relative to the p2-p3 vector.
+        line_length_factor: A large multiplier to create effectively infinite lines
+                            for Shapely intersection tests.
+
+    Returns:
+        A tuple (x, y) representing the calculated coordinate, or None if an error
+        occurs (e.g., file not found, keypoint missing, lines parallel, no mask boundary).
     """
 
     # 1. Load All Coordinates
