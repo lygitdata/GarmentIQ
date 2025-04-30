@@ -1,5 +1,5 @@
 import zipfile
-from tqdm import tqdm
+from tqdm.notebook import tqdm
 
 
 def unzip(zip_path, extract_to="."):
