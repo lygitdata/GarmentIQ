@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <a class="nav-link" href="/">Paper</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/">Documentation</a>
+                            <a class="nav-link" href="/documentation/">Documentation</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/lygitdata/GarmentIQ" target="_blank">GitHub</a>
