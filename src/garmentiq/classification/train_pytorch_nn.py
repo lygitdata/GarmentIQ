@@ -104,8 +104,8 @@ def train_pytorch_nn(
             num_workers=param["max_workers"],
             worker_init_fn=param["seed_worker"],
             generator=g,
-            pin_memory=True,
-            persistent_workers=True,
+            pin_memory=param["pin_memory"],
+            persistent_workers=param["persistent_workers"],
         )
         val_loader = DataLoader(
             val_dataset,
@@ -114,8 +114,8 @@ def train_pytorch_nn(
             num_workers=param["max_workers"],
             worker_init_fn=param["seed_worker"],
             generator=g,
-            pin_memory=True,
-            persistent_workers=True,
+            pin_memory=param["pin_memory"],
+            persistent_workers=param["persistent_workers"],
         )
 
         # Initialize model and optimizer
