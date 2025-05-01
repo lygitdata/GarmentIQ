@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir jupyterlab==4.4.1 ipywidgets
 
 # Suppress matplotlib.font_manager INFO logs using a hidden startup script
 RUN mkdir -p /etc/python_startup && \
-    echo "import logging; logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)" > /etc/python_startup/startup.py
+    echo "import logging; logging.basicConfig(level=logging.WARNING)" > /etc/python_startup/startup.py
 
 # Run the startup script for all Python sessions
 ENV PYTHONSTARTUP=/etc/python_startup/startup.py
