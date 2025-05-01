@@ -138,8 +138,10 @@ def validate_train_param(param: dict):
         "model_save_dir": (str, "./models"),
         "seed": (int, 88),
         "seed_worker": (Callable, seed_worker),
-        "max_workers": (int, max(os.cpu_count(), 1)),
+        "max_workers": (int, 0),
         "best_model_name": (str, "best_model.pt"),
+        "pin_memory": (bool, False),
+        "persistent_workers": (bool, False),
     }
 
     # --- Validate required keys
