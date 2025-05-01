@@ -10,6 +10,8 @@
 
 ---
 
+![image](https://github.com/user-attachments/assets/bd40b7b6-941c-429f-a160-0dd0eae0d295)
+
 GarmentIQ MagicBox is a streamlined, Docker-based JupyterLab environment designed to simplify the use of the GarmentIQ Python API. By packaging the development tools and dependencies into a Docker container, MagicBox ensures a consistent and reproducible environment for all users—eliminating the need for complex local setup or manual dependency management. Whether you're analyzing garment data, prototyping models, or running production-grade scripts, MagicBox offers a plug-and-play solution that gets you up and running quickly and reliably.
 
 ## How to install GarmentIQ MagicBox?
