@@ -24,7 +24,7 @@ Choosing a preferred directory.
 
 - For Windows, run the following command in Windows command prompt.
 
-  ```dos
+  ```bash
   powershell -Command "Invoke-WebRequest -Uri 'https://github.com/lygitdata/GarmentIQ/archive/refs/heads/magicbox.zip' -OutFile 'magicbox.zip'; Expand-Archive -Path 'magicbox.zip' -DestinationPath .; Rename-Item 'GarmentIQ-magicbox' 'garmentiq_magicbox'; Remove-Item 'magicbox.zip'"
   ```
 
