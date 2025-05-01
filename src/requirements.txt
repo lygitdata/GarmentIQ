@@ -3,8 +3,8 @@ pandas==2.2.3
 numpy==2.0.2
 torch==2.6.0
 torchvision==0.21.0
-scikit-learn==1.6.1
-scipy==1.15.2
+scikit-learn==1.4.2
+scipy==1.11.4
 Pillow==11.1.0
 matplotlib==3.10.0
 transformers==4.50.3
