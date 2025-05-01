@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  garmentiq:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./working:/app/working
+    environment:
+      - PYTHONPATH=/app:/app/working
