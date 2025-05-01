@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GarmentIQ MagicBox</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+    }
+    iframe {
+      width: 100%; height: 100%; border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe src="https://localhost:8888/lab"></iframe>
+
+  <script>
+    // Optional: wait for iframe load and catch connection errors
+    document.querySelector("iframe").addEventListener("error", () => {
+      alert("Could not connect to the local JupyterLab. Is it running?");
+    });
+  </script>
+</body>
+</html>
