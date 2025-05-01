@@ -159,6 +159,8 @@ def train_pytorch_nn(
                 }
             )
 
+            print(f"Fold {fold+1} | Epoch {epoch+1} | Val Loss: {val_loss:.4f} | F1: {f1:.4f} | Acc: {acc:.4f}")
+
             if patience_counter >= param["patience"]:
                 print(f"Early stopping at epoch {epoch+1} (fold {fold + 1})")
                 break
