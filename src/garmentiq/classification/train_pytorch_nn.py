@@ -120,7 +120,8 @@ def train_pytorch_nn(
 
         # Initialize model and optimizer
         model = model_class(**model_args).to(param["device"])
-        model = torch.nn.DataParallel(model)
+        if param["device"].type == "cuda" and torch.cuda.device_count() > 1:
+            model = torch.nn.DataParallel(model)
         optimizer = param["optimizer_class"](
             model.parameters(), **param["optimizer_args"]
         )
