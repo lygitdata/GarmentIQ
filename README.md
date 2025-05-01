@@ -1,6 +1,14 @@
 # GarmentIQ MagicBox (Version 1.0)
 
-*Last update of this page: 05/01/2025*
+*Last update: 05/01/2025*
+
+*Navigation*:
+
+1. [How to install GarmentIQ MagicBox?](#how-to-install-garmentiq-magicbox)
+2. [How to stop / uninstall GarmentIQ MagicBox?](#how-to-stop--uninstall-garmentiq-magicbox)
+3. [How to run code in GarmentIQ MagicBox?](#why-use-this-tool)
+
+---
 
 GarmentIQ MagicBox is a streamlined, Docker-based JupyterLab environment designed to simplify the use of the GarmentIQ Python API. By packaging the development tools and dependencies into a Docker container, MagicBox ensures a consistent and reproducible environment for all users—eliminating the need for complex local setup or manual dependency management. Whether you're analyzing garment data, prototyping models, or running production-grade scripts, MagicBox offers a plug-and-play solution that gets you up and running quickly and reliably.
 
@@ -97,3 +105,27 @@ To remove the Docker image, run the following command.
 ```cmd
 docker rmi garmentiq_magicbox
 ```
+
+## How to Run Code in GarmentIQ MagicBox
+
+To run code in GarmentIQ MagicBox, follow the steps below:
+
+### 1. Prepare Your Local Directory
+- Place all your configuration files for GarmentIQ MagicBox in your local directory.
+- The contents inside the `working/` folder will be synchronized with this directory, so ensure it reflects the latest state.
+
+### 2. Check Dependencies
+- All necessary dependencies are already included in GarmentIQ MagicBox.
+- You don't need to manually install them, making it easy to get started right away.
+
+### 3. Create a New Notebook or Script
+- You can create a new Jupyter notebook or a Python script to write your code.
+- Ensure your notebook or script is placed inside the `working/` folder to enable synchronization.
+
+### 4. Explore Example Notebooks
+- If you're new to GarmentIQ MagicBox or want to quickly see how things work, check out the example notebooks under the `working/examples/` folder.
+- These examples will help you understand how to use the system.
+
+### 5. Run Your Code
+- Once your notebook or script is ready, simply run it.
+- Any outputs or changes made within the `working/` directory will be reflected in your local directory.
