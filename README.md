@@ -6,7 +6,7 @@
 
 1. [How to install GarmentIQ MagicBox?](#how-to-install-garmentiq-magicbox)
 2. [How to stop / uninstall GarmentIQ MagicBox?](#how-to-stop--uninstall-garmentiq-magicbox)
-3. [How to run code in GarmentIQ MagicBox?](#why-use-this-tool)
+3. [How to run code in GarmentIQ MagicBox?](#how-to-run-code-in-garmentiq-magicbox)
 
 ---
 
@@ -117,6 +117,7 @@ To run code in GarmentIQ MagicBox, follow the steps below:
 ### 2. Check Dependencies
 - All necessary dependencies are already included in GarmentIQ MagicBox.
 - You don't need to manually install them, making it easy to get started right away.
+- In case if you need additional dipendencies, modify the `requirements.txt` in the configuration files in your local machine, then rebuild the Docker image and container, or simply using `!pip install`.
 
 ### 3. Create a New Notebook or Script
 - You can create a new Jupyter notebook or a Python script to write your code.
