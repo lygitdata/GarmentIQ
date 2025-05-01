@@ -1,6 +1,6 @@
 tqdm==4.67.1
 pandas==2.2.3
-numpy==2.0.2
+numpy==1.26.4
 torch==2.6.0
 torchvision==0.21.0
 scikit-learn==1.4.2
