@@ -4,6 +4,9 @@ FROM python:3.11.12
 # Set working directory
 WORKDIR /app
 
+# Suppress matplotlib.font_manager INFO logs and other info-level logs
+ENV PYTHONLOGLEVEL=WARNING
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
