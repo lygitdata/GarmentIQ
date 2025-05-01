@@ -24,13 +24,13 @@ Choosing a preferred directory.
 
 - For Windows, run the following command in Windows command prompt.
 
-  ```cmd
+  ```bash
   powershell -Command "Invoke-WebRequest -Uri 'https://github.com/lygitdata/GarmentIQ/archive/refs/heads/magicbox.zip' -OutFile 'magicbox.zip'; Expand-Archive -Path 'magicbox.zip' -DestinationPath .; Rename-Item 'GarmentIQ-magicbox' 'garmentiq_magicbox'; Remove-Item 'magicbox.zip'"
   ```
 
 - For Linux / MacOS, run the following command in terminal. Make sure you have already installed `curl` and `unzip`.
 
-  ```cmd
+  ```bash
   curl -L -o magicbox.zip https://github.com/lygitdata/GarmentIQ/archive/refs/heads/magicbox.zip && unzip magicbox.zip && mv GarmentIQ-magicbox garmentiq_magicbox && rm magicbox.zip
   ```
 
@@ -38,7 +38,7 @@ Choosing a preferred directory.
 
 Run the following command.
 
-```cmd
+```bash
 cd garmentiq_magicbox
 ```
 
@@ -46,7 +46,7 @@ cd garmentiq_magicbox
 
 Run the following command to build the Docker image. Make sure you have already installed Docker. This process is time consuming. Make sure your have a stable internet connection.
 
-```cmd
+```bash
 docker build --no-cache -t garmentiq_magicbox .
 ```
 
@@ -56,13 +56,13 @@ docker build --no-cache -t garmentiq_magicbox .
 
   - (Recommended) Run with GPU in addition to CPU.
 
-    ```cmd
+    ```bash
     docker run -d --name magicbox_container -p 8888:8888 -p 5000:5000 -p 5001:5001 -p 5002:5002 --gpus all -v "%cd%\working:/app/working" garmentiq_magicbox
     ```
 
   - Run with CPU only.
 
-    ```cmd
+    ```bash
     docker run -d --name magicbox_container -p 8888:8888 -p 5000:5000 -p 5001:5001 -p 5002:5002 -v "%cd%\working:/app/working" garmentiq_magicbox
     ```
 
@@ -70,13 +70,13 @@ docker build --no-cache -t garmentiq_magicbox .
 
   - (Recommended) Run with GPU in addition to CPU.
 
-    ```cmd
+    ```bash
     docker run -d --name magicbox_container -p 8888:8888 -p 5000:5000 -p 5001:5001 -p 5002:5002 --gpus all -v "$(pwd)/working:/app/working" garmentiq_magicbox
     ```
 
   - Run with CPU only.
 
-    ```cmd
+    ```bash
     docker run -d --name magicbox_container -p 8888:8888 -p 5000:5000 -p 5001:5001 -p 5002:5002 -v "$(pwd)/working:/app/working" garmentiq_magicbox
     ```
 
@@ -90,13 +90,13 @@ Open your browser, type http://127.0.0.1:8888 to access the Jupyter Lab interfac
 
 - To stop the Docker container, run the following command.
 
-  ```cmd
+  ```bash
   docker stop magicbox_container
   ```
 
 - To remove the Docker container, run the following command.
   
-  ```cmd
+  ```bash
   docker rm magicbox_container
   ```
 
@@ -104,7 +104,7 @@ Open your browser, type http://127.0.0.1:8888 to access the Jupyter Lab interfac
 
 To remove the Docker image, run the following command.
 
-```cmd
+```bash
 docker rmi garmentiq_magicbox
 ```
 
