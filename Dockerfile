@@ -4,9 +4,6 @@ FROM python:3.11.12
 # Set working directory
 WORKDIR /app
 
-# Suppress matplotlib.font_manager INFO logs and other info-level logs
-ENV PYTHONLOGLEVEL=WARNING
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -22,6 +19,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install JupyterLab and ipywidgets to suppress tqdm warnings
 RUN pip install --no-cache-dir jupyterlab==4.4.1 ipywidgets
+
+# Suppress matplotlib.font_manager INFO logs using a hidden startup script
+RUN mkdir -p /etc/python_startup && \
+    echo "import logging; logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)" > /etc/python_startup/startup.py
+
+# Run the startup script for all Python sessions
+ENV PYTHONSTARTUP=/etc/python_startup/startup.py
 
 # Expose JupyterLab port
 EXPOSE 8888
