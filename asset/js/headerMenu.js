@@ -4,22 +4,22 @@ document.addEventListener('DOMContentLoaded', function () {
         var content = `
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: auto; margin-right: 0;">
                         <li class="nav-item">
-                            <a class="nav-link" href="application/">Application</a>
+                            <a class="nav-link" href="/application/">Application</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="application/demo/">Demo</a>
+                            <a class="nav-link" href="/application/demo/">Demo</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/">Paper</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="documentation/">Documentation</a>
+                            <a class="nav-link" href="/documentation/">Documentation</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/lygitdata/GarmentIQ" target="_blank">GitHub</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="dashboard/">Dashboard</a>
+                            <a class="nav-link" href="/dashboard/">Dashboard</a>
                         </li>
                     </ul>
         `;
