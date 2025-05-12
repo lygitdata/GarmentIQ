@@ -1,6 +1,6 @@
 # Image Scraping Tool
 
-*Last update*: 04/10/2025
+*Last update*: 05/12/2025
 
 *Navigation*:
 
