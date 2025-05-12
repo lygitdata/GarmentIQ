@@ -2,15 +2,19 @@
 
 Date: 05/13/2025
 
-🏆 1st place: tinyViT (`tiny_vit_inditex_finetuned.pt`) - execellent performance on new Zara data (99.16% accuracy), preserves strong performance on the original Nordstrom & Myntra testing data (94.84% accuracy).
+Ranking:
 
-2nd place: CNN4 (`cnn_4_inditex_finetuned.pt`)
+- 🏆 1st place: tinyViT (`tiny_vit_inditex_finetuned.pt`) - execellent performance on new Zara data (99.16% accuracy), preserves strong performance on the original Nordstrom & Myntra testing data (94.84% accuracy).
 
-3rd place: CNN3 (`cnn_3_inditex_finetuned.pt`)
+- 🥈 2nd place: CNN4 (`cnn_4_inditex_finetuned.pt`)
 
-Zara data: https://www.kaggle.com/datasets/lygitdata/zara-clothes-image-data
+- 🥉 3rd place: CNN3 (`cnn_3_inditex_finetuned.pt`)
 
-Nordstrom & Myntra data: https://www.kaggle.com/datasets/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+Data:
+
+- Zara data: https://www.kaggle.com/datasets/lygitdata/zara-clothes-image-data
+
+- Nordstrom & Myntra data: https://www.kaggle.com/datasets/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
 
 ---
 
