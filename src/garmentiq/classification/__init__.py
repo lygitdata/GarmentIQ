@@ -2,6 +2,7 @@
 from .train_test_split import train_test_split
 from .load_data import load_data
 from .train_pytorch_nn import train_pytorch_nn
+from .fine_tune_pytorch_nn import fine_tune_pytorch_nn
 from .test_pytorch_nn import test_pytorch_nn
 from .predict import predict
 from .utils import (
