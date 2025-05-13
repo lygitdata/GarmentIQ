@@ -20,7 +20,7 @@ Data:
 
 ## tinyViT performance with fine-tuning
 
-### Test on Zara data
+### Training evaluation on Zara data
 
 ```
 Test Loss: 0.0390
@@ -45,7 +45,7 @@ short sleeve dress       0.93      1.00      0.97        14
       weighted avg       0.99      0.99      0.99       834
 ```
 
-### Test on original testing data
+### Test on original Nordstrom & Myntra testing data
 
 ```
 Test Loss: 0.1683
@@ -74,7 +74,7 @@ short sleeve dress       0.90      0.88      0.89       382
 
 ## CNN4 performance with fine-tuning
 
-### Test on Zara data
+### Training evaluation on Zara data
 
 ```
 Test Loss: 0.1355
@@ -99,7 +99,7 @@ short sleeve dress       0.75      0.86      0.80        14
       weighted avg       0.96      0.96      0.96       834
 ```
 
-### Test on original testing data
+### Test on original Nordstrom & Myntra testing data
 
 ```
 Test Loss: 0.3326
@@ -128,7 +128,7 @@ short sleeve dress       0.75      0.97      0.84       382
 
 ## CNN3 performance with fine-tuning
 
-### Test on Zara data
+### Training evaluation on Zara data
 
 ```
 Test Loss: 0.2756
@@ -153,7 +153,7 @@ short sleeve dress       0.62      0.71      0.67        14
       weighted avg       0.93      0.92      0.92       834
 ```
 
-### Test on original testing data
+### Test on original Nordstrom & Myntra testing data
 
 ```
 Test Loss: 0.3338
