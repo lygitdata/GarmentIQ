@@ -12,6 +12,7 @@ const modelChoices = {
     "CNN-3": "https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/application/demo/image-classification/models/cnn_3.onnx",
     "CNN-4": "https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/application/demo/image-classification/models/cnn_4.onnx",
     "Tiny ViT": "https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/application/demo/image-classification/models/tiny_vit.onnx"
+    "Tiny ViT (Inditex finetuned)": "https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/application/demo/image-classification/models/tiny_vit_inditex_finetuned.onnx"
 };
 
 const tabsContainer = document.getElementById("model-tabs");
