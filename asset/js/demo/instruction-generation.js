@@ -301,18 +301,6 @@ function removeAllCustom() {
     resetDescriptionListItems();
 }
 
-async function fetchDerivationDictionary() {
-    const url = 'http://garmentiq.ly.gd.edu.kg/asset/json/derivation_dictionary.json';
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Failed to fetch JSON:', error);
-        return null;
-    }
-}
-
 async function addDescriptionListItem(id, description) {
     const derivationDict = await fetchDerivationDictionary();
     if (!derivationDict) return;
