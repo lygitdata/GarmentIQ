@@ -187,8 +187,8 @@
   border-radius: 5px;
   background-color: #fff;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
 
 #garmentCustomLandmarkNameList li:hover {
@@ -197,19 +197,22 @@
 
 #garmentCustomLandmarkNameList label {
   font-weight: bold;
-  margin-right: 10px;
-  flex-shrink: 0;
+  margin-bottom: 4px;
 }
 
-#garmentCustomLandmarkNameList input {
-  width: 200px;
+#garmentCustomLandmarkNameList input,
+#garmentCustomLandmarkNameList select {
+  width: 100%;
+  max-width: 300px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
-#garmentCustomLandmarkNameList input:focus {
+#garmentCustomLandmarkNameList input:focus,
+#garmentCustomLandmarkNameList select:focus {
   outline: none;
   border-color: #4d90fe;
   box-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
