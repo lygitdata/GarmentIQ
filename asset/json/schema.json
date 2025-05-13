@@ -131,7 +131,7 @@
       "description": "Map of measurement-name → measurement definition",
       "minProperties": 1,
       "patternProperties": {
-        "^[a-z0-9_]+$": {
+        "^[a-z0-9_ ]+$": {
           "$ref": "#/definitions/measurement"
         }
       },
