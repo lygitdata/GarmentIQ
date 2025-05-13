@@ -1,0 +1,35 @@
+[project]
+name = "garmentiq"
+version = "0.0.2"
+authors = [
+  { name="Li Yuan", email="lyuan@gd.edu.kg" },
+]
+maintainers = [
+  { name="Li Yuan", email="lyuan@gd.edu.kg" },
+]
+description = "Automated Garment Measurement for Fashion Retail"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+]
+dependencies = [
+    "tqdm==4.67.1",
+    "pandas==2.2.2",
+    "numpy==2.0.0",
+    "torch==2.7.0",
+    "torchvision==0.22.0",
+    "scikit-learn==1.6.1",
+    "scipy==1.15.2",
+    "Pillow==11.1.0",
+    "matplotlib==3.10.0",
+    "transformers==4.50.3",
+    "kornia==0.8.0",
+    "timm==1.0.15",
+    "einops==0.8.1"
+]
+
+[project.urls]
+Homepage = "https://github.com/lygitdata/GarmentIQ/"
+Issues = "https://github.com/lygitdata/GarmentIQ/issues"
