@@ -42,7 +42,7 @@ function screenToSvgCoords(screenX, screenY) {
 }
 
 async function fetchDerivationDictionary() {
-    const url = 'http://garmentiq.ly.gd.edu.kg/asset/json/derivation_dictionary.json';
+    const url = 'https://garmentiq.ly.gd.edu.kg/asset/json/derivation_dictionary.json';
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
