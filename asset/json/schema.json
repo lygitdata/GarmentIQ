@@ -74,13 +74,16 @@
             }
           },
           "additionalProperties": false
+        },
+        "derivation": {
+          "$ref": "#/definitions/derivation",
+          "description": "How this custom point was derived"
         }
       },
       "additionalProperties": false
     },
     "neighborLandmark": {
       "type": "object",
-      "description": "A neighboring landmark (same shape as a landmark)",
       "required": [
         "predefined",
         "description",
@@ -103,6 +106,26 @@
       },
       "additionalProperties": false
     },
+    "derivation": {
+      "type": "object",
+      "required": [
+        "function"
+      ],
+      "minProperties": 2,
+      "properties": {
+        "function": {
+          "type": "string",
+          "description": "Name of the derivation function"
+        }
+      },
+      "patternProperties": {
+        "^(?!function$)[a-zA-Z_][a-zA-Z0-9_]*$": {
+          "type": "string",
+          "description": "Named argument for the derivation function"
+        }
+      },
+      "additionalProperties": false
+    },
     "measurements": {
       "type": "object",
       "description": "Map of measurement-name → measurement definition",
@@ -116,7 +139,6 @@
     },
     "measurement": {
       "type": "object",
-      "description": "Defines how to measure the garment",
       "required": [
         "landmarks",
         "description"
@@ -131,20 +153,17 @@
           "properties": {
             "start": {
               "type": "string",
-              "pattern": "^[0-9]+$",
-              "description": "ID of the starting landmark"
+              "pattern": "^[0-9]+$"
             },
             "end": {
               "type": "string",
-              "pattern": "^[0-9]+$",
-              "description": "ID of the ending landmark"
+              "pattern": "^[0-9]+$"
             }
           },
           "additionalProperties": false
         },
         "description": {
-          "type": "string",
-          "description": "Human-readable note about this measurement"
+          "type": "string"
         }
       },
       "additionalProperties": false
