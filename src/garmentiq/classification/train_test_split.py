@@ -11,6 +11,8 @@ from garmentiq.utils.check_filenames_metadata import check_filenames_metadata
 def train_test_split(
     output_dir: str,
     train_zip_dir: str,
+    metadata_csv: str,
+    label_column: str,
     test_zip_dir: Optional[str] = None,
     test_size: float = 0.2,
     seed: int = 88,
@@ -19,30 +21,48 @@ def train_test_split(
     """
     Prepares training and testing datasets from zipped image data and associated metadata.
 
-    This function handles two modes:
-    1. **Two-Zip Mode**: If both `train_zip_dir` and `test_zip_dir` are provided, it unzips and validates both datasets.
-    2. **Split Mode**: If only `train_zip_dir` is provided, it splits the data into training and testing sets based on the specified `test_size`.
+    This function supports two operation modes:
 
-    The function ensures the presence of the required folder structure (`images/` and `metadata.csv`),
-    verifies that image files match the metadata, and optionally prints dataset summaries.
+    1. **Two-Zip Mode**: If both `train_zip_dir` and `test_zip_dir` are provided, each dataset is unzipped, validated against the metadata, and returned as-is.
+    2. **Split Mode**: If only `train_zip_dir` is provided, the function splits the training data into new training and test sets based on `test_size`.
+
+    It ensures:
+    - The unzipped directories contain the expected structure (`images/` and metadata CSV).
+    - Image filenames match those specified in the metadata.
+    - Output datasets are organized into `train/` and `test/` folders under `output_dir`.
 
     :param output_dir: Directory where the processed datasets will be saved.
     :type output_dir: str
-    :param train_zip_dir: Path to the ZIP file containing training data.
+
+    :param train_zip_dir: Path to the ZIP file containing training data (with `images/` and metadata CSV).
     :type train_zip_dir: str
+
+    :param metadata_csv: Filename of the metadata CSV inside each ZIP archive (e.g., 'metadata.csv').
+    :type metadata_csv: str
+
+    :param label_column: Name of the column in the metadata CSV to use for class distribution summaries.
+    :type label_column: str
+
     :param test_zip_dir: Optional path to the ZIP file containing testing data. If not provided, the function performs a split.
     :type test_zip_dir: Optional[str]
+
     :param test_size: Proportion of data to use for testing if splitting from training data. Ignored if `test_zip_dir` is provided.
     :type test_size: float
+
     :param seed: Random seed used for reproducible splitting of training data.
     :type seed: int
-    :param verbose: Whether to print dataset summary statistics.
+
+    :param verbose: Whether to print class distribution summaries after processing.
     :type verbose: bool
 
-    :raises FileNotFoundError: If required files or folders are missing.
-    :raises ValueError: If metadata is missing required columns or if filename validation fails.
+    :raises FileNotFoundError: If any expected files or images are missing.
+    :raises ValueError: If metadata is missing required columns or if filenames and metadata don't align.
 
-    :returns: A dictionary with paths and loaded DataFrames for training and testing images and metadata.
+    :returns: A dictionary containing:
+        - 'train_images': Path to the directory with training images.
+        - 'train_metadata': DataFrame of training metadata.
+        - 'test_images': Path to the directory with testing images.
+        - 'test_metadata': DataFrame of testing metadata.
     :rtype: dict
     """
     os.makedirs(output_dir, exist_ok=True)
@@ -60,7 +80,7 @@ def train_test_split(
         check_unzipped_dir(test_out)
 
         # Load train metadata and check filenames
-        train_metadata_path = os.path.join(train_out, "metadata.csv")
+        train_metadata_path = os.path.join(train_out, metadata_csv)
         df_train = pd.read_csv(train_metadata_path)
         if "filename" not in df_train.columns:
             raise ValueError("Train metadata must contain a 'filename' column.")
@@ -69,7 +89,7 @@ def train_test_split(
         )
 
         # Load test metadata and check filenames
-        test_metadata_path = os.path.join(test_out, "metadata.csv")
+        test_metadata_path = os.path.join(test_out, metadata_csv)
         df_test = pd.read_csv(test_metadata_path)
         if "filename" not in df_test.columns:
             raise ValueError("Test metadata must contain a 'filename' column.")
@@ -78,10 +98,10 @@ def train_test_split(
         # Summary information
         if verbose:
             print(f"\n\nTrain set summary (sample size: {len(df_train)}):\n")
-            print(f"{df_train['garment'].value_counts()}\n")
+            print(f"{df_train[label_column].value_counts()}\n")
 
             print(f"Test set summary (sample size: {len(df_test)}):\n")
-            print(f"{df_test['garment'].value_counts()}\n")
+            print(f"{df_test[label_column].value_counts()}\n")
 
         return {
             "train_images": f"{train_out}/images",
@@ -94,7 +114,7 @@ def train_test_split(
     print("Splitting train data into train/test sets...")
 
     # Load train metadata
-    metadata_path = os.path.join(train_out, "metadata.csv")
+    metadata_path = os.path.join(train_out, metadata_csv)
     df = pd.read_csv(metadata_path)
 
     if "filename" not in df.columns:
@@ -124,7 +144,7 @@ def train_test_split(
     df_test = df[df["filename"].isin(test_filenames)]
     df_train = df[~df["filename"].isin(test_filenames)]
 
-    df_test.to_csv(os.path.join(test_out, "metadata.csv"), index=False)
+    df_test.to_csv(os.path.join(test_out, metadata_csv), index=False)
     df_train.to_csv(metadata_path, index=False)
 
     # Check if output images match the metadata records
@@ -134,10 +154,10 @@ def train_test_split(
     # Summary information
     if verbose:
         print(f"\n\nTrain set summary (sample size: {len(df_train)}):\n")
-        print(f"{df_train['garment'].value_counts()}\n")
+        print(f"{df_train[label_column].value_counts()}\n")
 
         print(f"Test set summary (sample size: {len(df_test)}):\n")
-        print(f"{df_test['garment'].value_counts()}\n")
+        print(f"{df_test[label_column].value_counts()}\n")
 
     return {
         "train_images": f"{train_out}/images",
