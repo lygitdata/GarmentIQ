@@ -10,7 +10,7 @@ Ranking:
 
 - 🥉 3rd place: CNN3 (`cnn_3_inditex_finetuned.pt`)
 
-*Note*: All these models were fine-tuned with `AdamW` with learning rate `0.00001` and weight decay `0.0001`.
+*Note*: All these models were fine-tuned using optimizer `AdamW` with learning rate `0.00001` and weight decay `0.0001`.
 
 Data:
 
