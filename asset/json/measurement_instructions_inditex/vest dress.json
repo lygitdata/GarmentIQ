@@ -46,8 +46,17 @@
       "20": {
         "predefined": false,
         "description": "custom_landmark",
-        "x": 76.33354949951172,
-        "y": 244.69029235839844,
+        "x": 79.22137451171875,
+        "y": 245.21800231933594,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "2",
+          "p2_id": "4",
+          "p3_id": "13",
+          "p4_id": "12",
+          "p5_id": "14",
+          "direction": "parallel"
+        },
         "neighbors": {
           "12": {
             "predefined": true,

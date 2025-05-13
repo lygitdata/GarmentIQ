@@ -40,8 +40,17 @@
       "26": {
         "predefined": false,
         "description": "custom_landmark",
-        "x": 77.76428985595703,
-        "y": 162.8007354736328,
+        "x": 82.12834930419922,
+        "y": 164.28207397460938,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "2",
+          "p2_id": "4",
+          "p3_id": "16",
+          "p4_id": "15",
+          "p5_id": "17",
+          "direction": "parallel"
+        },
         "neighbors": {
           "15": {
             "predefined": true,
@@ -60,8 +69,17 @@
       "27": {
         "predefined": false,
         "description": "custom_landmark",
-        "x": 45.686527252197266,
-        "y": 34.48967361450195,
+        "x": 46.79122543334961,
+        "y": 33.494102478027344,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "12",
+          "p2_id": "7",
+          "p3_id": "9",
+          "p4_id": "7",
+          "p5_id": "9",
+          "direction": "perpendicular"
+        },
         "neighbors": {
           "7": {
             "predefined": true,
