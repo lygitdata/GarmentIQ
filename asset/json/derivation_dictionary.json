@@ -10,10 +10,19 @@
       "perpendicular"
     ]
   },
-  "another_function": {
+  "another_function_1": {
     "arg_1": null,
     "arg_2": null,
     "arg_3": [
+      "option_1",
+      "option_2"
+    ]
+  },
+  "another_function_2": {
+    "arg_1": null,
+    "arg_2": null,
+    "arg_3": null,
+    "arg_4": [
       "option_1",
       "option_2"
     ]
