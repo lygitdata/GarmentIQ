@@ -199,6 +199,8 @@ function preprocessImage(image) {
     const ctx = canvas.getContext('2d');
     canvas.width = 184; // Target image width
     canvas.height = 120; // Target image height
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
     ctx.drawImage(image, 0, 0, 184, 120);
 
     const imageData = ctx.getImageData(0, 0, 184, 120);
