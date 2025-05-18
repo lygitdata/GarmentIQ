@@ -189,6 +189,7 @@ async function runModel(imageElement) {
     }; // Pass the tensor to the model
     const results = await session.run(feeds); // Run the model
     const output = results.output.data; // Get output data
+    console.log(output);
     return processOutput(output); // Process and return output
 }
 
