@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <a class="nav-link" href="/application/demo/">Demo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/">Paper</a>
+                            <a class="nav-link" href="https://archive.gd.edu.kg/abs/20250525121523/">Paper</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/documentation/">Documentation</a>
