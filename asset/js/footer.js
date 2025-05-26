@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
                     </a>.
                 </p>
-                <p class="text-center">Last update of this website: 05/19/2025</p>
+                <p class="text-center">Last update of this website: 05/26/2025</p>
                 <p class="text-center">
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/privacy-policy/">Privacy Policy</a>
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/cookie-policy/">Cookie Policy</a>
-                    <a class="link-fancy" target="_blank" href="https://garmentiq.ly.gd.edu.kg/sitemap.xml">Site Map</a>
+                    <a class="link-fancy" target="_blank" href="https://garmentiq.ly.gd.edu.kg/sitemap.xml">Sitemap</a>
                     <a class="link-fancy" href="https://garmentiq.ly.gd.edu.kg/dashboard/">Dashboard</a>
                 </p>
                 <p class="text-center" style="margin-top: 50px; font-size: 8px;"> Website template provided by <a href="https://templatedeck.com" class="link-fancy" target="_blank">templatedeck.com</a>. </p>
