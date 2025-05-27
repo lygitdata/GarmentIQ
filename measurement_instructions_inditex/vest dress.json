@@ -1,0 +1,107 @@
+{
+  "vest dress": {
+    "landmarks": {
+      "2": {
+        "predefined": true,
+        "description": "neck_left_outer",
+        "x": 83,
+        "y": 15
+      },
+      "8": {
+        "predefined": true,
+        "description": "side_seam_left_upper",
+        "x": 59,
+        "y": 70
+      },
+      "9": {
+        "predefined": true,
+        "description": "waist_left",
+        "x": 57.5,
+        "y": 100
+      },
+      "10": {
+        "predefined": true,
+        "description": "hip_left",
+        "x": 56,
+        "y": 122
+      },
+      "16": {
+        "predefined": true,
+        "description": "hip_right",
+        "x": 145,
+        "y": 122
+      },
+      "17": {
+        "predefined": true,
+        "description": "wast_right",
+        "x": 143,
+        "y": 100
+      },
+      "18": {
+        "predefined": true,
+        "description": "side_seam_right_upper",
+        "x": 141,
+        "y": 70
+      },
+      "20": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 79.22137451171875,
+        "y": 245.21800231933594,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "2",
+          "p2_id": "4",
+          "p3_id": "13",
+          "p4_id": "12",
+          "p5_id": "14",
+          "direction": "parallel"
+        },
+        "neighbors": {
+          "12": {
+            "predefined": true,
+            "description": "hem_left",
+            "x": 43,
+            "y": 240
+          },
+          "13": {
+            "predefined": true,
+            "description": "hem_center",
+            "x": 99,
+            "y": 246
+          }
+        }
+      }
+    },
+    "measurements": {
+      "full length": {
+        "landmarks": {
+          "start": "2",
+          "end": "20"
+        },
+        "description": "20: intersection of vertical line from 2 to bottom contour"
+      },
+      "chest": {
+        "landmarks": {
+          "start": "8",
+          "end": "18"
+        },
+        "description": "/"
+      },
+      "waist": {
+        "landmarks": {
+          "start": "9",
+          "end": "17"
+        },
+        "description": "/"
+      },
+      "hips": {
+        "landmarks": {
+          "start": "10",
+          "end": "16"
+        },
+        "description": "/"
+      }
+    }
+  }
+}

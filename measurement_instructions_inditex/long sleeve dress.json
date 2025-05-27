@@ -1,0 +1,162 @@
+{
+  "long sleeve dress": {
+    "landmarks": {
+      "2": {
+        "predefined": true,
+        "description": "neck_left_outer",
+        "x": 80,
+        "y": 18
+      },
+      "16": {
+        "predefined": true,
+        "description": "armpit_left",
+        "x": 60,
+        "y": 65
+      },
+      "18": {
+        "predefined": true,
+        "description": "side_seam_left_upper_mid",
+        "x": 62,
+        "y": 110
+      },
+      "19": {
+        "predefined": true,
+        "description": "waist_left",
+        "x": 60,
+        "y": 155
+      },
+      "25": {
+        "predefined": true,
+        "description": "waist_right",
+        "x": 140,
+        "y": 155
+      },
+      "26": {
+        "predefined": true,
+        "description": "side_seam_right_upper_mid",
+        "x": 138,
+        "y": 110
+      },
+      "28": {
+        "predefined": true,
+        "description": "armpit_right",
+        "x": 140,
+        "y": 65
+      },
+      "33": {
+        "predefined": true,
+        "description": "cuff_right_outer",
+        "x": 171,
+        "y": 148
+      },
+      "37": {
+        "predefined": true,
+        "description": "shoulder_right_top",
+        "x": 151,
+        "y": 32
+      },
+      "38": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 39.11378860473633,
+        "y": 54.05463409423828,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "16",
+          "p2_id": "7",
+          "p3_id": "9",
+          "p4_id": "7",
+          "p5_id": "9",
+          "direction": "perpendicular"
+        },
+        "neighbors": {
+          "8": {
+            "predefined": true,
+            "description": "sleeve_outer_left_upper",
+            "x": 37,
+            "y": 63
+          },
+          "16": {
+            "predefined": true,
+            "description": "armpit_left",
+            "x": 60,
+            "y": 65
+          }
+        }
+      },
+      "39": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 78.73814392089844,
+        "y": 244.92807006835938,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "2",
+          "p2_id": "4",
+          "p3_id": "22",
+          "p4_id": "21",
+          "p5_id": "23",
+          "direction": "parallel"
+        },
+        "neighbors": {
+          "21": {
+            "predefined": true,
+            "description": "hem_left",
+            "x": 51,
+            "y": 241
+          },
+          "22": {
+            "predefined": true,
+            "description": "hem_center",
+            "x": 100,
+            "y": 246
+          }
+        }
+      }
+    },
+    "measurements": {
+      "full length": {
+        "landmarks": {
+          "start": "2",
+          "end": "39"
+        },
+        "description": "39: intersection of vertical line from 2 to bottom contour"
+      },
+      "chest": {
+        "landmarks": {
+          "start": "16",
+          "end": "28"
+        },
+        "description": "/"
+      },
+      "sleeve width": {
+        "landmarks": {
+          "start": "16",
+          "end": "38"
+        },
+        "description": "38: intersection of perpendicular line from 16 to sleeve contour"
+      },
+      "waist": {
+        "landmarks": {
+          "start": "18",
+          "end": "26"
+        },
+        "description": "/"
+      },
+      "hips": {
+        "landmarks": {
+          "start": "19",
+          "end": "25"
+        },
+        "description": "/"
+      },
+      "sleeve length": {
+        "landmarks": {
+          "start": "33",
+          "end": "37"
+        },
+        "description": "/"
+      }
+    }
+  }
+}

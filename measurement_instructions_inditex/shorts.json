@@ -1,0 +1,78 @@
+{
+  "shorts": {
+    "landmarks": {
+      "1": {
+        "predefined": true,
+        "description": "waist_left",
+        "x": 50,
+        "y": 35
+      },
+      "2": {
+        "predefined": true,
+        "description": "waist_center",
+        "x": 94,
+        "y": 39
+      },
+      "3": {
+        "predefined": true,
+        "description": "waist_right",
+        "x": 138,
+        "y": 35
+      },
+      "4": {
+        "predefined": true,
+        "description": "side_seam_left_mid",
+        "x": 48,
+        "y": 77
+      },
+      "5": {
+        "predefined": true,
+        "description": "hem_left_outer",
+        "x": 46,
+        "y": 119
+      },
+      "7": {
+        "predefined": true,
+        "description": "crotch_apex",
+        "x": 94,
+        "y": 80
+      },
+      "10": {
+        "predefined": true,
+        "description": "side_seam_right_mid",
+        "x": 140,
+        "y": 77
+      }
+    },
+    "measurements": {
+      "waist": {
+        "landmarks": {
+          "start": "1",
+          "end": "3"
+        },
+        "description": "/"
+      },
+      "full length": {
+        "landmarks": {
+          "start": "1",
+          "end": "5"
+        },
+        "description": "/"
+      },
+      "front rise": {
+        "landmarks": {
+          "start": "2",
+          "end": "7"
+        },
+        "description": "/"
+      },
+      "hips": {
+        "landmarks": {
+          "start": "4",
+          "end": "10"
+        },
+        "description": "/"
+      }
+    }
+  }
+}
