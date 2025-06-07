@@ -54,8 +54,8 @@ def predict(
     :rtype: tuple[str, List[float]]
     """
     # Validate image extension
-    if not any(image_path.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png"]):
-        raise ValueError("Image file must end with .jpg, .jpeg, or .png")
+    if not any(image_path.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png", ".JPG"]):
+        raise ValueError("Image file must end with .jpg, .jpeg, .png, or .JPG")
 
     # Sort the classes list to have a consistent order
     sorted_classes = sorted(classes)
