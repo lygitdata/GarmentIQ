@@ -21,6 +21,10 @@ def process(
     class_dict: dict,
     image_path: str,
     model: Type[torch.nn.Module],
+    scale_std: float = 200.0,
+    resize_dim: list[int, int] = [288, 384],
+    normalize_mean: list[float, float, float] = [0.485, 0.456, 0.406],
+    normalize_std: list[float, float, float] = [0.229, 0.224, 0.225],
 ):
     if not validate_garment_class_dict(class_dict):
         raise ValueError(
@@ -56,12 +60,9 @@ def process(
     if class_name not in instruction_data:
         raise ValueError(f"Class '{class_name}' not found in instruction file.")
 
-    (
-        input_tensor,
-        image_np,
-        center,
-        scale,
-    ) = input_image_transform(image_path)
+    (input_tensor, image_np, center, scale,) = input_image_transform(
+        image_path, scale_std, resize_dim, normalize_mean, normalize_std
+    )
 
     with torch.no_grad():
         np_output_heatmap = model(input_tensor).detach().cpu().numpy()
@@ -75,12 +76,7 @@ def process(
     predefined_index = find_instruction_landmark_index(
         instruction_data[class_name]["landmarks"], predefined=True
     )
-    preds_all = np.stack(
-        [
-            transform_preds(p, center, scale)
-            for p in preds_heatmap
-        ]
-    )
+    preds_all = np.stack([transform_preds(p, center, scale) for p in preds_heatmap])
     preds = preds_all[:, predefined_index, :]
 
     instruction_data[class_name]["landmarks"] = fill_instruction_landmark_coordinate(
