@@ -1,0 +1,30 @@
+def validate_garment_class_dict(class_dict: dict) -> bool:
+    required_keys = {"num_predefined_points", "index_range"}
+
+    if not isinstance(class_dict, dict):
+        return False
+
+    for class_name, class_info in class_dict.items():
+        if not isinstance(class_name, str):
+            return False
+        if not isinstance(class_info, dict):
+            return False
+        if not required_keys.issubset(class_info.keys()):
+            return False
+
+        num_points = class_info["num_predefined_points"]
+        index_range = class_info["index_range"]
+
+        # Check types
+        if not isinstance(num_points, int):
+            return False
+        if (not isinstance(index_range, tuple) or
+            len(index_range) != 2 or
+            not all(isinstance(i, int) for i in index_range)):
+            return False
+
+        # Check logical consistency
+        if index_range[1] - index_range[0] != num_points:
+            return False
+
+    return True
