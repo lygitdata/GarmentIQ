@@ -3,6 +3,7 @@ import os
 from typing import Type
 import torch
 import requests
+import numpy as np
 from garmentiq.utils import validate_garment_class_dict
 from garmentiq.landmark.utils import (
     find_instruction_landmark_index,
