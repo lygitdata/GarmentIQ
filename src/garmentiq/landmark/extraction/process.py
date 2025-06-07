@@ -60,12 +60,12 @@ def process(
         image_np,
         center,
         scale,
-    ) = giq_landmark_extraction.utils.input_image_transform(image_path)
+    ) = input_image_transform(image_path)
 
     with torch.no_grad():
         np_output_heatmap = model(input_tensor).detach().cpu().numpy()
 
-    preds_heatmap, maxvals = giq_landmark_extraction.utils.get_final_preds(
+    preds_heatmap, maxvals = get_final_preds(
         np_output_heatmap[
             :, class_element["index_range"][0] : class_element["index_range"][1], :, :
         ]
@@ -76,7 +76,7 @@ def process(
     )
     preds = np.stack(
         [
-            giq_landmark_extraction.transform_preds(p, center, scale)
+            transform_preds(p, center, scale)
             for p in preds_heatmap
         ]
     )[:, predefined_index, :]
