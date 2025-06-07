@@ -85,4 +85,4 @@ def detect(
         fill_in_value=preds,
     )
 
-    return preds_all, instruction_data
+    return preds_all, maxvals, instruction_data
