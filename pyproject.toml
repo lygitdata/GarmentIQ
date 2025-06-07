@@ -1,11 +1,15 @@
 [project]
 name = "garmentiq"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Li Yuan", email="lyuan@gd.edu.kg" },
+  { name="Xinrui Zhai", email="zxr86272731@gmail.com" },
+  { name="Fangzhou Ma", email="fangzhou.ma029@gmail.com" },
 ]
 maintainers = [
   { name="Li Yuan", email="lyuan@gd.edu.kg" },
+  { name="Xinrui Zhai", email="zxr86272731@gmail.com" },
+  { name="Fangzhou Ma", email="fangzhou.ma029@gmail.com" },
 ]
 description = "Automated Garment Measurement for Fashion Retail"
 readme = "README.md"
@@ -31,5 +35,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/lygitdata/GarmentIQ/"
+Homepage = "https://garmentiq.ly.gd.edu.kg/"
 Issues = "https://github.com/lygitdata/GarmentIQ/issues"
+
+[tool.setuptools.package-data]
+"garmentiq.instruction" = ["*.json"]
