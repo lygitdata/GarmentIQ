@@ -1,0 +1,88 @@
+{
+  "vest": {
+    "landmarks": {
+      "2": {
+        "predefined": true,
+        "description": "neck_left_outer",
+        "x": 83,
+        "y": 15
+      },
+      "7": {
+        "predefined": true,
+        "description": "shoulder_left_top",
+        "x": 58,
+        "y": 25
+      },
+      "8": {
+        "predefined": true,
+        "description": "side_seam_left_upper",
+        "x": 59,
+        "y": 70
+      },
+      "14": {
+        "predefined": true,
+        "description": "side_seam_right_upper",
+        "x": 141,
+        "y": 70
+      },
+      "15": {
+        "predefined": true,
+        "description": "shoulder_right",
+        "x": 143,
+        "y": 25
+      },
+      "16": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 81.31600189208984,
+        "y": 163.8759002685547,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "p1_id": "2",
+          "p2_id": "4",
+          "p3_id": "11",
+          "p4_id": "10",
+          "p5_id": "12",
+          "direction": "parallel"
+        },
+        "neighbors": {
+          "10": {
+            "predefined": true,
+            "description": "hem_left",
+            "x": 55,
+            "y": 160
+          },
+          "11": {
+            "predefined": true,
+            "description": "hem_center",
+            "x": 99,
+            "y": 165
+          }
+        }
+      }
+    },
+    "measurements": {
+      "front length": {
+        "landmarks": {
+          "start": "2",
+          "end": "16"
+        },
+        "description": "16: intersection of vertical line from 2 to bottom contour"
+      },
+      "back width": {
+        "landmarks": {
+          "start": "7",
+          "end": "15"
+        },
+        "description": "/"
+      },
+      "chest": {
+        "landmarks": {
+          "start": "8",
+          "end": "14"
+        },
+        "description": "/"
+      }
+    }
+  }
+}
