@@ -75,12 +75,13 @@ def process(
     predefined_index = find_instruction_landmark_index(
         instruction_data[class_name]["landmarks"], predefined=True
     )
-    preds = np.stack(
+    preds_all = np.stack(
         [
             transform_preds(p, center, scale)
             for p in preds_heatmap
         ]
-    )[:, predefined_index, :]
+    )
+    preds = preds_all[:, predefined_index, :]
 
     instruction_data[class_name]["landmarks"] = fill_instruction_landmark_coordinate(
         instruction_landmarks=instruction_data[class_name]["landmarks"],
@@ -88,4 +89,4 @@ def process(
         fill_in_value=preds,
     )
 
-    return preds, instruction_data
+    return preds_all, instruction_data
