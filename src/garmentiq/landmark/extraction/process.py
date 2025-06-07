@@ -19,7 +19,6 @@ def process(
     class_name: str,
     class_dict: dict,
     image_path: str,
-    instruction_path: str,
     model: Type[torch.nn.Module],
 ):
     if not validate_garment_class_dict(class_dict):
