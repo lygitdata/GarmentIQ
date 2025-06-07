@@ -15,7 +15,7 @@ from garmentiq.landmark.extraction.utils import (
 )
 
 
-def extraction_core(
+def process(
     class_name: str,
     class_dict: dict,
     image_path: str,
@@ -31,6 +31,10 @@ def extraction_core(
         raise ValueError(
             f"Invalid class '{class_name}'. Must be one of: {list(class_dict.keys())}"
         )
+
+    class_element = class_dict[class_name]
+
+    instruction_path = class_element[""]
 
     if instruction_path.startswith("http://") or instruction_path.startswith(
         "https://"
@@ -51,8 +55,6 @@ def extraction_core(
 
     if class_name not in instruction_data:
         raise ValueError(f"Class '{class_name}' not found in instruction file.")
-
-    class_element = class_dict[class_name]
 
     (
         input_tensor,
