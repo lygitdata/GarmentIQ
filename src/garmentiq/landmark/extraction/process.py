@@ -33,7 +33,7 @@ def process(
 
     class_element = class_dict[class_name]
 
-    instruction_path = class_element[""]
+    instruction_path = class_element["instruction"]
 
     if instruction_path.startswith("http://") or instruction_path.startswith(
         "https://"
