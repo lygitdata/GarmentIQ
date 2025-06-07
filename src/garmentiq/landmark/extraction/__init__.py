@@ -1,4 +1,5 @@
 # garmentiq/landmark/extraction/__init__.py
+from .load_model import load_model
 from .model_definition import PoseHighResolutionNet
 from .utils import (
     get_max_preds,

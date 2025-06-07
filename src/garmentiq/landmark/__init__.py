@@ -2,3 +2,4 @@
 from .extraction import *
 from .derivation import *
 from .refinement import *
+from .plot import plot
