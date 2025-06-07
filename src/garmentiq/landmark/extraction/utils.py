@@ -1,6 +1,8 @@
 import math
 import numpy as np
 import cv2
+from PIL import Image
+import torchvision.transforms as transforms
 
 
 def get_max_preds(batch_heatmaps):
@@ -35,9 +37,9 @@ def get_max_preds(batch_heatmaps):
     return preds, maxvals
 
 
-def get_final_preds(output):
-    heatmap_height = 96
-    heatmap_width = 72
+def get_final_preds(output, height=96, width=72):
+    heatmap_height = height
+    heatmap_width = width
 
     batch_heatmaps = output
     coords, maxvals = get_max_preds(batch_heatmaps)
@@ -99,7 +101,7 @@ def fliplr_joints(joints, joints_vis, width, matched_parts):
     return joints * joints_vis, joints_vis
 
 
-def transform_preds(coords, center, scale, output_size):
+def transform_preds(coords, center, scale, output_size: list[int, int] = [72, 96]):
     target_coords = np.zeros(coords.shape)
     trans = get_affine_transform(center, scale, 0, output_size, inv=1)
     for p in range(coords.shape[0]):
@@ -170,3 +172,34 @@ def crop(img, center, scale, output_size, rot=0):
     )
 
     return dst_img
+
+
+def input_image_transform(
+    img_path: str,
+    scale_std: float = 200.0,
+    resize_dim: list[int, int] = [288, 384],
+    normalize_mean: list[float, float, float] = [0.485, 0.456, 0.406],
+    normalize_std: list[float, float, float] = [0.229, 0.224, 0.225],
+):
+    image_np = np.array(Image.open(img_path).convert("RGB"))
+    h, w = image_np.shape[:2]
+    center = np.array([w / 2, h / 2], dtype=np.float32)
+    scale = np.array([w / scale_std, h / scale_std], dtype=np.float32)
+    image_size = np.array(resize_dim)
+    rotation = 0
+
+    trans = giq.landmark.extraction.utils.get_affine_transform(
+        center, scale, rotation, image_size
+    )
+    warped_image = cv2.warpAffine(
+        image_np,
+        trans,
+        (int(image_size[0]), int(image_size[1])),
+        flags=cv2.INTER_LINEAR,
+    )
+
+    to_tensor = transforms.ToTensor()
+    normalize = transforms.Normalize(normalize_mean, normalize_std)
+    input_tensor = normalize(to_tensor(warped_image)).unsqueeze(0)
+
+    return input_tensor, image_np, center, scale

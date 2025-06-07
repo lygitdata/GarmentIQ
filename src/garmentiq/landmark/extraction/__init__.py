@@ -11,4 +11,5 @@ from .utils import (
     get_3rd_point,
     get_dir,
     crop,
+    input_image_transform,
 )
