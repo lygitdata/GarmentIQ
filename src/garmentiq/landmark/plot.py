@@ -1,21 +1,21 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from PIL import Image
 
 def plot(
-    image_np: np.ndarray,
+    image_path: str,
     coordinate: np.ndarray = None,
     figsize: tuple = (6, 6),
     color: str = 'red'
 ):
     """
-    Display an image using matplotlib with optional overlay of coordinates.
+    Display an image from a file path using matplotlib, with optional overlay of coordinates.
 
-    This function visualizes a NumPy image array using matplotlib. If the image is grayscale
-    (2D array), it is displayed using a grayscale colormap. Optionally, a set of coordinates
-    (e.g., landmarks) can be overlaid as scatter points, with a customizable color.
+    This function loads an image from the given file path, displays it using matplotlib,
+    and optionally overlays coordinate points on the image.
 
-    :param image_np: The image to display. Should be a 2D (grayscale) or 3D (RGB) NumPy array.
-    :type image_np: np.ndarray
+    :param image_path: Path to the image file. The image will be loaded as RGB.
+    :type image_path: str
 
     :param coordinate: Optional array of coordinates to overlay on the image.
                        Expected shape: (1, N, 2), where N is the number of points.
@@ -27,12 +27,14 @@ def plot(
     :param color: Color of the overlay points. Default is 'red'.
     :type color: str, optional
 
-    :raises ValueError: If `image_np` is not a NumPy array.
+    :raises ValueError: If image cannot be loaded or coordinate format is invalid.
 
     :return: None
     """
-    if not isinstance(image_np, np.ndarray):
-        raise ValueError("image_np must be a NumPy array")
+    try:
+        image_np = np.array(Image.open(image_path).convert("RGB"))
+    except Exception as e:
+        raise ValueError(f"Unable to load image from path: {image_path}. Error: {e}")
 
     plt.figure(figsize=figsize)
 
@@ -42,7 +44,10 @@ def plot(
         plt.imshow(image_np)
 
     if coordinate is not None:
-        plt.scatter(coordinate[0][:, 0], coordinate[0][:, 1], c=color, s=10)
+        try:
+            plt.scatter(coordinate[0][:, 0], coordinate[0][:, 1], c=color, s=10)
+        except Exception as e:
+            raise ValueError(f"Invalid coordinate format: {coordinate}. Error: {e}")
 
     plt.axis("off")
     plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
