@@ -1,5 +1,5 @@
 def validate_garment_class_dict(class_dict: dict) -> bool:
-    required_keys = {"num_predefined_points", "index_range"}
+    required_keys = {"num_predefined_points", "index_range", "instruction"}
 
     if not isinstance(class_dict, dict):
         return False
@@ -14,6 +14,7 @@ def validate_garment_class_dict(class_dict: dict) -> bool:
 
         num_points = class_info["num_predefined_points"]
         index_range = class_info["index_range"]
+        instruction = class_info["instruction"]
 
         # Check types
         if not isinstance(num_points, int):
@@ -25,6 +26,10 @@ def validate_garment_class_dict(class_dict: dict) -> bool:
 
         # Check logical consistency
         if index_range[1] - index_range[0] != num_points:
+            return False
+
+        # Validate instruction field (must be a string ending with .json)
+        if not (isinstance(instruction, str) and instruction.endswith(".json")):
             return False
 
     return True
