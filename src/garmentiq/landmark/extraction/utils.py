@@ -188,7 +188,7 @@ def input_image_transform(
     image_size = np.array(resize_dim)
     rotation = 0
 
-    trans = giq.landmark.extraction.utils.get_affine_transform(
+    trans = get_affine_transform(
         center, scale, rotation, image_size
     )
     warped_image = cv2.warpAffine(
