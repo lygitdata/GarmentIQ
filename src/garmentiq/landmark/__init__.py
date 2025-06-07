@@ -3,7 +3,7 @@ from .detect import detect
 from .detection import *
 from .derive import derive
 from .derivation import *
-from .refinement import *
+from .refine import refine
 from .plot import plot
 from .utils import (
 	find_instruction_landmark_index,
