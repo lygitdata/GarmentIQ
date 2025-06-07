@@ -4,19 +4,20 @@ from typing import Optional, List, Tuple, Any
 from shapely.geometry import Point, LineString, Polygon, MultiPoint, MultiLineString
 from shapely.ops import unary_union
 
-def _get_mask_boundary(mask_path: str) -> Optional[Any]: # Returns Shapely Geometry
-    """Loads a mask, finds contours, and returns the primary boundary as Shapely geometry."""
+def _get_mask_boundary(mask: np.ndarray):
+    """Processes a binary or grayscale mask array and returns the primary boundary as Shapely geometry."""
     try:
-        mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-        if mask is None:
-            print(f"Error: Could not read mask file '{mask_path}'")
+        if mask is None or not isinstance(mask, np.ndarray):
+            print("Error: Provided mask is not a valid NumPy array.")
             return None
 
+        # Ensure binary mask (values 0 or 1)
         binary_mask = (mask > 0).astype(np.uint8)
+
         contours, _ = cv2.findContours(binary_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         if not contours:
-            print(f"Warning: No contours found in mask '{mask_path}'")
+            print("Warning: No contours found in the mask array.")
             return None
 
         geometries = []
@@ -28,17 +29,13 @@ def _get_mask_boundary(mask_path: str) -> Optional[Any]: # Returns Shapely Geome
                 geometries.append(LineString(points))
 
         if not geometries:
-             print(f"Warning: No valid boundary geometries found from contours in '{mask_path}'")
-             return None
+            print("Warning: No valid boundary geometries found in the mask.")
+            return None
 
-        primary_boundary = unary_union(geometries)
-        return primary_boundary
+        return unary_union(geometries)
 
-    except FileNotFoundError:
-        print(f"Error: Mask file not found at '{mask_path}'")
-        return None
     except Exception as e:
-        print(f"Error processing mask '{mask_path}': {str(e)}")
+        print(f"Error processing mask array: {str(e)}")
         return None
 
 def _find_line_mask_intersections(
