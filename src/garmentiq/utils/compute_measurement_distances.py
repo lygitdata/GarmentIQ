@@ -16,9 +16,9 @@ def compute_measurement_distances(garment_dict):
             distance = euclidean(point1, point2)
 
             # Store the distance in the return dict
-            distances[measurement_name] = round(distance, 4)
+            distances[measurement_name] = round(distance, 16)
 
             # Update the original dictionary
-            garment_dict[garment_name]["measurements"][measurement_name]["distance"] = round(distance, 4)
+            garment_dict[garment_name]["measurements"][measurement_name]["distance"] = round(distance, 16)
 
     return distances, garment_dict
