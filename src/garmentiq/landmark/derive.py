@@ -1,4 +1,4 @@
-from giq.landmark.derivation import (
+from garmentiq.landmark.derivation import (
   prepare_args,
   process,
 )
