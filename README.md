@@ -12,6 +12,7 @@
 2. [Overview of QarmentIQ Python Package](#overview-of-qarmentiq-python-package)
 3. [Quick Start](#quick-start)
     - [Installation](#installation)
+    - [Tailor (the whole pipeline)](#tailor-the-whole-pipeline)
     - [Classification](#classification)
     - [Segmentation](#segmentation)
     - [Landmark detection](#landmark-detection)
