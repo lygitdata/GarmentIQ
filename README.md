@@ -20,28 +20,32 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 | **4. Garment landmark extraction**<br/>Key landmarks are extracted from garment images, enabling precise measurement locations for consistent results. | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-extraction/) | [Try Python demo](#) |
 | **5. Garment landmark adjustment**<br/>Landmarks can be refined and adjusted manually to ensure they align perfectly, improving the accuracy of garment measurements. | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/) | [Try Python demo](#) |
 
-## Overview of QarmentIQ
+## Overview of QarmentIQ Python package
 
-The GarmentIQ package is designed for automated garment measurement from images, leveraging computer vision models. It provides a modular and customizable framework for classifying, segmenting, and extracting key features from garment images to generate precise measurements.
+The `gqrmentiq` package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction.
 
-The package structure is organized into several key modules, each handling a specific aspect of the garment measurement pipeline:
+### Package Structure Overview
 
-tailor: This is the main class that orchestrates the entire measurement pipeline, integrating functionalities from other modules. It handles classification, segmentation, landmark detection, refinement, and derivation, and manages input/output operations.
-utils: Contains various utility functions used across the package, such as unzipping files, checking directory structures, validating metadata, computing measurement distances, and exporting data to JSON.
-classification: This module focuses on garment image classification. It includes functionalities for:
-Training and fine-tuning PyTorch neural networks (train_pytorch_nn.py, fine_tune_pytorch_nn.py).
-Loading data and models (load_data.py, load_model.py).
-Making predictions (predict.py).
-Defining various CNN and transformer models (model_definition.py).
-Splitting data into training and testing sets (train_test_split.py).
-segmentation: Handles image segmentation tasks, including:
-Loading segmentation models (load_model.py).
-Extracting segmentation masks (extract.py).
-Changing background colors of images (change_background_color.py).
-Processing and saving segmented images (process_and_save_images.py).
-landmark: Dedicated to garment landmark detection, derivation, and refinement:
-detection: Manages landmark detection, including model loading (load_model.py) and utility functions for image transformation and prediction processing (utils.py).
-derivation: Focuses on deriving new keypoint coordinates based on existing landmarks and mask intersections (derive_keypoint_coord.py, process.py).
-refinement: Contains functions for refining landmark locations using blurred masks (refine_landmark_with_blur.py).
-Utilities for finding and filling landmark coordinates within instruction dictionaries (utils.py).
-The garment_classes.py file defines the different garment types supported by the system, along with their respective landmark properties and instructional JSON file paths. The instruction JSON files (e.g., long sleeve dress.json) provide detailed information about predefined and custom landmarks, and the measurements associated with each garment type, including the landmarks used for each measurement.
+- `tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
+
+- `classification`: This module is responsible for identifying the type of garment in an image. Its key functions include:
+-   train_test_split: For preparing and splitting image datasets into training and testing sets.
+load_data: For loading and preprocessing image data into memory.
+load_model: For loading pre-trained classification models.
+train_pytorch_nn: For training PyTorch neural networks for classification.
+fine_tune_pytorch_nn: For fine-tuning pre-trained models on new datasets.
+test_pytorch_nn: For evaluating the performance of trained models.
+predict: For making class predictions on new images.
+segmentation: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include:
+
+load_model: For loading pre-trained segmentation models.
+extract: For extracting segmentation masks from images.
+change_background_color: For modifying the background color of segmented images.
+process_and_save_images: For processing multiple images through segmentation and saving the results.
+landmark: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include:
+
+detect: For identifying initial landmark coordinates on a garment image.
+derive: For calculating the coordinates of new, derived landmarks based on existing ones.
+refine: For adjusting and improving the precision of detected landmark locations.
+Instruction Schemas
+The instruction/ folder contains 9 predefined measurement schemas, which are utilized by the garment_classes.py file to define different garment types and their measurement properties. Users can also define their own custom measurement instructions by creating new dictionaries formatted similarly to the existing garment classes.
