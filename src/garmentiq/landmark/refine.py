@@ -15,8 +15,7 @@ def refine(
     mask: np.array,
     window_size: int = 5,
     ksize: tuple = (11, 11),
-    sigmaX: float = 0.0,
-    **arg
+    sigmaX: float = 0.0
 ):
     """
     Refines detected landmarks using a blurred mask and updates the detection dictionary.
@@ -42,7 +41,7 @@ def refine(
             - refined_detection_np (np.array): Array of the same shape as `detection_np` with refined coordinates.
             - detection_dict (dict): Updated detection dictionary with refined landmark coordinates.
     """
-    blurred_mask = cv2.GaussianBlur(mask, ksize, sigmaX, **arg)
+    blurred_mask = cv2.GaussianBlur(mask, ksize, sigmaX)
 
     refined_detection_np = np.zeros(detection_np.shape)
 
