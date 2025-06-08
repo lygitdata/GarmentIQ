@@ -26,17 +26,22 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 
 ### Package Structure Overview
 
-- `tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
+`tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
 
-- `classification`: This module is responsible for identifying the type of garment in an image. Its key functions include:
-  - train_test_split: For preparing and splitting image datasets into training and testing sets.
-load_data: For loading and preprocessing image data into memory.
-load_model: For loading pre-trained classification models.
-train_pytorch_nn: For training PyTorch neural networks for classification.
-fine_tune_pytorch_nn: For fine-tuning pre-trained models on new datasets.
-test_pytorch_nn: For evaluating the performance of trained models.
-predict: For making class predictions on new images.
-segmentation: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include:
+`classification`: This module is responsible for identifying the type of garment in an image. Its key functions include:.
+- `fine_tune_pytorch_nn`: For fine-tuning pre-trained models on new datasets.
+- `load_data`: For loading and preprocessing image data into memory.
+- `load_model`: For loading pre-trained classification models.
+- `predict`: For making class predictions on new images.
+- `test_pytorch_nn`: For evaluating the performance of trained models.
+- `train_pytorch_nn`: For training PyTorch neural networks for classification.  
+- `train_test_split`: For preparing and splitting image datasets into training and testing sets.
+
+
+
+  
+
+- `segmentation`: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include:
 
 load_model: For loading pre-trained segmentation models.
 extract: For extracting segmentation masks from images.
