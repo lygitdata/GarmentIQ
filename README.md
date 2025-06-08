@@ -58,6 +58,8 @@ Please install from PyPI using the following command.
 
 ### Classification
 
+[Open in Colab](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/classification_quick_start.ipynb)
+
 ```python
 import garmentiq as giq
 from garmentiq.classification.model_definition import tinyViT
