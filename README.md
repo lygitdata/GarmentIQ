@@ -6,6 +6,12 @@
 
 <img src="https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/bg.jpg" alt="GarmentIQ Background Image" width="300px"/>
 
+**Content**: 
+
+1. [What Are the Key Features of GarmentIQ?](#what-are-the-key-features-of-garmentiq)
+2. [Overview of QarmentIQ Python Package](#overview-of-qarmentiq-python-package)
+3. [Quick Start](#quick-start)
+
 ## What Are the Key Features of GarmentIQ?
 
 GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to classify garments, remove backgrounds, and detect key features with precision. It turns expert know-how into an intuitive measurement system—no coding required. Fully modular and customizable, it adapts to your workflows while delivering fast, accurate results out of the box.
@@ -18,7 +24,7 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 | **4. Garment landmark extraction**<br/>Key landmarks are extracted from garment images, enabling precise measurement locations for consistent results. | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-extraction/) |
 | **5. Garment landmark adjustment**<br/>Landmarks can be refined and adjusted manually to ensure they align perfectly, improving the accuracy of garment measurements. | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/) |
 
-## Overview of QarmentIQ Python package
+## Overview of QarmentIQ Python Package
 
 The `gqrmentiq` package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction.
 
@@ -33,3 +39,13 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 - `landmark`: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include: `derive`, `detect`, and `refine`.
 
 - Instruction Schemas: The `instruction/` folder contains 9 predefined measurement schemas in `.json` format, which are utilized by the `garment_classes.py` file `garment_classes` dictionary to define different garment types and their predefined measurement properties. Users can also define their own custom measurement instructions by creating new dictionaries formatted similarly to the existing garment classes.
+
+## Quick Start
+
+### Installation
+
+### Classification
+
+### Segmentation
+
+### Landmark detection, derivation, and refinement
