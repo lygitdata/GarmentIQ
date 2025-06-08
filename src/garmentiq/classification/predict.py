@@ -6,9 +6,7 @@ from torchvision import transforms
 from typing import Type, List
 
 def predict(
-    model_path: str,
-    model_class: Type[nn.Module],
-    model_args: dict,
+    model: Type[nn.Module],
     image_path: str,
     classes: List[str],
     resize_dim=(120, 184),
@@ -59,16 +57,6 @@ def predict(
 
     # Sort the classes list to have a consistent order
     sorted_classes = sorted(classes)
-
-    # Initialize the model and move it to device
-    model = model_class(**model_args).to(device)
-
-    # Load the saved state dict
-    state_dict = torch.load(model_path, map_location=device, weights_only=True)
-    # Remove potential "module." prefix if the model was saved using DataParallel
-    new_state_dict = {k.replace("module.", ""): v for k, v in state_dict.items()}
-    model.load_state_dict(new_state_dict, strict=False)
-    model.eval()
 
     # Define the preprocessing transformation.
     transform = transforms.Compose(
