@@ -56,6 +56,114 @@ Please install from PyPI using the following command.
 !pip install -r garmentiq -q
 ```
 
+### Tailor (the whole pipeline)
+
+The tailor agent executes the entire pipeline in sequence: classification, segmentation (if needed), landmark detection, landmark refinement (if required), and landmark derivation (if applicable). Note that the first 3 steps can also be executed independently (the last 2 steps depend on the results returned by segmentation), without the use of the tailor agent, as described in the following subsections.
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/tailor_quick_start.ipynb)
+
+```python
+import garmentiq as giq
+from garmentiq.classification.model_definition import tinyViT
+from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
+from garmentiq.garment_classes import garment_classes
+from garmentiq.landmark.derivation.derivation_dict import derivation_dict
+
+# Download 4 test images
+# cloth_1 and cloth_2 are short sleeve tops, cloth_3 is vest dress, cloth_4 is skirt
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_1.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_1.jpg
+!wget -q -O /content/test_image/cloth_2.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_2.jpg
+!wget -q -O /content/test_image/cloth_3.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_3.jpg
+!wget -q -O /content/test_image/cloth_4.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_4.jpg
+
+# Download the classification model
+!mkdir -p models
+!wget -q -O /content/models/tiny_vit_inditex_finetuned.pt \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit_inditex_finetuned.pt
+
+# Download the landmark detection model
+!wget -q -O /content/models/hrnet.pth \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
+
+# Setup the tailor agent
+tailor = giq.tailor(
+    input_dir="/content/test_image",
+    model_dir="/content/models",
+    output_dir="/content/output",
+    class_dict=garment_classes,
+    do_derive=True,
+    derivation_dict=derivation_dict,
+    do_refine=True,
+    classification_model_path="tiny_vit_inditex_finetuned.pt",
+    classification_model_class=tinyViT,
+    classification_model_args={
+        "num_classes": len(list(garment_classes.keys())),
+        "img_size": (120, 184),
+        "patch_size": 6,
+        "resize_dim": (120, 184),
+        "normalize_mean": [0.8047, 0.7808, 0.7769],
+        "normalize_std": [0.2957, 0.3077, 0.3081],
+    },
+    segmentation_model_name="lygitdata/BiRefNet_garmentiq_backup",
+    segmentation_model_args={
+        "trust_remote_code": True,
+        "resize_dim": (1024, 1024),
+        "normalize_mean": [0.485, 0.456, 0.406],
+        "normalize_std": [0.229, 0.224, 0.225],
+        "high_precision": True,
+        "background_color": [102, 255, 102],
+    },
+    landmark_detection_model_path="hrnet.pth",
+    landmark_detection_model_class=PoseHighResolutionNet(),
+    landmark_detection_model_args={
+        "scale_std": 200.0,
+        "resize_dim": [288, 384],
+        "normalize_mean": [0.485, 0.456, 0.406],
+        "normalize_std": [0.229, 0.224, 0.225],
+    },
+)
+
+# See the tailor agent's basic information
+tailor.summary()
+
+# Start the measurement with refinement and derivation
+metadata, outputs = tailor.measure(save_segmentation_image=True, save_measurement_image=True)
+
+# See the metadata
+# It makes file access much easier
+print(metadata)
+     
+# Plot the masks
+# Go to /content/output/mask_image/ to see the high resolution images
+for image in metadata['mask_image']:
+  giq.landmark.plot(image_path=image, figsize=(3, 3))
+     
+# Plot the background modified images
+# Go to /content/output/bg_modified_image to see the high resolution images
+for image in metadata['bg_modified_image']:
+  giq.landmark.plot(image_path=image, figsize=(3, 3))
+     
+# Plot the images with desired landmarks
+# Go to /content/output/measurement_image/ to see the high resolution images
+for image in metadata['measurement_image']:
+  giq.landmark.plot(image_path=image, figsize=(3, 3))
+     
+# See the measurement results in JSON format
+# Go to /content/output/measurement_json/ to see the JSON files
+import json
+
+for json_path in metadata['measurement_json']:
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+        print(f"{json_path}:\n")
+        print(json.dumps(data, indent=4, sort_keys=Tr
+```
+
 ### Classification
 
 [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/classification_quick_start.ipynb)
