@@ -1,6 +1,6 @@
 # GarmentIQ: Automated Garment Measurement for Fashion Retail
 
-![PyPI](https://img.shields.io/pypi/v/garmentiq) ![MIT](https://img.shields.io/github/license/lygitdata/GarmentIQ)
+[![PyPI](https://img.shields.io/pypi/v/garmentiq)](https://pypi.org/project/garmentiq/) ![MIT](https://img.shields.io/github/license/lygitdata/GarmentIQ)
 
 *Last update of this page: 06/08/2025*
 
