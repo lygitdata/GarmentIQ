@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Type
+from typing import Type, Union
 import torch
 import requests
 import numpy as np
@@ -19,7 +19,7 @@ from garmentiq.landmark.detection.utils import (
 def detect(
     class_name: str,
     class_dict: dict,
-    image_path: str,
+    image_path: Union[str, np.ndarray],
     model: Type[torch.nn.Module],
     scale_std: float = 200.0,
     resize_dim: list[int, int] = [288, 384],
