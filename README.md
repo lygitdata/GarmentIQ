@@ -336,4 +336,15 @@ Found a bug or have a feature request? Please open an issue on our [GitHub Issue
 
 ## License
 
-GarmentIQ is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+GarmentIQ's Python API code is licensed under the MIT License.
+
+## Acknowledgements
+
+We sincerely thank [Adrián González-Sieira](https://github.com/gonzalezsieira) and [Laura Rodríguez](https://github.com/laurarbar) from Inditex for their invaluable suggestions and continuous support throughout this research. We are also grateful to everyone at ETH Zürich and the ETH AI Center for their coordination and collaborative efforts.
+
+We gratefully acknowledge the use and adaptation of the following open-source resources:
+
+- https://github.com/facebookresearch/deit
+- https://github.com/ZhengPeng7/BiRefNet
+- https://github.com/svip-lab/HRNet-for-Fashion-Landmark-Estimation.PyTorch
+- https://github.com/switchablenorms/DeepFashion2
