@@ -135,4 +135,44 @@ print(
 
 ### Segmentation
 
+[Open in Colab](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/segmentation_quick_start.ipynb)
+
+```python
+import garmentiq as giq
+
+# Download a test image
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_1.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_1.jpg
+
+# Load the pretrained model from Hugging Face
+BiRefNet = giq.segmentation.load_model(
+    pretrained_model='lygitdata/BiRefNet_garmentiq_backup',
+    pretrained_model_args={'trust_remote_code': True},
+    high_precision=True
+)
+
+# Extract the mask
+original_img, mask = giq.segmentation.extract(
+    model=BiRefNet,
+    image_path='/content/test_image/cloth_1.jpg',
+    resize_dim=(1024, 1024),
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225],
+    high_precision=True
+)
+
+# Change background color
+bg_modified_img = giq.segmentation.change_background_color(
+    image_np=original_img,
+    mask_np=mask,
+    background_color=[102, 255, 102]
+)
+
+# Plot the original image, mask, and background modified image
+giq.segmentation.plot(image_np=original_img, figsize=(3, 3))
+giq.segmentation.plot(image_np=mask, figsize=(3, 3))
+giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))
+```
+
 ### Landmark detection, derivation, and refinement
