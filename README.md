@@ -1,3 +1,3 @@
 # GarmentIQ: Automated Garment Measurement for Fashion Retail
 
-![GatmentIQ Background](https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg=x250)
+<img src="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg" alt="GatmentIQ Background Image" width="300px"/>
