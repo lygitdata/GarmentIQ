@@ -53,7 +53,7 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 Please install from PyPI using the following command.
 
 ```python
-pip install -r garmentiq -q
+!pip install -r garmentiq -q
 ```
 
 ### Classification
