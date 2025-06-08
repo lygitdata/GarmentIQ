@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from PIL import Image
 import torchvision.transforms as transforms
+from typing import Union
 
 
 def get_max_preds(batch_heatmaps):
@@ -175,13 +176,21 @@ def crop(img, center, scale, output_size, rot=0):
 
 
 def input_image_transform(
-    img_path: str,
+    img_input: Union[str, np.ndarray],
     scale_std: float = 200.0,
-    resize_dim: list[int, int] = [288, 384],
-    normalize_mean: list[float, float, float] = [0.485, 0.456, 0.406],
-    normalize_std: list[float, float, float] = [0.229, 0.224, 0.225],
+    resize_dim: list[int] = [288, 384],
+    normalize_mean: list[float] = [0.485, 0.456, 0.406],
+    normalize_std: list[float] = [0.229, 0.224, 0.225],
 ):
-    image_np = np.array(Image.open(img_path).convert("RGB"))
+    if isinstance(img_input, str):
+        img = Image.open(img_input).convert("RGB")
+    elif isinstance(img_input, np.ndarray):
+        img = Image.fromarray(img_input.astype(np.uint8))
+    else:
+        raise ValueError("img_input must be a file path or a NumPy array.")
+
+    image_np = np.array(img)
+    
     h, w = image_np.shape[:2]
     center = np.array([w / 2, h / 2], dtype=np.float32)
     scale = np.array([w / scale_std, h / scale_std], dtype=np.float32)
