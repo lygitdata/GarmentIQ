@@ -7,7 +7,10 @@ import pandas as pd
 from tqdm.auto import tqdm
 import textwrap
 from PIL import Image, ImageDraw, ImageFont
-import garmeniq as giq
+from . import classification
+from . import segmentation
+from . import landmark
+from . import utils
 
 
 class tailor:
@@ -71,7 +74,7 @@ class tailor:
         }
 
         # Load the model using the filtered arguments
-        self.classification_model = giq.classification.load_model(
+        self.classification_model = classification.load_model(
             model_path=f"{self.model_dir}/{self.classification_model_path}",
             model_class=self.classification_model_class,
             model_args=filtered_model_args,
@@ -81,7 +84,7 @@ class tailor:
         self.segmentation_model_name = segmentation_model_name
         self.segmentation_model_args = segmentation_model_args
         self.segmentation_has_bg_color = "background_color" in segmentation_model_args
-        self.segmentation_model = giq.segmentation.load_model(
+        self.segmentation_model = segmentation.load_model(
             pretrained_model=self.segmentation_model_name,
             pretrained_model_args={
                 "trust_remote_code": segmentation_model_args["trust_remote_code"]
@@ -93,7 +96,7 @@ class tailor:
         self.landmark_detection_model_path = landmark_detection_model_path
         self.landmark_detection_model_class = landmark_detection_model_class
         self.landmark_detection_model_args = landmark_detection_model_args
-        self.landmark_detection_model = giq.landmark.detection.load_model(
+        self.landmark_detection_model = landmark.detection.load_model(
             model_path=f"{self.model_dir}/{self.landmark_detection_model_path}",
             model_class=self.landmark_detection_model_class,
         )
@@ -140,7 +143,7 @@ class tailor:
         print(sep)
 
     def classify(self, image: str, verbose=False):
-        label, probablities = giq.classification.predict(
+        label, probablities = classification.predict(
             model=self.classification_model,
             image_path=f"{self.input_dir}/{image}",
             classes=self.classes,
@@ -152,7 +155,7 @@ class tailor:
         return label, probablities
 
     def segment(self, image: str):
-        original_img, mask = giq.segmentation.extract(
+        original_img, mask = segmentation.extract(
             model=self.segmentation_model,
             image_path=f"{self.input_dir}/{image}",
             resize_dim=self.segmentation_model_args.get("resize_dim"),
@@ -166,7 +169,7 @@ class tailor:
         if background_color is None:
             return original_img, mask
         else:
-            bg_modified_img = giq.segmentation.change_background_color(
+            bg_modified_img = segmentation.change_background_color(
                 image_np=original_img, mask_np=mask, background_color=background_color
             )
             return original_img, mask, bg_modified_img
@@ -176,7 +179,7 @@ class tailor:
         if isinstance(image, str):
             image = f"{self.input_dir}/{image}"
 
-        coords, maxval, detection_dict = giq.landmark.detect(
+        coords, maxval, detection_dict = landmark.detect(
             class_name=class_name,
             class_dict=self.class_dict,
             image_path=image,
@@ -196,7 +199,7 @@ class tailor:
         landmark_coords: np.array,
         np_mask: np.array,
     ):
-        derived_coords, updated_detection_dict = giq.landmark.derive(
+        derived_coords, updated_detection_dict = landmark.derive(
             class_name=class_name,
             detection_dict=detection_dict,
             derivation_dict=derivation_dict,
@@ -224,7 +227,7 @@ class tailor:
             if self.refinement_args.get("sigmaX") is not None:
                 sigmaX = self.refinement_args["sigmaX"]
 
-        refined_detection_np, refined_detection_dict = giq.landmark.refine(
+        refined_detection_np, refined_detection_dict = landmark.refine(
             class_name=class_name,
             detection_np=detection_np,
             detection_conf=detection_conf,
@@ -457,7 +460,7 @@ class tailor:
             transformed_name = os.path.splitext(image)[0]
 
             # Compute distances and get a fresh copy of detection_dict
-            _, clean_dict = giq.utils.compute_measurement_distances(
+            _, clean_dict = utils.compute_measurement_distances(
                 outputs[image]["detection_dict"]
             )
 
@@ -485,7 +488,7 @@ class tailor:
             final_dict = {new_key: original_data}
 
             # Export JSON
-            giq.utils.export_dict_to_json(
+            utils.export_dict_to_json(
                 data=final_dict,
                 filename=f"{self.output_dir}/measurement_json/{transformed_name}_measurement.json",
             )
