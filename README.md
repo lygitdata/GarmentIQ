@@ -175,4 +175,6 @@ giq.segmentation.plot(image_np=mask, figsize=(3, 3))
 giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))
 ```
 
-### Landmark detection, derivation, and refinement
+### Landmark detection
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/landmark_detection_quick_start.ipynb)
