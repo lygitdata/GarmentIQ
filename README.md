@@ -46,7 +46,7 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 
 ## Quick Start
 
-<img src="https://github.com/user-attachments/assets/2de8ee34-166e-42db-8428-6e376848a9ec" width="600px" alt="GarmentIQ Example">
+<img src="https://github.com/user-attachments/assets/2de8ee34-166e-42db-8428-6e376848a9ec" width="600px" alt="GarmentIQ Example"/>
 
 ### Installation
 
@@ -134,8 +134,6 @@ print(
 ```
 
 ### Segmentation
-
-<img src="https://github.com/user-attachments/assets/32c612a8-b69f-49d5-90f1-13f169356cdf" width="150px" alt="bg modified example" />
 
 [Open in Colab](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/segmentation_quick_start.ipynb)
 
