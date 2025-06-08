@@ -3,7 +3,7 @@
 <table>
   <tr>
     <td style="width: 30%;">
-      <img src="https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/bg.jpg" alt="GarmentIQ Background Image" width="300px"/>
+      <img src="https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/bg.jpg" alt="GarmentIQ Background Image" width="500px"/>
     </td>
     <td style="width: 70%;">
       <p>
