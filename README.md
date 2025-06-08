@@ -11,6 +11,10 @@
 1. [What Are the Key Features of GarmentIQ?](#what-are-the-key-features-of-garmentiq)
 2. [Overview of QarmentIQ Python Package](#overview-of-qarmentiq-python-package)
 3. [Quick Start](#quick-start)
+  - [Installation](#installation)
+  - [Classification](#classification)
+  - [Segmentation](#segmentation)
+  - [Landmark detection, derivation, and refinement](#landmark-detection-derivation-and-refinement)
 
 ---
 
