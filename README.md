@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/garmentiq)](https://pypi.org/project/garmentiq/) ![MIT](https://img.shields.io/github/license/lygitdata/GarmentIQ)
 
-Try the full pipeline - use the [Web](https://garmentiq.ly.gd.edu.kg/application/) or [Python](https://pypi.org/project/garmentiq/) interface.
+[Official website](https://garmentiq.ly.gd.edu.kg/) [Documentation](https://garmentiq.ly.gd.edu.kg/documentation/)
 
 **Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation.**
 
@@ -30,6 +30,6 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 
 - `segmentation`: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include: `change_background_color`, `extract`, `load_model`, and `process_and_save_images`.
 
-`landmark`: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include: `derive`, `detect`, and `refine`.
+- `landmark`: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include: `derive`, `detect`, and `refine`.
 
 - Instruction Schemas: The `instruction/` folder contains 9 predefined measurement schemas in `.json` format, which are utilized by the `garment_classes.py` file `garment_classes` dictionary to define different garment types and their predefined measurement properties. Users can also define their own custom measurement instructions by creating new dictionaries formatted similarly to the existing garment classes.
