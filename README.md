@@ -50,7 +50,15 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 
 ### Installation
 
+Please install from PyPI using the following command.
+
+```python
+pip install -r garmentiq -q
+```
+
 ### Classification
+
+
 
 ### Segmentation
 
