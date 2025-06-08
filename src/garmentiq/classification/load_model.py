@@ -16,4 +16,4 @@ def load_model(
     model.load_state_dict(new_state_dict, strict=False)
     model.eval()
 
-    return pred_label, prob_list
+    return model
