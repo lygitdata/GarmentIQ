@@ -2,11 +2,9 @@
 
 [![PyPI](https://img.shields.io/pypi/v/garmentiq)](https://pypi.org/project/garmentiq/) ![MIT](https://img.shields.io/github/license/lygitdata/GarmentIQ)
 
-*Last update of this page: 06/08/2025*
+Try the full pipeline - use the [Web](https://garmentiq.ly.gd.edu.kg/application/) or [Python](https://pypi.org/project/garmentiq/) interface.
 
 **Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation.**
-
-Try the full pipeline - use the [Web](https://garmentiq.ly.gd.edu.kg/application/) or [Python](https://pypi.org/project/garmentiq/) interface.
 
 <img src="https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/bg.jpg" alt="GarmentIQ Background Image" width="300px"/>
 
