@@ -60,7 +60,7 @@ This section provides simple examples demonstrating how to use the `garmentiq` P
 Please install from PyPI using the following command.
 
 ```python
-!pip install -r garmentiq -q
+pip install garmentiq -q
 ```
 
 ### Tailor (the whole pipeline)
