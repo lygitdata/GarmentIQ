@@ -347,7 +347,7 @@ class tailor:
         ):
             label = metadata.loc[metadata["filename"] == image, "class"].values[0]
             if use_bg_color:
-                coords, maxvals, detection_dict = inditexTailor.detect(
+                coords, maxvals, detection_dict = self.detect(
                     class_name=label, image=outputs[image]["bg_modified_image"]
                 )
                 outputs[image]["detection_dict"] = detection_dict
@@ -355,7 +355,7 @@ class tailor:
                     outputs[image]["coords"] = coords
                     outputs[image]["maxvals"] = maxvals
             else:
-                coords, maxvals, detection_dict = inditexTailor.detect(
+                coords, maxvals, detection_dict = self.detect(
                     class_name=label, image=image
                 )
                 outputs[image]["detection_dict"] = detection_dict
