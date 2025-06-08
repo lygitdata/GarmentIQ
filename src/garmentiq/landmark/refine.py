@@ -1,24 +1,68 @@
+import numpy as np
 import cv2
+from garmentiq.landmark.refinement import refine_landmark_with_blur
+from garmentiq.landmark.utils import (
+    find_instruction_landmark_index,
+    fill_instruction_landmark_coordinate,
+)
 
-def refine(x, y, blurred_mask, window_size=5):
+
+def refine(
+    class_name: str,
+    detection_np: np.array,
+    detection_conf: np.array,
+    detection_dict: dict,
+    mask: np.array,
+    window_size: int = 5,
+    ksize: tuple = (11, 11),
+    sigmaX: float = 0.0,
+    **arg
+):
     """
-    Refine the landmark location using a Gaussian-blurred version of the segmentation mask.
-    The function searches a small window around (x, y) in the blurred mask and returns
-    the coordinates of the pixel with the maximum value, which is assumed to be a more
-    reliable location for the landmark.
+    Refines detected landmarks using a blurred mask and updates the detection dictionary.
+
+    This function applies Gaussian blur to the given mask, then refines landmark coordinates
+    based on their confidence scores and local intensity structure. Only landmarks with a 
+    confidence score greater than 0 are refined. The refined coordinates are used to update 
+    predefined landmarks in the detection dictionary.
+
+    Args:
+        class_name (str): The name of the class to access in the detection dictionary.
+        detection_np (np.array): The initial landmark predictions. Shape: (1, N, 2).
+        detection_conf (np.array): Confidence scores for each predicted landmark. Shape: (1, N, 1).
+        detection_dict (dict): Dictionary containing landmark data for each class.
+        mask (np.array): Grayscale mask image used to guide refinement.
+        window_size (int, optional): Size of the window used in the refinement algorithm. Defaults to 5.
+        ksize (tuple, optional): Kernel size for Gaussian blur. Must be odd integers. Defaults to (11, 11).
+        sigmaX (float, optional): Gaussian kernel standard deviation in the X direction. Defaults to 0.0.
+        **arg: Additional keyword arguments passed to `cv2.GaussianBlur`.
+
+    Returns:
+        tuple:
+            - refined_detection_np (np.array): Array of the same shape as `detection_np` with refined coordinates.
+            - detection_dict (dict): Updated detection dictionary with refined landmark coordinates.
     """
-    height, width = blurred_mask.shape
-    x_min = int(max(0, x - window_size))
-    x_max = int(min(width, x + window_size + 1))
-    y_min = int(max(0, y - window_size))
-    y_max = int(min(height, y + window_size + 1))
+    blurred_mask = cv2.GaussianBlur(mask, ksize, sigmaX, **arg)
 
-    # Extract the local region from the blurred mask.
-    local_region = blurred_mask[y_min:y_max, x_min:x_max]
-    # Find the location of the maximum value within the local region.
-    _, max_val, _, max_loc = cv2.minMaxLoc(local_region)
+    refined_detection_np = np.zeros(detection_np.shape)
 
-    # Compute refined coordinates relative to the entire image.
-    refined_x = x_min + max_loc[0]
-    refined_y = y_min + max_loc[1]
-    return refined_x, refined_y
+    for i, coord in enumerate(detection_np[0]):
+        if detection_conf[0, i, 0] > 0:
+            refined_x, refined_y = refine_landmark_with_blur(
+                coord[0], coord[1], blurred_mask, window_size
+            )
+            refined_detection_np[0, i] = [refined_x, refined_y]
+
+    predefined_index = find_instruction_landmark_index(
+        detection_dict[class_name]["landmarks"], predefined=True
+    )
+
+    preds = refined_detection_np[:, predefined_index, :]
+
+    detection_dict[class_name]["landmarks"] = fill_instruction_landmark_coordinate(
+        instruction_landmarks=detection_dict[class_name]["landmarks"],
+        index=predefined_index,
+        fill_in_value=preds,
+    )
+
+    return refined_detection_np, detection_dict
