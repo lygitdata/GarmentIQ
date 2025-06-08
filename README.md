@@ -16,7 +16,10 @@
     - [Classification](#classification)
     - [Segmentation](#segmentation)
     - [Landmark detection](#landmark-detection)
-4. 
+4. []()
+5. [Issues & Feedback](#issues--feedback)
+6. [License](#license)
+7. [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -330,6 +333,19 @@ coords, maxvals, detection_dict = giq.landmark.detect(
 giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")
 ```
 
+## Trained Models for Classification
+
+We release the following models trained as part of this project. Models having `_inditex_finetuned` in their names means that they were finetuned on a small set of garment data from Inditex - Zara.
+
+| Model | Test Accuracy | Test F1 Score | Fine-tune Accuracy | Fine-tune F1 Score | Link |
+|---------|----------|----------|----------|----------|----------|
+| `cnn_3.pt` | 0.9458 | 0.9459 | / | / | [See the model](https://huggingface.co/lygitdata/garmentiq/blob/main/cnn_3.pt) |
+| `cnn_4.pt` | 0.9533 | 0.9533 | / | / | [See the model](https://huggingface.co/lygitdata/garmentiq/blob/main/cnn_4.pt) |
+| `tiny_vit.pt` | 0.9576 | 0.9576 | / | / | [See the model](https://huggingface.co/lygitdata/garmentiq/blob/main/tiny_vit.pt) |
+| `cnn_3_inditex_finetuned.pt` | 0.9074 | 0.9068 | 0.9197 | 0.9216 | [See the model](https://huggingface.co/lygitdata/garmentiq/blob/main/cnn_3_inditex_finetuned.pt) |
+| `cnn_4_inditex_finetuned.pt` | 0.9132 | 0.9137 | 0.9592 | 0.9585 | [See the model](https://huggingface.co/lygitdata/garmentiq/blob/main/cnn_4_inditex_finetuned.pt) |
+| `tiny_vit_inditex_finetuned.pt` | 0.9484 | 0.9483 | 0.9916 | 0.9917 | [See the model](https://huggingface.co/lygitdata/garmentiq/blob/main/tiny_vit_inditex_finetuned.pt) |
+
 ## Issues & Feedback
 
 Found a bug or have a feature request? Please open an issue on our [GitHub Issues page](https://github.com/lygitdata/GarmentIQ/issues).
@@ -349,4 +365,6 @@ We gratefully acknowledge the use and adaptation of the following open-source re
 - https://github.com/svip-lab/HRNet-for-Fashion-Landmark-Estimation.PyTorch
 - https://github.com/switchablenorms/DeepFashion2
 - https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset
+- https://www.kaggle.com/datasets/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+- https://www.kaggle.com/datasets/lygitdata/zara-clothes-image-data
 - All Python packages listed in `requirements.txt`
