@@ -4,7 +4,7 @@
 
 **Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation.**
 
-<img src="https://github.com/user-attachments/assets/49e176e2-59c7-4e8b-b7e1-f834de965760" alt="GarmentIQ" width="800px"/>
+<img src="https://github.com/user-attachments/assets/49e176e2-59c7-4e8b-b7e1-f834de965760" alt="GarmentIQ" width="600px"/>
 
 **Content**: 
 
