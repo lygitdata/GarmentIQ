@@ -348,3 +348,5 @@ We gratefully acknowledge the use and adaptation of the following open-source re
 - https://github.com/ZhengPeng7/BiRefNet
 - https://github.com/svip-lab/HRNet-for-Fashion-Landmark-Estimation.PyTorch
 - https://github.com/switchablenorms/DeepFashion2
+- https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset
+- All Python packages listed in `requirements.txt`
