@@ -12,6 +12,8 @@
 2. [Overview of QarmentIQ Python Package](#overview-of-qarmentiq-python-package)
 3. [Quick Start](#quick-start)
 
+---
+
 ## What Are the Key Features of GarmentIQ?
 
 GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to classify garments, remove backgrounds, and detect key features with precision. It turns expert know-how into an intuitive measurement system—no coding required. Fully modular and customizable, it adapts to your workflows while delivering fast, accurate results out of the box.
