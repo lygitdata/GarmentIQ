@@ -58,7 +58,7 @@ Please install from PyPI using the following command.
 
 ### Classification
 
-[Open in Colab](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/classification_quick_start.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/classification_quick_start.ipynb)
 
 ```python
 import garmentiq as giq
@@ -135,7 +135,7 @@ print(
 
 ### Segmentation
 
-[Open in Colab](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/segmentation_quick_start.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/segmentation_quick_start.ipynb)
 
 ```python
 import garmentiq as giq
