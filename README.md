@@ -135,6 +135,8 @@ print(
 
 ### Segmentation
 
+<img src="https://github.com/user-attachments/assets/32c612a8-b69f-49d5-90f1-13f169356cdf" width="200px" alt="bg modified example" />
+
 [Open in Colab](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/segmentation_quick_start.ipynb)
 
 ```python
