@@ -16,6 +16,7 @@
     - [Classification](#classification)
     - [Segmentation](#segmentation)
     - [Landmark detection](#landmark-detection)
+4. 
 
 ---
 
@@ -328,3 +329,11 @@ coords, maxvals, detection_dict = giq.landmark.detect(
 # Plot the detected coordinates
 giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")
 ```
+
+## Issues & Feedback
+
+Found a bug or have a feature request? Please open an issue on our [GitHub Issues page](https://github.com/lygitdata/GarmentIQ/issues).
+
+## License
+
+GarmentIQ is licensed under the MIT License. See [LICENSE](LICENSE) for details.
