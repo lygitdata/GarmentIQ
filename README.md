@@ -14,7 +14,7 @@
     - [Installation](#installation)
     - [Classification](#classification)
     - [Segmentation](#segmentation)
-    - [Landmark detection, derivation, and refinement](#landmark-detection-derivation-and-refinement)
+    - [Landmark detection](#landmark-detection)
 
 ---
 
