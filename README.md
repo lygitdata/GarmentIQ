@@ -67,7 +67,7 @@ pip install garmentiq -q
 
 The tailor agent executes the entire pipeline in sequence: classification, segmentation (if needed), landmark detection, landmark refinement (if required), and landmark derivation (if applicable). Note that the first 3 steps can also be executed independently (the last 2 steps depend on the results returned by segmentation), without the use of the tailor agent, as described in the following subsections.
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/tailor_quick_start.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/tailor_quick_start.ipynb)
 
 ```python
 import garmentiq as giq
@@ -173,7 +173,7 @@ for json_path in metadata['measurement_json']:
 
 ### Classification
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/classification_quick_start.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_quick_start.ipynb)
 
 ```python
 import garmentiq as giq
@@ -250,7 +250,7 @@ print(
 
 ### Segmentation
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/segmentation_quick_start.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/segmentation_quick_start.ipynb)
 
 ```python
 import garmentiq as giq
@@ -292,7 +292,7 @@ giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))
 
 ### Landmark detection
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/quick_start/landmark_detection_quick_start.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_detection_quick_start.ipynb)
 
 ```python
 import garmentiq as giq
