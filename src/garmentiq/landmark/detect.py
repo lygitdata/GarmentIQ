@@ -85,4 +85,7 @@ def detect(
         fill_in_value=preds,
     )
 
+    for idx in predefined_index:
+        instruction_data[class_name]["landmarks"][str(idx + 1)]["conf"] = float(maxval[0, idx, 0])
+
     return preds_all, maxvals, instruction_data
