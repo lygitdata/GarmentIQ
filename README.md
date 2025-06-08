@@ -24,33 +24,12 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 
 The `gqrmentiq` package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction.
 
-### Package Structure Overview
+- `tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
 
-`tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
+- `classification`: This module is responsible for identifying the type of garment in an image. Its key functions include: `fine_tune_pytorch_nn`, `load_data`, `load_model`, `predict`, `test_pytorch_nn`, `train_pytorch_nn`, and `train_test_split`
 
-`classification`: This module is responsible for identifying the type of garment in an image. Its key functions include:.
-- `fine_tune_pytorch_nn`: For fine-tuning pre-trained models on new datasets.
-- `load_data`: For loading and preprocessing image data into memory.
-- `load_model`: For loading pre-trained classification models.
-- `predict`: For making class predictions on new images.
-- `test_pytorch_nn`: For evaluating the performance of trained models.
-- `train_pytorch_nn`: For training PyTorch neural networks for classification.  
-- `train_test_split`: For preparing and splitting image datasets into training and testing sets.
+- `segmentation`: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include: `change_background_color`, `extract`, `load_model`, and `process_and_save_images`.
 
+`landmark`: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include: `derive`, `detect`, and `refine`.
 
-
-  
-
-- `segmentation`: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include:
-
-load_model: For loading pre-trained segmentation models.
-extract: For extracting segmentation masks from images.
-change_background_color: For modifying the background color of segmented images.
-process_and_save_images: For processing multiple images through segmentation and saving the results.
-landmark: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include:
-
-detect: For identifying initial landmark coordinates on a garment image.
-derive: For calculating the coordinates of new, derived landmarks based on existing ones.
-refine: For adjusting and improving the precision of detected landmark locations.
-Instruction Schemas
-The instruction/ folder contains 9 predefined measurement schemas, which are utilized by the garment_classes.py file to define different garment types and their measurement properties. Users can also define their own custom measurement instructions by creating new dictionaries formatted similarly to the existing garment classes.
+- Instruction Schemas: The `instruction/` folder contains 9 predefined measurement schemas in `.json` format, which are utilized by the `garment_classes.py` file `garment_classes` dictionary to define different garment types and their predefined measurement properties. Users can also define their own custom measurement instructions by creating new dictionaries formatted similarly to the existing garment classes.
