@@ -29,7 +29,7 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 - `tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
 
 - `classification`: This module is responsible for identifying the type of garment in an image. Its key functions include:
--   train_test_split: For preparing and splitting image datasets into training and testing sets.
+  - train_test_split: For preparing and splitting image datasets into training and testing sets.
 load_data: For loading and preprocessing image data into memory.
 load_model: For loading pre-trained classification models.
 train_pytorch_nn: For training PyTorch neural networks for classification.
