@@ -46,6 +46,8 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 
 ## Quick Start
 
+<img src="https://github.com/user-attachments/assets/2de8ee34-166e-42db-8428-6e376848a9ec" width="600px" alt="GarmentIQ Example">
+
 ### Installation
 
 Please install from PyPI using the following command.
