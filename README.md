@@ -1,10 +1,17 @@
 # GarmentIQ: Automated Garment Measurement for Fashion Retail
 
-Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation.
-
-GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to classify garments, remove backgrounds, and detect key features with precision. It turns expert know-how into an intuitive measurement system—no coding required. Fully modular and customizable, it adapts to your workflows while delivering fast, accurate results out of the box.
-
-<img src="https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/bg.jpg" alt="GatmentIQ Background Image" width="300px"/>
+<table>
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/bg.jpg" alt="GarmentIQ Background Image" width="300px"/>
+    </td>
+    <td>
+      <p>
+        Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation. GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to classify garments, remove backgrounds, and detect key features with precision. It turns expert know-how into an intuitive measurement system—no coding required. Fully modular and customizable, it adapts to your workflows while delivering fast, accurate results out of the box.
+      </p>
+    </td>
+  </tr>
+</table>
 
 ## What Are the Key Features of GarmentIQ?
 
