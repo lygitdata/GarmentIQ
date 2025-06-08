@@ -1,6 +1,8 @@
 # Model fine-tuning briefing
 
-Date: 05/13/2025
+Date: 06/08/2025
+
+> For `.pt` model files, please go to https://huggingface.co/lygitdata/garmentiq.
 
 Ranking:
 
