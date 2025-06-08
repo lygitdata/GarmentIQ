@@ -58,7 +58,78 @@ Please install from PyPI using the following command.
 
 ### Classification
 
+```python
+import garmentiq as giq
+from garmentiq.classification.model_definition import tinyViT
+from garmentiq.classification.utils import CachedDataset
 
+# Download test data and a pretrained model
+!mkdir -p models
+
+!curl -L -o /content/garmentiq-classification-set-nordstrom-and-myntra.zip \
+  https://www.kaggle.com/api/v1/datasets/download/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+
+!wget -q -O /content/models/tiny_vit_inditex_finetuned.pt \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit_inditex_finetuned.pt
+
+# Prepare test data
+DATA = giq.classification.train_test_split(
+    output_dir="data",
+    metadata_csv="metadata.csv",
+    label_column="garment",
+    train_zip_dir="garmentiq-classification-set-nordstrom-and-myntra.zip",
+    test_size=0.15,
+    verbose=True
+)
+
+test_images, test_labels, _ = giq.classification.load_data(
+    df=DATA["test_metadata"],
+    img_dir=DATA["test_images"],
+    label_column="garment",
+    resize_dim=(120, 184),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+
+# Load the pretrained model
+classifier = giq.classification.load_model(
+    model_path="/content/models/tiny_vit_inditex_finetuned.pt",
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6}
+)
+
+# Fit the model on the whole test data
+giq.classification.test_pytorch_nn(
+    model_path="/content/models/tiny_vit_inditex_finetuned.pt",
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": DATA["test_metadata"]["garment"],
+        "cached_images": test_images,
+        "cached_labels": test_labels,
+    },
+    param={"batch_size": 64},
+)
+
+# Fit the model on a single image
+img_to_test = DATA['test_metadata']['filename'][88]
+
+pred_label, pred_prob = giq.classification.predict(
+    model=classifier,
+    image_path=f"data/test/images/{img_to_test}",
+    classes=DATA['test_metadata']['garment'].unique().tolist(),
+    resize_dim=(120, 184),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+
+print(
+    "True label: ", img_to_test,
+    "\nPredicted label: ", pred_label,
+    "\nPredicted Probabilities: ", pred_prob
+)
+```
 
 ### Segmentation
 
