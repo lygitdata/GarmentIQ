@@ -29,8 +29,8 @@
         <meta name="twitter:title" content="GarmentIQ - Demo | Garment landmark detection">
         <meta name="twitter:description" content="GarmentIQ - Demo | Garment landmark detection">
         <meta name="twitter:image" content="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg">
-        <link rel="stylesheet" href="/asset/css/theme.min.css">
-        <link rel="stylesheet" href="/asset/css/demo/landmark-detection.css">
+        <link rel="stylesheet" href="https://garmentiq.ly.gd.edu.kg/asset/css/theme.min.css">
+        <link rel="stylesheet" href="landmark-detection.css">
         <style>
             /* inter-300 - latin */
             @font-face {
@@ -39,9 +39,9 @@
                 font-weight: 300;
                 font-display: swap;
                 src: local(''),
-                    url('/asset/fonts/inter-v12-latin-300.woff2') format('woff2'),
+                    url('https://garmentiq.ly.gd.edu.kg/asset/fonts/inter-v12-latin-300.woff2') format('woff2'),
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
-                    url('/asset/fonts/inter-v12-latin-300.woff') format('woff');
+                    url('https://garmentiq.ly.gd.edu.kg/asset/fonts/inter-v12-latin-300.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
 
@@ -51,9 +51,9 @@
                 font-weight: 500;
                 font-display: swap;
                 src: local(''),
-                    url('/asset/fonts/inter-v12-latin-500.woff2') format('woff2'),
+                    url('https://garmentiq.ly.gd.edu.kg/asset/fonts/inter-v12-latin-500.woff2') format('woff2'),
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
-                    url('/asset/fonts/inter-v12-latin-500.woff') format('woff');
+                    url('https://garmentiq.ly.gd.edu.kg/asset/fonts/inter-v12-latin-500.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
 
@@ -63,9 +63,9 @@
                 font-weight: 700;
                 font-display: swap;
                 src: local(''),
-                    url('/asset/fonts/inter-v12-latin-700.woff2') format('woff2'),
+                    url('https://garmentiq.ly.gd.edu.kg/asset/fonts/inter-v12-latin-700.woff2') format('woff2'),
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
-                    url('/asset/fonts/inter-v12-latin-700.woff') format('woff');
+                    url('https://garmentiq.ly.gd.edu.kg/asset/fonts/inter-v12-latin-700.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
         </style>
@@ -100,21 +100,24 @@
                         </div>
                         <div class="row d-flex align-items-start mt-5 border-top pt-5" data-aos="fade">
                             <div class="col-12">
-                                <a href="https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
+                                <a href="https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
                                 <div id="runtime-overlay">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
-                                        <h2>Connecting to Runtime</h2>
-                                        <div class="spinner"></div>
+                                        <h2>Connect to runtime</h2>
+                                        <div style="margin-bottom: 20px;">
+                                            <label for="server-url">Enter API endpoint URL:</label>
+                                            <input type="text" id="server-url" placeholder="http://127.0.0.1:5001" style="width: 80%; padding: 8px;">
+                                        </div>
+                                        <button id="refresh-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Connect</button>
                                     </div>
-                                    <p id="status-text">Initializing connection...</p>
-                                    <p> Demonstration Setup Instruction:
+                                    <p id="status-text">Not connected yet</p>
+                                    <p> Setup Instruction:
                                     <ol style="text-align: left;">
                                         <li> Install and run <a href="/documentation/magicbox/" class="link-fancy" target="_blank">GarmentIQ MagicBox</a>. If you have already installed the magicbox, please skip this step. </li>
                                         <li> In GarmentIQ MagicBox, open and run the whole notebook at <code>working/examples/web_landmark_detection/main.ipynb</code>. </li>
                                         <li> Click on the following button to start. </li>
                                     </ol>
                                     </p>
-                                    <button id="refresh-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Retry Connection</button>
                                 </div>
                                 <div class="main-content">
                                     <label style="width: 100%;">
@@ -156,11 +159,11 @@
             </div>
         </main>
         <footer id="footer"></footer>
-        <script src="/asset/js/headerMenu.js"></script>
-        <script src="/asset/js/footer.js"></script>
-        <script src="/asset/js/bootstrap.bundle.min.js"></script>
-        <script src="/asset/js/aos.js"></script>
-        <script src="/asset/js/demo/landmark-detection.js"></script>
+        <script src="https://garmentiq.ly.gd.edu.kg/asset/js/headerMenu.js"></script>
+        <script src="https://garmentiq.ly.gd.edu.kg/asset/js/footer.js"></script>
+        <script src="https://garmentiq.ly.gd.edu.kg/asset/js/bootstrap.bundle.min.js"></script>
+        <script src="https://garmentiq.ly.gd.edu.kg/asset/js/aos.js"></script>
+        <script src="landmark-detection.js"></script>
         <script>
             AOS.init({
                 duration: 800, // values from 0 to 3000, with step 50ms
