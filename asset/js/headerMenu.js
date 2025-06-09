@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             <a class="nav-link" href="/application/demo/">Demo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="https://archive.gd.edu.kg/abs/20250525121523/" target="_blank">Paper</a>
+                            <a class="nav-link" href="/documentation/">Documentation</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/documentation/">Documentation</a>
+                            <a class="nav-link" href="https://archive.gd.edu.kg/abs/20250525121523/" target="_blank">Paper</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/lygitdata/GarmentIQ" target="_blank">GitHub</a>
