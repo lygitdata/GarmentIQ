@@ -464,33 +464,12 @@ class tailor:
             label = metadata.loc[metadata["filename"] == image, "class"].values[0]
             transformed_name = os.path.splitext(image)[0]
 
-            # Compute distances and get a fresh copy of detection_dict
-            _, clean_dict = utils.compute_measurement_distances(
-                outputs[image]["detection_dict"]
+            # Clean the detection dictionary
+            final_dict = utils.clean_detection_dict(
+                class_name=label, 
+                image_name=image, 
+                detection_dict=outputs[image]["detection_dict"]
             )
-
-            # Safely extract and clean the content under the label
-            original_data = clean_dict.get(label, {})
-
-            # Clean landmarks
-            if "landmarks" in original_data:
-                for lm_id in list(original_data["landmarks"].keys()):
-                    lm = original_data["landmarks"][lm_id]
-                    original_data["landmarks"][lm_id] = {
-                        k: lm[k] for k in ("x", "y", "conf") if k in lm
-                    }
-
-            # Clean measurements
-            if "measurements" in original_data:
-                for m_id in list(original_data["measurements"].keys()):
-                    m = original_data["measurements"][m_id]
-                    original_data["measurements"][m_id] = {
-                        k: m[k] for k in ("landmarks", "distance") if k in m
-                    }
-
-            # Change the top-level key
-            new_key = f"{label}->{image}"
-            final_dict = {new_key: original_data}
 
             # Export JSON
             utils.export_dict_to_json(
