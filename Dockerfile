@@ -27,11 +27,6 @@ RUN mkdir -p /etc/python_startup && \
 # Run the startup script for all Python sessions
 ENV PYTHONSTARTUP=/etc/python_startup/startup.py
 
-# Create model directory and download models
-RUN mkdir -p /app/working/models && \
-    wget -O /app/working/models/tiny_vit_inditex_finetuned.pt https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit_inditex_finetuned.pt && \
-    wget -O /app/working/models/hrnet.pth https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
-
 # Expose JupyterLab port
 EXPOSE 8888
 
