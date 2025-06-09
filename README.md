@@ -32,7 +32,7 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 | **Garment image classification** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/) |
 | **Garment image segmentation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/) |
 | **Garment measurement instruction generation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/) |
-| **Garment landmark extraction** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-extraction/) |
+| **Garment landmark detection** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/) |
 | **Garment landmark adjustment** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/) |
 
 ## Overview of QarmentIQ Python Package
