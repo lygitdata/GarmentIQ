@@ -1,6 +1,6 @@
 # GarmentIQ: Automated Garment Measurement for Fashion Retail
 
-[🌐 Official website](https://garmentiq.ly.gd.edu.kg/) | [📖 Documentation](https://garmentiq.ly.gd.edu.kg/documentation/) | [⚙️ Pipeline web interface](https://garmentiq.ly.gd.edu.kg/application/) | [📄 Paper](https://archive.gd.edu.kg/abs/20250525121523/)
+[🌐 Official website](https://garmentiq.ly.gd.edu.kg/) | [📖 Documentation](https://garmentiq.ly.gd.edu.kg/documentation/) | [⚙️ Web pipeline](https://garmentiq.ly.gd.edu.kg/application/) | [🪄 MagicBox](https://garmentiq.ly.gd.edu.kg/documentation/magicbox/) | [📄 Paper](https://archive.gd.edu.kg/abs/20250525121523/)
 
 **Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation.**
 
