@@ -90,7 +90,7 @@
                         <div class="row">
                             <div class="col-12 py-vh-4">
                                 <h1 class="display-huge fw-bold lh-1" data-aos="fade-down">Demo 2: Garment image segmentation</h1>
-                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 05/01/2025</span>
+                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 06/09/2025</span>
                                 <div class="mt-4 d-flex justify-content-center" data-aos="fade-down" data-aos-delay="200">
                                     <svg viewbox="0 0 29 107" xmlns="http://www.w3.org/2000/svg" style="width:10px;" data-aos="fade-down">
                                         <path d="M15.425 106.639l13.116-12.42c.55-.446.615-1.23.144-1.751a1.363 1.363 0 0 0-1.993 0l-10.887 10.296V1.242C15.805.556 15.218 0 14.493 0c-.724 0-1.311.556-1.311 1.242v101.522L2.308 92.468a1.363 1.363 0 0 0-1.85-.136 1.197 1.197 0 0 0 0 1.887l13.117 12.42a1.364 1.364 0 0 0 1.85 0z" fill="#000" fill-rule="evenodd"></path>
@@ -103,11 +103,15 @@
                                 <a href="https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
                                 <div id="runtime-overlay">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
-                                        <h2>Connecting to Runtime</h2>
-                                        <div class="spinner"></div>
+                                        <h2>Connect to runtime</h2>
+                                        <div style="margin-bottom: 20px;">
+                                            <label for="server-url">Enter API endpoint URL:</label>
+                                            <input type="text" id="server-url" placeholder="http://127.0.0.1:5000" style="width: 80%; padding: 8px;">
+                                        </div>
+                                        <button id="refresh-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Connect</button>
                                     </div>
-                                    <p id="status-text">Initializing connection...</p>
-                                    <p> Demonstration Setup Instruction:
+                                    <p id="status-text">Not connected yet</p>
+                                    <p> Setup Instruction:
                                     <ol style="text-align: left;">
                                         <li> Install and run <a href="/documentation/magicbox/" class="link-fancy" target="_blank">GarmentIQ MagicBox</a>. If you have already installed the magicbox, please skip this step. </li>
                                         <li> In GarmentIQ MagicBox, open and run the whole notebook at <code>working/examples/web_segmentation/main.ipynb</code>. </li>
