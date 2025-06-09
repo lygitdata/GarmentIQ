@@ -497,4 +497,7 @@ class tailor:
                 idx, "measurement_json"
             ] = f"{self.output_dir}/measurement_json/{transformed_name}_measurement.json"
 
+        # Step 12: Save metadata as a CSV
+        metadata.to_csv(f"{self.output_dir}/metadata.csv", index=False)
+
         return metadata, outputs
