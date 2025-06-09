@@ -321,7 +321,7 @@ class tailor:
             outputs[image] = {}
 
         # Step 6: Segmentation
-        if self.do_derive or self.do_refine:
+        if use_bg_color or (self.do_derive or self.do_refine):
             for idx, image in tqdm(
                 enumerate(metadata["filename"]),
                 total=len(metadata),
@@ -399,7 +399,7 @@ class tailor:
                 outputs[image]["detection_dict"] = updated_detection_dict
 
         # Step 10: Save segmentation image
-        if save_segmentation_image and (self.do_derive or self.do_refine):
+        if save_segmentation_image and (use_bg_color or self.do_derive or self.do_refine):
             for idx, image in tqdm(
                 enumerate(metadata["filename"]),
                 total=len(metadata),
