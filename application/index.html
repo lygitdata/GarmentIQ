@@ -15,21 +15,22 @@
             window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "G-ELSZ3SFQ2D")
         </script>
         <!-- Google / Search Engine Tags -->
-        <meta itemprop="name" content="GarmentIQ - Application">
-        <meta itemprop="description" content="GarmentIQ - Application">
+        <meta itemprop="name" content="GarmentIQ - Application: Tailor">
+        <meta itemprop="description" content="GarmentIQ - Application: Tailor">
         <meta itemprop="image" content="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg">
         <!-- Facebook Meta Tags -->
         <meta property="og:url" content="https://garmentiq.ly.gd.edu.kg/application/">
         <meta property="og:type" content="website">
-        <meta property="og:title" content="GarmentIQ - Application">
-        <meta property="og:description" content="GarmentIQ - Application">
+        <meta property="og:title" content="GarmentIQ - Application: Tailor">
+        <meta property="og:description" content="GarmentIQ - Application: Tailor">
         <meta property="og:image" content="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg">
         <!-- Twitter Meta Tags -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="GarmentIQ - Application">
-        <meta name="twitter:description" content="GarmentIQ - Application">
+        <meta name="twitter:title" content="GarmentIQ - Application: Tailor">
+        <meta name="twitter:description" content="GarmentIQ - Application: Tailor">
         <meta name="twitter:image" content="https://garmentiq.ly.gd.edu.kg/asset/img/bg.jpg">
-        <link rel="stylesheet" href="../asset/css/theme.min.css">
+        <link rel="stylesheet" href="/asset/css/theme.min.css">
+        <link rel="stylesheet" href="/asset/css/tailor.css">
         <style>
             /* inter-300 - latin */
             @font-face {
@@ -38,9 +39,9 @@
                 font-weight: 300;
                 font-display: swap;
                 src: local(''),
-                    url('../asset/fonts/inter-v12-latin-300.woff2') format('woff2'),
+                    url('/asset/fonts/inter-v12-latin-300.woff2') format('woff2'),
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
-                    url('../asset/fonts/inter-v12-latin-300.woff') format('woff');
+                    url('/asset/fonts/inter-v12-latin-300.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
 
@@ -50,9 +51,9 @@
                 font-weight: 500;
                 font-display: swap;
                 src: local(''),
-                    url('../asset/fonts/inter-v12-latin-500.woff2') format('woff2'),
+                    url('/asset/fonts/inter-v12-latin-500.woff2') format('woff2'),
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
-                    url('../asset/fonts/inter-v12-latin-500.woff') format('woff');
+                    url('/asset/fonts/inter-v12-latin-500.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
 
@@ -62,9 +63,9 @@
                 font-weight: 700;
                 font-display: swap;
                 src: local(''),
-                    url('../asset/fonts/inter-v12-latin-700.woff2') format('woff2'),
+                    url('/asset/fonts/inter-v12-latin-700.woff2') format('woff2'),
                     /* Chrome 26+, Opera 23+, Firefox 39+ */
-                    url('../asset/fonts/inter-v12-latin-700.woff') format('woff');
+                    url('/asset/fonts/inter-v12-latin-700.woff') format('woff');
                 /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
             }
         </style>
@@ -89,13 +90,13 @@
                     <div class="col-12 col-lg-10">
                         <div class="row">
                             <div class="col-12 py-vh-4">
-                                <h1 class="display-huge fw-bold lh-1" data-aos="fade-down">Application</h1>
-                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 04/07/2025</span>
+                                <h1 class="display-huge fw-bold lh-1" data-aos="fade-down">Application: Tailor</h1>
+                                <span class="h6 badge text-bg-light" data-aos="fade-down">Last update of this page: 06/09/2025</span>
                                 <div class="row d-flex align-items-start text-muted pt-5" data-aos="fade">
                                     <div class="col-12">
                                         <div class="border p-4">
                                             <p>
-                                                This application runs the entire GarmentIQ workflow through a user-friendly website interface. If you only want to try a specific feature of GarmentIQ, please visit the <a href="/application/demo/" class="link-fancy">demo page</a>.
+                                                This application - tailor - runs the entire GarmentIQ workflow through a user-friendly website interface. If you only want to try a specific feature of GarmentIQ, please visit the <a href="/application/demo/" class="link-fancy">demo page</a>.
                                             </p>
                                         </div>
                                     </div>
@@ -109,7 +110,70 @@
                         </div>
                         <div class="row d-flex align-items-start mt-5 border-top pt-5" data-aos="fade">
                             <div class="col-12">
-                                Coming soon. This page is under development.                       
+                                <a href="https://garmentiq.ly.gd.edu.kg/application/guide.mp4" class="link-fancy" target="_blank">Watch video guide.</a>
+                                <div id="runtime-overlay">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+                                        <h2>Connect to runtime</h2>
+                                        <div style="margin-bottom: 20px;">
+                                            <label for="server-url">Enter API endpoint URL:</label>
+                                            <input type="text" id="server-url" placeholder="http://127.0.0.1:5002" style="width: 80%; padding: 8px;">
+                                        </div>
+                                        <button id="refresh-btn" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Connect</button>
+                                    </div>
+                                    <p id="status-text">Not connected yet</p>
+                                    <p> Setup Instruction:
+                                    <ol style="text-align: left;">
+                                        <li> Install and run <a href="/documentation/magicbox/" class="link-fancy" target="_blank">GarmentIQ MagicBox</a>. If you have already installed and started the magicbox, please skip this step. </li>
+                                        <li> In GarmentIQ MagicBox, open and run the whole notebook at <code>working/examples/web_tailor/main.ipynb</code>. </li>
+                                        <li> Click on the "Connect" button to start. </li>
+                                    </ol>
+                                    </p>
+                                </div>
+                                <div class="main-content">
+                                    <label style="width: 100%;">
+                                        <div class="upload-area">
+                                            <!-- Add multiple attribute -->
+                                            <input type="file" id="imageUpload" accept="image/*" hidden multiple>
+                                            <div style="color: #007bff;"> 📁 Click to upload images </div>
+                                            <div style="margin-top: 0.5rem;"> Supported formats: PNG, JPG, JPEG (multiple selection enabled) </div>
+                                        </div>
+                                    </label>
+                                    <div style="margin-top: 20px;">
+                                        <label style="display: block; margin-top: 0.5rem;">
+                                            <input type="checkbox" id="doDeriveToggle" />
+                                            Use derivation
+                                        </label>
+                                        <label style="display: block; margin-top: 0.5rem;">
+                                            <input type="checkbox" id="doRefineToggle" />
+                                            Use refinement
+                                        </label>
+                                        <label style="display: block; margin-top: 0.5rem;">
+                                            <input type="checkbox" id="bgToggle" /> Change background color </label>
+                                        <br>
+                                        <div id="bgColorContainer" style="display: none; margin-top: 0.5rem; align-items: center; gap: 0.5rem;">
+                                            <label for="colorPicker"></label>
+                                            <input type="color" id="colorPicker" value="#66ff66" />
+                                        </div>
+                                    </div>
+                                    <!-- Change to preview container -->
+                                    <div class="preview-container" id="previewContainer"></div>
+                                    <button onclick="uploadImage()" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Start measurement</button>
+                                    <div style="margin-top: 2rem;">
+                                        <div id="result-container">
+                                            <center>
+                                                <div id="result-spinner" class="spinner" style="display: none;"></div>
+                                            </center>
+                                            <div id="saveNote" style="display: none;">
+                                                <p>The following image(s) and JSON are also saved at <code>working/examples/web_tailor/tailor_files/output</code> in GarmentIQ MagicBox. </p>
+                                            </div>
+                                            <div id="classificationSection" style="margin-top: 1rem;"></div>
+                                            <div id="measureJSONSection" style="margin-top: 1rem;"></div>
+                                            <div id="measureImgSection" class="preview-container" style="margin-top: 1rem;"></div>
+                                            <div id="masksSection" class="preview-container" style="margin-top: 1rem;"></div>
+                                            <div id="modifiedSection" class="preview-container" style="margin-top: 1rem;"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -118,10 +182,11 @@
         </main>
         <footer id="footer">
         </footer>
-        <script src="../asset/js/headerMenu.js"></script>
-        <script src="../asset/js/footer.js"></script>
-        <script src="../asset/js/bootstrap.bundle.min.js"></script>
-        <script src="../asset/js/aos.js"></script>
+        <script src="/asset/js/headerMenu.js"></script>
+        <script src="/asset/js/footer.js"></script>
+        <script src="/asset/js/bootstrap.bundle.min.js"></script>
+        <script src="/asset/js/aos.js"></script>
+        <script src="/asset/js/tailor.js"></script>
         <script>
             AOS.init({
                 duration: 800, // values from 0 to 3000, with step 50ms
