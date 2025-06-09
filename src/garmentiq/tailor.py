@@ -253,7 +253,7 @@ class tailor:
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
         Path(f"{self.output_dir}/measurement_json").mkdir(parents=True, exist_ok=True)
 
-        if save_segmentation_image and (self.do_derive or self.do_refine):
+        if save_segmentation_image and (use_bg_color or self.do_derive or self.do_refine):
             Path(f"{self.output_dir}/mask_image").mkdir(parents=True, exist_ok=True)
             if use_bg_color:
                 Path(f"{self.output_dir}/bg_modified_image").mkdir(
@@ -277,7 +277,7 @@ class tailor:
         columns = [
             "filename",
             "class",
-            "mask_image",
+            "mask_image" if use_bg_color or self.do_derive or self.do_refine else None,
             "bg_modified_image" if use_bg_color else None,
             "measurement_image",
             "measurement_json",
