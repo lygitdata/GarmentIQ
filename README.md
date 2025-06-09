@@ -1,4 +1,4 @@
-# GarmentIQ MagicBox (Version 1.0)
+# GarmentIQ MagicBox (Version 1.1)
 
 *Last update: 06/09/2025*
 
@@ -16,7 +16,7 @@ GarmentIQ MagicBox is a streamlined, Docker-based JupyterLab environment designe
 
 ## How to install GarmentIQ MagicBox?
 
-Before installing GarmentIQ MagicBox, ensure that Docker is installed on your system. For optimal performance, it is recommended to have at least 16 GB of RAM, an NVIDIA GPU with CUDA support and a minimum of 4 GB of GPU memory, and at least 20 GB space available on disk.
+Before installing GarmentIQ MagicBox, ensure that Docker is installed and running on your system. For optimal performance, it is recommended to have at least 16 GB of RAM, an NVIDIA GPU with CUDA support and a minimum of 4 GB of GPU memory, and at least 20 GB space available on disk.
 
 ### Step 1: Download GarmentIQ MagicBox configuration files
 
