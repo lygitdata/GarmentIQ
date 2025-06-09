@@ -1,13 +1,43 @@
-const API_URL = 'http://127.0.0.1:5001/landmark_detection';
-const HEALTH_URL = 'http://127.0.0.1:5001/health';
-const EXPECTED_TOKEN = 'a3f7d2c14e65bb2e8f01a9dc4f6c9823d279f1e05b3a6d74c0987b1c2fae3c65';
+let baseURL = ''; 
+let API_URL = '';
 let isServerReady = false;
+const EXPECTED_TOKEN = 'a3f7d2c14e65bb2e8f01a9dc4f6c9823d279f1e05b3a6d74c0987b1c2fae3c65';
+
 const overlay = document.getElementById('runtime-overlay');
 const statusText = document.getElementById('status-text');
 const refreshBtn = document.getElementById('refresh-btn');
+const urlInput = document.getElementById('server-url');
 
-// Initial check
-checkServerStatus();
+refreshBtn.addEventListener('click', async () => {
+    baseURL = urlInput.value.trim();
+    if (!baseURL) {
+        statusText.textContent = 'Please enter a valid server URL.';
+        return;
+    }
+
+    const healthUrl = `${baseURL}/health`;
+    API_URL = `${baseURL}/landmark_detection`
+    statusText.textContent = 'Checking server health...';
+
+    try {
+        const res = await fetch(healthUrl);
+        const data = await res.json();
+
+        if (res.ok && data.token === EXPECTED_TOKEN) {
+            isServerReady = true;
+            statusText.textContent = 'Connected to server successfully!';
+            overlay.style.display = 'none';
+            document.querySelector('.main-content').style.display = 'block';
+        } else {
+            statusText.textContent = 'Server responded, but token is invalid.';
+            isServerReady = false;
+        }
+    } catch (error) {
+        console.error('Connection error:', error);
+        statusText.textContent = 'Failed to connect to server.';
+        isServerReady = false;
+    }
+});
 
 document.getElementById('imageUpload').addEventListener('change', function(e) {
     const container = document.getElementById('previewContainer');
@@ -49,25 +79,6 @@ document.getElementById('imageUpload').addEventListener('change', function(e) {
         });
     });
 });
-// Server status check
-async function checkServerStatus() {
-    try {
-        statusText.textContent = "Checking server status...";
-        refreshBtn.style.display = 'none';
-        const response = await fetch(HEALTH_URL);
-        if (!response.ok) throw new Error('Server not responding');
-        const data = await response.json();
-        if (data.token !== EXPECTED_TOKEN) throw new Error('Security verification failed');
-        // Success
-        isServerReady = true;
-        overlay.style.display = 'none';
-        document.querySelector('.main-content').style.display = 'block';
-    } catch (error) {
-        statusText.textContent = `Error: ${error.message}`;
-        refreshBtn.style.display = 'block';
-        isServerReady = false;
-    }
-}
 // Image analysis
 async function uploadImage() {
     if (!isServerReady) {
@@ -135,6 +146,3 @@ async function uploadImage() {
         document.getElementById('result').textContent = '❌ Error processing images';
     }
 }
-
-// Event listeners
-refreshBtn.addEventListener('click', checkServerStatus);
