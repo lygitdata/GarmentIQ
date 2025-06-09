@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/lygitdata/GarmentIQ" target="_blank">GitHub</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://pypi.org/project/garmentiq/" target="_blank">PyPI</a>
+                        </li>
                     </ul>
         `;
         normal.innerHTML = content;
