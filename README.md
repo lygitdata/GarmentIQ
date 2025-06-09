@@ -53,6 +53,8 @@ The `gqrmentiq` package provides an automated solution for garment measurement f
 
 This section provides simple examples demonstrating how to use the `garmentiq` Python API, offering users an overview of how the entire pipeline - as well as each individual step - works. For more detailed information, please refer to our [documentation](https://garmentiq.ly.gd.edu.kg/documentation/).
 
+> If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing MagicBox on your local machine, where you can find these examples under `working/examples/`.
+
 <img src="https://github.com/user-attachments/assets/2de8ee34-166e-42db-8428-6e376848a9ec" width="600px" alt="GarmentIQ Example"/>
 
 ### Installation
