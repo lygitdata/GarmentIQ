@@ -1,6 +1,6 @@
 [project]
 name = "garmentiq"
-version = "0.0.4"
+version = "0.0.4.1"
 authors = [
   { name="Li Yuan", email="lyuan@gd.edu.kg" },
   { name="Xinrui Zhai", email="zxr86272731@gmail.com" },
@@ -32,7 +32,8 @@ dependencies = [
     "kornia==0.8.0",
     "timm==1.0.15",
     "einops==0.8.1",
-    "shapely==2.1.1"
+    "shapely==2.1.1",
+    "opencv-python==4.11.0.86"
 ]
 
 [project.urls]
