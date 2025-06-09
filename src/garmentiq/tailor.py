@@ -305,9 +305,14 @@ class tailor:
                 "There are 4 measurement steps: classification, segmentation, "
                 "landmark detection, and landmark refinement."
             )
+        elif use_bg_color:
+            message = (
+                "There are 3 measurement steps: classification, segmentation, "
+                "and landmark detection."
+            )
         else:
             message = (
-                "There are 2 measurement steps: classification, and landmark detection."
+                "There are 2 measurement steps: classification and landmark detection."
             )
 
         print(textwrap.fill(message, width=80))
