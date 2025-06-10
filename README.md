@@ -170,7 +170,8 @@ for json_path in metadata['measurement_json']:
     with open(json_path, 'r') as file:
         data = json.load(file)
         print(f"{json_path}:\n")
-        print(json.dumps(data, indent=4, sort_keys=Tr
+        print(json.dumps(data, indent=4, sort_keys=True))
+        print("\n\n")
 ```
 
 ### Classification
