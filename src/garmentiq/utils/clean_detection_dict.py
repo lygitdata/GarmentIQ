@@ -1,7 +1,22 @@
 import os
 from garmentiq.utils import compute_measurement_distances
 
+
 def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict):
+    """
+    Cleans and reformats a detection dictionary, computes measurement distances,
+    and changes the top-level key for easier access.
+
+    Args:
+        class_name (str): The name of the garment class.
+        image_name (str): The original filename of the image.
+        detection_dict (dict): The raw detection dictionary containing landmark and measurement data.
+
+    Returns:
+        dict: A new dictionary with cleaned landmark and measurement data,
+              and a top-level key formatted as "{class_name}->{image_name}".
+    """
+
     transformed_name = os.path.splitext(image_name)[0]
 
     # Compute distances and get a fresh copy of detection_dict

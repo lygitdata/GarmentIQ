@@ -23,47 +23,38 @@ def train_test_split(
 
     This function supports two operation modes:
 
-    1. **Two-Zip Mode**: If both `train_zip_dir` and `test_zip_dir` are provided, each dataset is unzipped, validated against the metadata, and returned as-is.
-    2. **Split Mode**: If only `train_zip_dir` is provided, the function splits the training data into new training and test sets based on `test_size`.
+    1.  **Two-Zip Mode**: If both `train_zip_dir` and `test_zip_dir` are provided, each dataset is unzipped,
+        validated against the metadata, and returned as-is.
+    2.  **Split Mode**: If only `train_zip_dir` is provided, the function splits the training data
+        into new training and test sets based on `test_size`.
 
     It ensures:
     - The unzipped directories contain the expected structure (`images/` and metadata CSV).
     - Image filenames match those specified in the metadata.
     - Output datasets are organized into `train/` and `test/` folders under `output_dir`.
 
-    :param output_dir: Directory where the processed datasets will be saved.
-    :type output_dir: str
+    Args:
+        output_dir (str): Directory where the processed datasets will be saved.
+        train_zip_dir (str): Path to the ZIP file containing training data (with `images/` and metadata CSV).
+        metadata_csv (str): Filename of the metadata CSV inside each ZIP archive (e.g., 'metadata.csv').
+        label_column (str): Name of the column in the metadata CSV to use for class distribution summaries.
+        test_zip_dir (Optional[str]): Optional path to the ZIP file containing testing data.
+                                    If not provided, the function performs a split.
+        test_size (float): Proportion of data to use for testing if splitting from training data.
+                           Ignored if `test_zip_dir` is provided.
+        seed (int): Random seed used for reproducible splitting of training data.
+        verbose (bool): Whether to print class distribution summaries after processing.
 
-    :param train_zip_dir: Path to the ZIP file containing training data (with `images/` and metadata CSV).
-    :type train_zip_dir: str
+    Raises:
+        FileNotFoundError: If any expected files or images are missing.
+        ValueError: If metadata is missing required columns or if filenames and metadata don't align.
 
-    :param metadata_csv: Filename of the metadata CSV inside each ZIP archive (e.g., 'metadata.csv').
-    :type metadata_csv: str
-
-    :param label_column: Name of the column in the metadata CSV to use for class distribution summaries.
-    :type label_column: str
-
-    :param test_zip_dir: Optional path to the ZIP file containing testing data. If not provided, the function performs a split.
-    :type test_zip_dir: Optional[str]
-
-    :param test_size: Proportion of data to use for testing if splitting from training data. Ignored if `test_zip_dir` is provided.
-    :type test_size: float
-
-    :param seed: Random seed used for reproducible splitting of training data.
-    :type seed: int
-
-    :param verbose: Whether to print class distribution summaries after processing.
-    :type verbose: bool
-
-    :raises FileNotFoundError: If any expected files or images are missing.
-    :raises ValueError: If metadata is missing required columns or if filenames and metadata don't align.
-
-    :returns: A dictionary containing:
-        - 'train_images': Path to the directory with training images.
-        - 'train_metadata': DataFrame of training metadata.
-        - 'test_images': Path to the directory with testing images.
-        - 'test_metadata': DataFrame of testing metadata.
-    :rtype: dict
+    Returns:
+        dict: A dictionary containing:
+            - 'train_images': Path to the directory with training images.
+            - 'train_metadata': DataFrame of training metadata.
+            - 'test_images': Path to the directory with testing images.
+            - 'test_metadata': DataFrame of testing metadata.
     """
     os.makedirs(output_dir, exist_ok=True)
 

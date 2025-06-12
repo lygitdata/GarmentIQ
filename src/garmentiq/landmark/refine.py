@@ -15,14 +15,14 @@ def refine(
     mask: np.array,
     window_size: int = 5,
     ksize: tuple = (11, 11),
-    sigmaX: float = 0.0
+    sigmaX: float = 0.0,
 ):
     """
     Refines detected landmarks using a blurred mask and updates the detection dictionary.
 
     This function applies Gaussian blur to the given mask, then refines landmark coordinates
-    based on their confidence scores and local intensity structure. Only landmarks with a 
-    confidence score greater than 0 are refined. The refined coordinates are used to update 
+    based on their confidence scores and local intensity structure. Only landmarks with a
+    confidence score greater than 0 are refined. The refined coordinates are used to update
     predefined landmarks in the detection dictionary.
 
     Args:
@@ -34,7 +34,6 @@ def refine(
         window_size (int, optional): Size of the window used in the refinement algorithm. Defaults to 5.
         ksize (tuple, optional): Kernel size for Gaussian blur. Must be odd integers. Defaults to (11, 11).
         sigmaX (float, optional): Gaussian kernel standard deviation in the X direction. Defaults to 0.0.
-        **arg: Additional keyword arguments passed to `cv2.GaussianBlur`.
 
     Returns:
         tuple:

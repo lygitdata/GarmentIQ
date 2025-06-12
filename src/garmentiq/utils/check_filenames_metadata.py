@@ -11,17 +11,16 @@ def check_filenames_metadata(output_dir, file_dir, metadata_df):
     the output directory is deleted and a `ValueError` is raised. If they match, a confirmation
     message is printed.
 
-    :param output_dir: Path to the output directory that will be deleted if filenames do not match.
-    :type output_dir: str
-    :param file_dir: Path to the directory containing the files to check.
-    :type file_dir: str
-    :param metadata_df: A pandas DataFrame containing a 'filename' column with expected filenames.
-    :type metadata_df: pandas.DataFrame
+    Args:
+        output_dir (str): Path to the output directory that will be deleted if filenames do not match.
+        file_dir (str): Path to the directory containing the files to check.
+        metadata_df (pandas.DataFrame): A pandas DataFrame containing a 'filename' column with expected filenames.
 
-    :raises ValueError: If the filenames in the directory do not match those in the metadata.
+    Raises:
+        ValueError: If the filenames in the directory do not match those in the metadata.
 
-    :returns: None
-    :rtype: None
+    Returns:
+        None
     """
     file_list = os.listdir(file_dir)
     metadata_filenames = metadata_df["filename"].tolist()

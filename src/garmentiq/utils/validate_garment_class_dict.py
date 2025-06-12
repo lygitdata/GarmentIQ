@@ -1,4 +1,17 @@
 def validate_garment_class_dict(class_dict: dict) -> bool:
+    """
+    Validates the structure and content of a garment class dictionary.
+
+    Ensures that the dictionary adheres to the expected format, including the presence
+    of required keys ("num_predefined_points", "index_range", "instruction") and
+    correct data types and logical consistency for their values.
+
+    Args:
+        class_dict (dict): The dictionary to be validated.
+
+    Returns:
+        bool: True if the dictionary is valid, False otherwise.
+    """
     required_keys = {"num_predefined_points", "index_range", "instruction"}
 
     if not isinstance(class_dict, dict):
@@ -19,9 +32,11 @@ def validate_garment_class_dict(class_dict: dict) -> bool:
         # Check types
         if not isinstance(num_points, int):
             return False
-        if (not isinstance(index_range, tuple) or
-            len(index_range) != 2 or
-            not all(isinstance(i, int) for i in index_range)):
+        if (
+            not isinstance(index_range, tuple)
+            or len(index_range) != 2
+            or not all(isinstance(i, int) for i in index_range)
+        ):
             return False
 
         # Check logical consistency

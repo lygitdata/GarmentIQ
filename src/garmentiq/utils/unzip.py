@@ -9,13 +9,12 @@ def unzip(zip_path, extract_to="."):
     This function unzips the contents of the specified ZIP file to the given directory.
     A progress bar is displayed during the extraction using `tqdm`.
 
-    :param zip_path: Path to the ZIP file to be extracted.
-    :type zip_path: str
-    :param extract_to: Destination directory where the contents will be extracted. Defaults to the current directory.
-    :type extract_to: str
+    Args:
+        zip_path (str): Path to the ZIP file to be extracted.
+        extract_to (str): Destination directory where the contents will be extracted. Defaults to the current directory.
 
-    :returns: None
-    :rtype: None
+    Returns:
+        None
     """
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         members = zip_ref.infolist()

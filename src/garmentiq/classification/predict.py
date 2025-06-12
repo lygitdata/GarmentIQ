@@ -5,6 +5,7 @@ from PIL import Image
 from torchvision import transforms
 from typing import Type, List
 
+
 def predict(
     model: Type[nn.Module],
     image_path: str,
@@ -22,37 +23,29 @@ def predict(
     feeds it through a loaded model, and returns the predicted class along with the
     class probabilities. The model is expected to output logits over a fixed number of classes.
 
-    :param model_path: Path to the saved model checkpoint file.
-    :type model_path: str
-    :param model_class: The class of the PyTorch model to instantiate. Must inherit from `torch.nn.Module`.
-    :type model_class: Type[nn.Module]
-    :param model_args: Dictionary of arguments used to initialize the model.
-    :type model_args: dict
-    :param image_path: Path to the input image file (.jpg, .jpeg, .png).
-    :type image_path: str
-    :param classes: List of class names corresponding to model outputs. Will be sorted internally.
-    :type classes: List[str]
-    :param resize_dim: Tuple indicating the dimensions to resize the image to. Default is (120, 184).
-    :type resize_dim: tuple[int, int]
-    :param normalize_mean: List of mean values for normalization. Default is [0.8047, 0.7808, 0.7769].
-    :type normalize_mean: list[float]
-    :param normalize_std: List of standard deviation values for normalization. Default is [0.2957, 0.3077, 0.3081].
-    :type normalize_std: list[float]
-    :param device: Device to run inference on. Defaults to CUDA if available, otherwise CPU.
-    :type device: torch.device, optional
-    :param verbose: If True, prints the predicted label and class probabilities.
-    :type verbose: bool
+    Args:
+        model (Type[nn.Module]): The loaded PyTorch model instance ready for inference.
+        image_path (str): Path to the input image file (.jpg, .jpeg, .png).
+        classes (List[str]): List of class names corresponding to model outputs. Will be sorted internally.
+        resize_dim (tuple[int, int]): Tuple indicating the dimensions to resize the image to. Default is (120, 184).
+        normalize_mean (list[float]): List of mean values for normalization. Default is [0.8047, 0.7808, 0.7769].
+        normalize_std (list[float]): List of standard deviation values for normalization. Default is [0.2957, 0.3077, 0.3081].
+        device (torch.device, optional): Device to run inference on. Defaults to CUDA if available, otherwise CPU.
+        verbose (bool): If True, prints the predicted label and class probabilities.
 
-    :raises ValueError: If the image file does not have a supported extension (.jpg, .jpeg, .png).
-    :raises FileNotFoundError: If the model checkpoint file is not found or cannot be loaded.
+    Raises:
+        ValueError: If the image file does not have a supported extension (.jpg, .jpeg, .png).
+        FileNotFoundError: If the model checkpoint file is not found or cannot be loaded.
 
-    :returns: A tuple containing:
-        - predicted label (str): The class label with the highest predicted probability.
-        - prob_list (List[float]): The list of class probabilities in the same order as the sorted class list.
-    :rtype: tuple[str, List[float]]
+    Returns:
+        tuple[str, List[float]]: A tuple containing:
+            - predicted label (str): The class label with the highest predicted probability.
+            - prob_list (List[float]): The list of class probabilities in the same order as the sorted class list.
     """
     # Validate image extension
-    if not any(image_path.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png", ".JPG"]):
+    if not any(
+        image_path.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png", ".JPG"]
+    ):
         raise ValueError("Image file must end with .jpg, .jpeg, .png, or .JPG")
 
     # Sort the classes list to have a consistent order

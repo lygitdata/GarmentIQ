@@ -29,33 +29,28 @@ def test_pytorch_nn(
     Loads the model from disk, prepares the test dataset, and computes loss, accuracy,
     F1 score, and prints a full classification report.
 
-    :param model_path: Path to the saved model checkpoint file.
-    :type model_path: str
-    :param model_class: The class of the PyTorch model to instantiate. Must inherit from `torch.nn.Module`.
-    :type model_class: Type[torch.nn.Module]
-    :param model_args: Dictionary of arguments used to initialize the model.
-    :type model_args: dict
-    :param dataset_class: A callable class or function that returns a `torch.utils.data.Dataset`-compatible dataset.
-                          (Note: Not directly used, but included for consistency with training pipeline.)
-    :type dataset_class: Callable
-    :param dataset_args: Dictionary with dataset components:
-        - ``cached_images`` (torch.Tensor): Preprocessed test image tensors.
-        - ``cached_labels`` (torch.Tensor): Corresponding test labels.
-        - ``raw_labels`` (pandas.Series or array-like): Original labels for report generation.
-    :type dataset_args: dict
-    :param param: Dictionary of optional configuration parameters.
+    Args:
+        model_path (str): Path to the saved model checkpoint file.
+        model_class (Type[torch.nn.Module]): The class of the PyTorch model to instantiate.
+                                            Must inherit from `torch.nn.Module`.
+        model_args (dict): Dictionary of arguments used to initialize the model.
+        dataset_class (Callable): A callable class or function that returns a `torch.utils.data.Dataset`-compatible dataset.
+                                  (Note: Not directly used, but included for consistency with training pipeline.)
+        dataset_args (dict): Dictionary with dataset components:
+            - `cached_images` (torch.Tensor): Preprocessed test image tensors.
+            - `cached_labels` (torch.Tensor): Corresponding test labels.
+            - `raw_labels` (pandas.Series or array-like): Original labels for report generation.
+        param (dict): Dictionary of optional configuration parameters.
+                      Optional Keys:
+                          - `device` (torch.device): Device for computation. Defaults to `"cuda"` if available, else `"cpu"`.
+                          - `batch_size` (int): Batch size used for testing. Default is 64.
 
-        **Optional Keys**:
-            - ``device`` (torch.device): Device for computation. Defaults to `"cuda"` if available, else `"cpu"`.
-            - ``batch_size`` (int): Batch size used for testing. Default is 64.
+    Raises:
+        FileNotFoundError: If the model checkpoint cannot be loaded.
+        TypeError: If any parameter is of an incorrect type.
 
-    :type param: dict
-
-    :raises FileNotFoundError: If the model checkpoint cannot be loaded.
-    :raises TypeError: If any parameter is of an incorrect type.
-
-    :returns: None — prints test loss, accuracy, F1 score, and a classification report.
-    :rtype: None
+    Returns:
+        None — prints test loss, accuracy, F1 score, and a classification report.
     """
     validate_test_param(param)
     model = model_class(**model_args).to(param["device"])

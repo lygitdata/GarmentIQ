@@ -29,44 +29,39 @@ def train_pytorch_nn(
     This function performs training and validation across multiple folds using stratified sampling.
     It manages model instantiation, training loops, early stopping, and saves the best model based on validation loss.
 
-    :param model_class: The class of the PyTorch model to instantiate. Must inherit from `torch.nn.Module`.
-    :type model_class: Type[torch.nn.Module]
-    :param model_args: Dictionary of arguments used to initialize `model_class`.
-    :type model_args: dict
-    :param dataset_class: A callable class or function that returns a `torch.utils.data.Dataset`-compatible dataset.
-    :type dataset_class: Callable
-    :param dataset_args: Dictionary with dataset components:
-        - 'metadata_df' (pandas.DataFrame): Metadata with labels, used for stratification.
-        - 'raw_labels' (array-like): Raw class labels used by StratifiedKFold.
-        - 'cached_images' (torch.Tensor): Preprocessed image tensor.
-        - 'cached_labels' (torch.Tensor): Corresponding labels.
-    :type dataset_args: dict
-    :param param: Dictionary of training hyperparameters and configuration values.
+    Args:
+        model_class (Type[torch.nn.Module]): The class of the PyTorch model to instantiate.
+                                            Must inherit from `torch.nn.Module`.
+        model_args (dict): Dictionary of arguments used to initialize `model_class`.
+        dataset_class (Callable): A callable class or function that returns a `torch.utils.data.Dataset`-compatible dataset.
+        dataset_args (dict): Dictionary with dataset components:
+            - 'metadata_df' (pandas.DataFrame): Metadata with labels, used for stratification.
+            - 'raw_labels' (array-like): Raw class labels used by StratifiedKFold.
+            - 'cached_images' (torch.Tensor): Preprocessed image tensor.
+            - 'cached_labels' (torch.Tensor): Corresponding labels.
+        param (dict): Dictionary of training hyperparameters and configuration values.
+                      Required Keys:
+                          - `optimizer_class` (type): PyTorch optimizer class (e.g., `torch.optim.Adam`).
+                          - `optimizer_args` (dict): Arguments passed to the optimizer.
+                      Optional Keys (with defaults and types):
+                          - `device` (torch.device): Training device. Default is `"cuda"` if available, else `"cpu"`.
+                          - `n_fold` (int): Number of stratified folds for cross-validation. Default: 5.
+                          - `n_epoch` (int): Number of training epochs per fold. Default: 100.
+                          - `patience` (int): Epochs to wait before early stopping. Default: 5.
+                          - `batch_size` (int): Batch size for training and validation. Default: 64.
+                          - `model_save_dir` (str): Directory to save model checkpoints. Default: `"./models"`.
+                          - `seed` (int): Random seed for reproducibility. Default: 88.
+                          - `seed_worker` (Callable): Function to seed workers in the DataLoader. Default: `seed_worker`.
+                          - `max_workers` (int): Number of subprocesses for data loading. Default: `os.cpu_count()`.
+                          - `best_model_name` (str): Filename for saving the best model. Default: `"best_model.pt"`.
 
-        **Required Keys**:
-            - ``optimizer_class`` (type): PyTorch optimizer class (e.g., `torch.optim.Adam`).
-            - ``optimizer_args`` (dict): Arguments passed to the optimizer.
+    Raises:
+        ValueError: If any required key is missing from `param`.
+        TypeError: If any parameter is of the wrong type.
+        FileNotFoundError: If the model directory cannot be created or accessed.
 
-        **Optional Keys** (with defaults and types):
-            - ``device`` (torch.device): Training device. Default is `"cuda"` if available, else `"cpu"`.
-            - ``n_fold`` (int): Number of stratified folds for cross-validation. Default: 5.
-            - ``n_epoch`` (int): Number of training epochs per fold. Default: 100.
-            - ``patience`` (int): Epochs to wait before early stopping. Default: 5.
-            - ``batch_size`` (int): Batch size for training and validation. Default: 64.
-            - ``model_save_dir`` (str): Directory to save model checkpoints. Default: `"./models"`.
-            - ``seed`` (int): Random seed for reproducibility. Default: 88.
-            - ``seed_worker`` (Callable): Function to seed workers in the DataLoader. Default: `seed_worker`.
-            - ``max_workers`` (int): Number of subprocesses for data loading. Default: `os.cpu_count()`.
-            - ``best_model_name`` (str): Filename for saving the best model. Default: `"best_model.pt"`.
-
-    :type param: dict
-
-    :raises ValueError: If any required key is missing from `param`.
-    :raises TypeError: If any parameter is of the wrong type.
-    :raises FileNotFoundError: If the model directory cannot be created or accessed.
-
-    :returns: None
-    :rtype: None
+    Returns:
+        None
     """
     # Validate and catch parameters
     validate_train_param(param)
@@ -160,7 +155,9 @@ def train_pytorch_nn(
                 }
             )
 
-            print(f"Fold {fold+1} | Epoch {epoch+1} | Val Loss: {val_loss:.4f} | F1: {f1:.4f} | Acc: {acc:.4f}")
+            print(
+                f"Fold {fold+1} | Epoch {epoch+1} | Val Loss: {val_loss:.4f} | F1: {f1:.4f} | Acc: {acc:.4f}"
+            )
 
             if patience_counter >= param["patience"]:
                 print(f"Early stopping at epoch {epoch+1} (fold {fold + 1})")

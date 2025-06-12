@@ -29,30 +29,27 @@ def fine_tune_pytorch_nn(
     while preserving original learned features. It performs stratified k-fold CV, monitors validation loss, and saves
     the best performing model.
 
-    :param model_class: Class of the PyTorch model (inherits from `torch.nn.Module`).
-    :type model_class: Type[torch.nn.Module]
-    :param model_args: Arguments for model initialization.
-    :type model_args: dict
-    :param dataset_class: Callable that returns a Dataset given indices and cached tensors.
-    :type dataset_class: Callable
-    :param dataset_args: Dict containing:
-        - 'metadata_df': DataFrame for stratification
-        - 'raw_labels': Labels array for KFold
-        - 'cached_images': Tensor of images
-        - 'cached_labels': Tensor of labels
-    :type dataset_args: dict
-    :param param: Training configuration dict. Must include:
-        - 'pretrained_path' (str): Path to pretrained weights (.pt)
-        - 'freeze_layers' (bool): Whether to freeze base layers
-        - 'optimizer_class', 'optimizer_args'
-        - optional: 'device', 'n_fold', 'n_epoch', 'patience',
-                    'batch_size', 'model_save_dir', 'seed',
-                    'seed_worker', 'max_workers', 'pin_memory',
-                    'persistent_workers', 'best_model_name'
-    :type param: dict
+    Args:
+        model_class (Type[torch.nn.Module]): Class of the PyTorch model (inherits from `torch.nn.Module`).
+        model_args (dict): Arguments for model initialization.
+        dataset_class (Callable): Callable that returns a Dataset given indices and cached tensors.
+        dataset_args (dict): Dict containing:
+            - 'metadata_df': DataFrame for stratification
+            - 'raw_labels': Labels array for KFold
+            - 'cached_images': Tensor of images
+            - 'cached_labels': Tensor of labels
+        param (dict): Training configuration dict. Must include:
+            - 'pretrained_path' (str): Path to pretrained weights (.pt)
+            - 'freeze_layers' (bool): Whether to freeze base layers
+            - 'optimizer_class', 'optimizer_args'
+            - optional: 'device', 'n_fold', 'n_epoch', 'patience',
+                        'batch_size', 'model_save_dir', 'seed',
+                        'seed_worker', 'max_workers', 'pin_memory',
+                        'persistent_workers', 'best_model_name'
 
-    :raises ValueError: If required keys are missing.
-    :returns: None
+    Raises:
+        ValueError: If required keys are missing.
+        Returns: None
     """
     # Validate parameters
     validate_train_param(param)

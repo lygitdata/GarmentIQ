@@ -10,15 +10,14 @@ def change_background_color(
     This function modifies the background of an image by replacing the pixels
     that correspond to the background (as identified by the mask) with a specified color.
 
-    :param image_np: The original image as a numpy array (RGB).
-    :type image_np: numpy.ndarray
-    :param mask_np: A binary mask where background pixels are labeled as 0 and foreground as 1.
-    :type mask_np: numpy.ndarray
-    :param background_color: A tuple representing the RGB color to replace the background with, e.g., (255, 255, 255) for white.
-    :type background_color: tuple[int, int, int]
+    Args:
+        image_np (numpy.ndarray): The original image as a numpy array (RGB).
+        mask_np (numpy.ndarray): A binary mask where background pixels are labeled as 0 and foreground as 1.
+        background_color (tuple[int, int, int]): A tuple representing the RGB color to replace the background with,
+                                                 e.g., (255, 255, 255) for white.
 
-    :returns: A new image with the background color changed.
-    :rtype: numpy.ndarray
+    Returns:
+        numpy.ndarray: A new image with the background color changed.
     """
     # Create a mask where the background (black) is 1, and the foreground is 0
     background_mask = mask_np == 0  # Mask values of 0 represent background

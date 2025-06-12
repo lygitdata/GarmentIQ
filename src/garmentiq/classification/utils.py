@@ -11,20 +11,70 @@ import numpy as np
 
 
 class CachedDataset(Dataset):
+    """
+    A PyTorch Dataset that wraps pre-loaded data (images and labels) in memory.
+
+    This dataset is designed to be used when images and labels have already been
+    loaded and preprocessed into PyTorch tensors or NumPy arrays, avoiding
+    repeated disk I/O during training/validation.
+
+    Attributes:
+        indices (list or numpy.ndarray): A list or array of indices that map
+            to specific items in `cached_images` and `cached_labels`. This
+            allows for flexible subsetting (e.g., for train/validation splits).
+        cached_images (torch.Tensor): A tensor containing the pre-loaded images.
+        cached_labels (torch.Tensor): A tensor containing the pre-loaded labels.
+    """
+
     def __init__(self, indices, cached_images, cached_labels):
+        """
+        Initializes the CachedDataset.
+
+        Args:
+            indices (list or numpy.ndarray): Indices to select from the cached data.
+            cached_images (torch.Tensor): Pre-loaded image tensor.
+            cached_labels (torch.Tensor): Pre-loaded label tensor.
+        """
         self.indices = indices
         self.cached_images = cached_images
         self.cached_labels = cached_labels
 
     def __len__(self):
+        """
+        Returns the number of samples in the dataset.
+
+        Returns:
+            int: The number of samples.
+        """
         return len(self.indices)
 
     def __getitem__(self, idx):
+        """
+        Retrieves a sample from the dataset at the given index.
+
+        Args:
+            idx (int): The index of the sample to retrieve.
+
+        Returns:
+            tuple: A tuple containing the image and its corresponding label.
+        """
         actual_idx = self.indices[idx]
         return self.cached_images[actual_idx], self.cached_labels[actual_idx]
 
 
 def seed_worker(worker_id, SEED=88):
+    """
+    Seeds the random number generators for a DataLoader worker.
+
+    This function is intended to be passed as `worker_init_fn` to a PyTorch
+    DataLoader to ensure reproducibility across different worker processes.
+    It seeds Python's `random` module, NumPy, and PyTorch for each worker.
+
+    Args:
+        worker_id (int): The ID of the current worker process.
+        SEED (int, optional): The base seed value. The worker's seed will be
+            `SEED + worker_id`. Defaults to 88.
+    """
     worker_seed = SEED + worker_id
     random.seed(worker_seed)
     np.random.seed(worker_seed)
@@ -32,6 +82,23 @@ def seed_worker(worker_id, SEED=88):
 
 
 def train_epoch(model, train_loader, optimizer, param):
+    """
+    Performs a single training epoch for a PyTorch model.
+
+    Sets the model to training mode, iterates through the `train_loader`,
+    performs forward and backward passes, and updates model weights using
+    the provided optimizer. A progress bar is displayed, showing the batch loss.
+
+    Args:
+        model (torch.nn.Module): The PyTorch model to train.
+        train_loader (torch.utils.data.DataLoader): DataLoader for the training data.
+        optimizer (torch.optim.Optimizer): The optimizer used for updating model weights.
+        param (dict): A dictionary containing training parameters, including:
+            - "device" (torch.device): The device (e.g., 'cuda' or 'cpu') to use for training.
+
+    Returns:
+        float: The average loss for the epoch.
+    """
     model.train()
     running_loss = 0.0
     train_pbar = tqdm(train_loader, desc=f"Training", leave=False)
@@ -57,6 +124,25 @@ def train_epoch(model, train_loader, optimizer, param):
 
 
 def validate_epoch(model, val_loader, param):
+    """
+    Performs a single validation epoch for a PyTorch model.
+
+    Sets the model to evaluation mode, iterates through the `val_loader`
+    without gradient calculations, and computes the validation loss, F1 score,
+    and accuracy. A progress bar is displayed, showing the batch validation loss.
+
+    Args:
+        model (torch.nn.Module): The PyTorch model to validate.
+        val_loader (torch.utils.data.DataLoader): DataLoader for the validation data.
+        param (dict): A dictionary containing training parameters, including:
+            - "device" (torch.device): The device (e.g., 'cuda' or 'cpu') to use for validation.
+
+    Returns:
+        tuple: A tuple containing:
+            - val_loss (float): The average validation loss for the epoch.
+            - f1 (float): The weighted average F1 score on the validation set.
+            - acc (float): The accuracy score on the validation set.
+    """
     model.eval()
     val_loss = 0.0
     all_preds = []
@@ -98,6 +184,30 @@ def save_best_model(
     fold,
     best_model_path,
 ):
+    """
+    Saves the best model checkpoints based on validation loss and manages early stopping.
+
+    This function updates the `best_fold_loss` and `patience_counter` for the current
+    cross-validation fold. It also saves the model's state dictionary if it's the best
+    performing model for the current fold or the overall best model across all folds.
+
+    Args:
+        model (torch.nn.Module): The current PyTorch model being trained.
+        val_loss (float): The validation loss from the current epoch.
+        best_fold_loss (float): The best validation loss recorded so far for the current fold.
+        patience_counter (int): The number of epochs since the last improvement for the current fold.
+        overall_best_loss (float): The best validation loss recorded so far across all folds.
+        param (dict): A dictionary containing training parameters, including:
+            - "model_save_dir" (str): Directory where model checkpoints will be saved.
+        fold (int): The current fold number (0-indexed).
+        best_model_path (str): The full path where the overall best model will be saved.
+
+    Returns:
+        tuple: A tuple containing:
+            - best_fold_loss (float): The updated best validation loss for the current fold.
+            - patience_counter (int): The updated patience counter for the current fold.
+            - overall_best_loss (float): The updated overall best validation loss.
+    """
     # Save the best model for this fold
     if val_loss < best_fold_loss:
         best_fold_loss = val_loss
@@ -119,9 +229,19 @@ def save_best_model(
 
 def validate_train_param(param: dict):
     """
-    Validate the parameter dictionary for required and optional keys with type checks.
-    """
+    Validates the parameter dictionary for training configuration.
 
+    This function checks for the presence and correct types of required
+    parameters for training, and applies default values for optional parameters
+    if they are not provided.
+
+    Args:
+        param (dict): The dictionary of training parameters to validate.
+
+    Raises:
+        ValueError: If a required parameter is missing.
+        TypeError: If a parameter has an incorrect type.
+    """
     # --- Required fields and types
     required_keys = {"optimizer_class": type, "optimizer_args": dict}
 
@@ -164,6 +284,18 @@ def validate_train_param(param: dict):
 
 
 def validate_test_param(param: dict):
+    """
+    Validates the parameter dictionary for testing configuration.
+
+    This function checks for the presence and correct types of optional
+    parameters for testing, and applies default values if they are not provided.
+
+    Args:
+        param (dict): The dictionary of testing parameters to validate.
+
+    Raises:
+        TypeError: If a parameter has an incorrect type.
+    """
     # --- Optional fields with default values and expected types
     optional_keys = {
         "device": (
@@ -182,7 +314,20 @@ def validate_test_param(param: dict):
                 f"param['{key}'] must be of type {expected_type}, got {type(param[key])}"
             )
 
+
 def validate_pred_param(param: dict):
+    """
+    Validates the parameter dictionary for prediction configuration.
+
+    This function checks for the presence and correct types of optional
+    parameters for prediction, and applies default values if they are not provided.
+
+    Args:
+        param (dict): The dictionary of prediction parameters to validate.
+
+    Raises:
+        TypeError: If a parameter has an incorrect type.
+    """
     # --- Optional fields with default values and expected types
     optional_keys = {
         "device": (

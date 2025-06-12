@@ -29,26 +29,23 @@ def load_data(
     and tensor conversion, and encodes labels from a specified column. It returns tensors for
     images and labels, along with the transform pipeline used.
 
-    :param df: A pandas DataFrame containing at least a 'filename' column and a label column.
-    :type df: pandas.DataFrame
-    :param img_dir: Path to the directory containing image files.
-    :type img_dir: str
-    :param label_column: Name of the column in `df` containing class labels.
-    :type label_column: str
-    :param resize_dim: Tuple indicating the dimensions (height, width) to resize each image to. Defaults to (120, 184).
-    :type resize_dim: tuple[int, int]
-    :param normalize_mean: Mean values for normalization (per channel). Defaults to `[0.8047, 0.7808, 0.7769]`.
-    :type normalize_mean: list[float]
-    :param normalize_std: Standard deviation values for normalization (per channel). Defaults to `[0.2957, 0.3077, 0.3081]`.
-    :type normalize_std: list[float]
+    Args:
+        df (pandas.DataFrame): A pandas DataFrame containing at least a 'filename' column and a label column.
+        img_dir (str): Path to the directory containing image files.
+        label_column (str): Name of the column in `df` containing class labels.
+        resize_dim (tuple[int, int]): Tuple indicating the dimensions (height, width) to resize each image to.
+                                     Defaults to (120, 184).
+        normalize_mean (list[float]): Mean values for normalization (per channel).
+                                      Defaults to `[0.8047, 0.7808, 0.7769]`.
+        normalize_std (list[float]): Standard deviation values for normalization (per channel).
+                                     Defaults to `[0.2957, 0.3077, 0.3081]`.
 
-    :returns:
-        - cached_images (torch.Tensor): Tensor containing all preprocessed images.
-        - cached_labels (torch.Tensor): Tensor containing all encoded labels.
-        - transform (torchvision.transforms.Compose): The transformation pipeline used.
-    :rtype: tuple[torch.Tensor, torch.Tensor, torchvision.transforms.Compose]
+    Returns:
+        tuple[torch.Tensor, torch.Tensor, torchvision.transforms.Compose]: A tuple containing:
+            - cached_images (torch.Tensor): Tensor containing all preprocessed images.
+            - cached_labels (torch.Tensor): Tensor containing all encoded labels.
+            - transform (torchvision.transforms.Compose): The transformation pipeline used.
     """
-
     transform = transforms.Compose(
         [
             transforms.Resize(resize_dim),

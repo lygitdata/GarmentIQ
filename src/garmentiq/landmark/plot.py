@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
+
 def plot(
     image_path: str,
     coordinate: np.ndarray = None,
     figsize: tuple = (6, 6),
-    color: str = 'red'
+    color: str = "red",
 ):
     """
     Display an image from a file path using matplotlib, with optional overlay of coordinates.
@@ -14,22 +15,18 @@ def plot(
     This function loads an image from the given file path, displays it using matplotlib,
     and optionally overlays coordinate points on the image.
 
-    :param image_path: Path to the image file. The image will be loaded as RGB.
-    :type image_path: str
+    Args:
+        image_path (str): Path to the image file. The image will be loaded as RGB.
+        coordinate (np.ndarray, optional): Optional array of coordinates to overlay on the image.
+                                          Expected shape: (1, N, 2), where N is the number of points.
+        figsize (tuple, optional): Size of the displayed figure in inches (width, height).
+        color (str, optional): Color of the overlay points. Default is 'red'.
 
-    :param coordinate: Optional array of coordinates to overlay on the image.
-                       Expected shape: (1, N, 2), where N is the number of points.
-    :type coordinate: np.ndarray, optional
+    Raises:
+        ValueError: If image cannot be loaded or coordinate format is invalid.
 
-    :param figsize: Size of the displayed figure in inches (width, height).
-    :type figsize: tuple, optional
-
-    :param color: Color of the overlay points. Default is 'red'.
-    :type color: str, optional
-
-    :raises ValueError: If image cannot be loaded or coordinate format is invalid.
-
-    :return: None
+    Returns:
+        None
     """
     try:
         image_np = np.array(Image.open(image_path).convert("RGB"))

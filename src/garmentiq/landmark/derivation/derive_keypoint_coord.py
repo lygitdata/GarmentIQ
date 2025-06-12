@@ -16,6 +16,39 @@ def derive_keypoint_coord(
     np_mask: np.array,
     line_length_factor: float = 10000.0,
 ) -> Optional[Tuple[float, float]]:
+    """
+    Derives the coordinate of a new keypoint based on intersections of lines defined by
+    existing predefined keypoints and the segmentation mask boundary.
+
+    This function implements a geometric method to derive a new landmark:
+    1. It uses `p1_id` as a point on the first line.
+    2. The direction of the first line is derived from `p2_id`, `p3_id`, and `direction`
+       (parallel or perpendicular to the line formed by p2 and p3).
+    3. The second line is defined by `p4_id` and `p5_id`.
+    4. An initial intersection point is found between Line 1 and Line 2.
+    5. The boundary of the `np_mask` is extracted.
+    6. Intersections between Line 1 and the `np_mask` boundary are found.
+    7. The final derived point is the mask intersection point closest to the line-line intersection,
+       or the line-line intersection itself if no mask intersections are found or an error occurs.
+
+    Args:
+        p1_id (int): ID of the first keypoint used to define Line 1.
+        p2_id (int): ID of the second keypoint used to define Line 1's direction.
+        p3_id (int): ID of the third keypoint used to define Line 1's direction.
+        p4_id (int): ID of the fourth keypoint used to define Line 2.
+        p5_id (int): ID of the fifth keypoint used to define Line 2.
+        direction (str): Specifies the direction of Line 1 relative to (p2, p3).
+                         Can be "parallel" or "perpendicular".
+        landmark_coords (np.array): NumPy array of all detected landmark coordinates.
+                                    Shape: (1, N, 2) where N is the total number of landmarks.
+        np_mask (np.array): NumPy array of the segmentation mask.
+        line_length_factor (float, optional): Factor to extend lines for intersection calculations.
+                                              Defaults to 10000.0.
+
+    Returns:
+        Optional[Tuple[float, float]]: The (x, y) coordinates of the derived keypoint, or None if
+                                      derivation fails (e.g., parallel lines, no valid mask boundary).
+    """
     p1_coord = landmark_coords[:, p1_id - 1, :].reshape(2)
     p2_coord = landmark_coords[:, p2_id - 1, :].reshape(2)
     p3_coord = landmark_coords[:, p3_id - 1, :].reshape(2)

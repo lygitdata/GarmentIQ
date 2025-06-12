@@ -14,6 +14,32 @@ from . import utils
 
 
 class tailor:
+    """
+    The `tailor` class acts as a central agent for the GarmentIQ pipeline,
+    orchestrating garment measurement from classification to landmark derivation.
+
+    It integrates functionalities from other modules (classification, segmentation, landmark)
+    to provide a smooth end-to-end process for automated garment measurement from images.
+
+    Attributes:
+        input_dir (str): Directory containing input images.
+        model_dir (str): Directory where models are stored.
+        output_dir (str): Directory to save processed outputs.
+        class_dict (dict): Dictionary defining garment classes and their properties.
+        do_derive (bool): Flag to enable landmark derivation.
+        do_refine (bool): Flag to enable landmark refinement.
+        classification_model_path (str): Path to the classification model.
+        classification_model_class (Type[nn.Module]): Class definition for the classification model.
+        classification_model_args (Dict): Arguments for the classification model.
+        segmentation_model_name (str): Name or path for the segmentation model.
+        segmentation_model_args (Dict): Arguments for the segmentation model.
+        landmark_detection_model_path (str): Path to the landmark detection model.
+        landmark_detection_model_class (Type[nn.Module]): Class definition for the landmark detection model.
+        landmark_detection_model_args (Dict): Arguments for the landmark detection model.
+        refinement_args (Optional[Dict]): Arguments for landmark refinement.
+        derivation_dict (Optional[Dict]): Dictionary for landmark derivation rules.
+    """
+
     def __init__(
         self,
         input_dir: str,
@@ -33,6 +59,33 @@ class tailor:
         refinement_args: Optional[Dict] = None,
         derivation_dict: Optional[Dict] = None,
     ):
+        """
+        Initializes the `tailor` agent with paths, model configurations, and processing flags.
+
+        Args:
+            input_dir (str): Path to the directory containing input images.
+            model_dir (str): Path to the directory where all required models are stored.
+            output_dir (str): Path to the directory where all processed outputs will be saved.
+            class_dict (dict): A dictionary defining the garment classes, their predefined points,
+                                index ranges, and instruction JSON file paths.
+            do_derive (bool): If True, enables the landmark derivation step.
+            do_refine (bool): If True, enables the landmark refinement step.
+            classification_model_path (str): The filename or relative path to the classification model.
+            classification_model_class (Type[nn.Module]): The Python class of the classification model.
+            classification_model_args (Dict): A dictionary of arguments to initialize the classification model.
+            segmentation_model_name (str): The name or path of the pretrained segmentation model.
+            segmentation_model_args (Dict): A dictionary of arguments for the segmentation model.
+            landmark_detection_model_path (str): The filename or relative path to the landmark detection model.
+            landmark_detection_model_class (Type[nn.Module]): The Python class of the landmark detection model.
+            landmark_detection_model_args (Dict): A dictionary of arguments for the landmark detection model.
+            refinement_args (Optional[Dict]): Optional arguments for the refinement process,
+                                              e.g., `window_size`, `ksize`, `sigmaX`. Defaults to None.
+            derivation_dict (Optional[Dict]): A dictionary defining derivation rules for non-predefined landmarks.
+                                               Required if `do_derive` is True.
+
+        Raises:
+            ValueError: If `do_derive` is True but `derivation_dict` is None.
+        """
         # Directories
         self.input_dir = input_dir
         self.model_dir = model_dir
@@ -102,6 +155,10 @@ class tailor:
         )
 
     def summary(self):
+        """
+        Prints a summary of the `tailor` agent's configuration, including directory paths,
+        defined classes, processing options (refine, derive), and loaded models.
+        """
         width = 80
         sep = "=" * width
 
@@ -143,6 +200,18 @@ class tailor:
         print(sep)
 
     def classify(self, image: str, verbose=False):
+        """
+        Classifies a single garment image using the configured classification model.
+
+        Args:
+            image (str): The filename of the image to classify, located in `self.input_dir`.
+            verbose (bool): If True, prints detailed classification output. Defaults to False.
+
+        Returns:
+            tuple:
+                - label (str): The predicted class label of the garment.
+                - probabilities (List[float]): A list of probabilities for each class.
+        """
         label, probablities = classification.predict(
             model=self.classification_model,
             image_path=f"{self.input_dir}/{image}",
@@ -155,6 +224,20 @@ class tailor:
         return label, probablities
 
     def segment(self, image: str):
+        """
+        Segments a single garment image to extract its mask and optionally modifies the background color.
+
+        Args:
+            image (str): The filename of the image to segment, located in `self.input_dir`.
+
+        Returns:
+            tuple:
+                - original_img (np.ndarray): The original image with the mask overlaid.
+                - mask (np.ndarray): The binary segmentation mask.
+                - bg_modified_img (np.ndarray, optional): The image with the background color changed,
+                                                         returned only if `background_color` is specified
+                                                         in `segmentation_model_args`.
+        """
         original_img, mask = segmentation.extract(
             model=self.segmentation_model,
             image_path=f"{self.input_dir}/{image}",
@@ -175,7 +258,19 @@ class tailor:
             return original_img, mask, bg_modified_img
 
     def detect(self, class_name: str, image: Union[str, np.ndarray]):
+        """
+        Detects predefined landmarks on a garment image based on its classified class.
 
+        Args:
+            class_name (str): The classified name of the garment.
+            image (Union[str, np.ndarray]): The path to the image file or a NumPy array of the image.
+
+        Returns:
+            tuple:
+                - coords (np.array): Detected landmark coordinates.
+                - maxval (np.array): Confidence scores for detected landmarks.
+                - detection_dict (dict): A dictionary containing detailed landmark detection data.
+        """
         if isinstance(image, str):
             image = f"{self.input_dir}/{image}"
 
@@ -199,6 +294,21 @@ class tailor:
         landmark_coords: np.array,
         np_mask: np.array,
     ):
+        """
+        Derives non-predefined landmark coordinates based on predefined landmarks and a mask.
+
+        Args:
+            class_name (str): The name of the garment class.
+            detection_dict (dict): The dictionary containing detected landmarks.
+            derivation_dict (dict): The dictionary defining derivation rules.
+            landmark_coords (np.array): NumPy array of initial landmark coordinates.
+            np_mask (np.array): NumPy array of the segmentation mask.
+
+        Returns:
+            tuple:
+                - derived_coords (dict): A dictionary of the newly derived landmark coordinates.
+                - updated_detection_dict (dict): The detection dictionary updated with derived landmarks.
+        """
         derived_coords, updated_detection_dict = landmark.derive(
             class_name=class_name,
             detection_dict=detection_dict,
@@ -219,6 +329,24 @@ class tailor:
         ksize: tuple = (11, 11),
         sigmaX: float = 0.0,
     ):
+        """
+        Refines detected landmark coordinates using a blurred segmentation mask.
+
+        Args:
+            class_name (str): The name of the garment class.
+            detection_np (np.array): NumPy array of initial landmark predictions.
+            detection_conf (np.array): NumPy array of confidence scores for each predicted landmark.
+            detection_dict (dict): Dictionary containing landmark data for each class.
+            mask (np.array): Grayscale mask image used to guide refinement.
+            window_size (int, optional): Size of the window used in the refinement algorithm. Defaults to 5.
+            ksize (tuple, optional): Kernel size for Gaussian blur. Must be odd integers. Defaults to (11, 11).
+            sigmaX (float, optional): Gaussian kernel standard deviation in the X direction. Defaults to 0.0.
+
+        Returns:
+            tuple:
+                - refined_detection_np (np.array): Array of the same shape as `detection_np` with refined coordinates.
+                - detection_dict (dict): Updated detection dictionary with refined landmark coordinates.
+        """
         if self.refinement_args:
             if self.refinement_args.get("window_size") is not None:
                 window_size = self.refinement_args["window_size"]
@@ -245,6 +373,24 @@ class tailor:
         save_segmentation_image: bool = False,
         save_measurement_image: bool = False,
     ):
+        """
+        Executes the full garment measurement pipeline for all images in the input directory.
+
+        The pipeline includes classification, segmentation, landmark detection, optional
+        refinement, and optional derivation of landmarks. It also handles saving
+        segmentation and measurement images, and final measurement results in JSON format.
+
+        Args:
+            save_segmentation_image (bool): If True, saves the mask and background-modified images. Defaults to False.
+            save_measurement_image (bool): If True, saves images with overlaid detected landmarks. Defaults to False.
+
+        Returns:
+            tuple:
+                - metadata (pd.DataFrame): A DataFrame containing metadata about each processed image,
+                                           including file paths for generated outputs.
+                - outputs (dict): A dictionary containing detailed outputs for each image,
+                                  such as masks, background-modified images, and detection dictionaries.
+        """
         # Some helper variables
         use_bg_color = self.segmentation_model_args.get("background_color") is not None
         outputs = {}
@@ -253,7 +399,9 @@ class tailor:
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
         Path(f"{self.output_dir}/measurement_json").mkdir(parents=True, exist_ok=True)
 
-        if save_segmentation_image and (use_bg_color or self.do_derive or self.do_refine):
+        if save_segmentation_image and (
+            use_bg_color or self.do_derive or self.do_refine
+        ):
             Path(f"{self.output_dir}/mask_image").mkdir(parents=True, exist_ok=True)
             if use_bg_color:
                 Path(f"{self.output_dir}/bg_modified_image").mkdir(
@@ -404,7 +552,9 @@ class tailor:
                 outputs[image]["detection_dict"] = updated_detection_dict
 
         # Step 10: Save segmentation image
-        if save_segmentation_image and (use_bg_color or self.do_derive or self.do_refine):
+        if save_segmentation_image and (
+            use_bg_color or self.do_derive or self.do_refine
+        ):
             for idx, image in tqdm(
                 enumerate(metadata["filename"]),
                 total=len(metadata),
@@ -466,9 +616,9 @@ class tailor:
 
             # Clean the detection dictionary
             final_dict = utils.clean_detection_dict(
-                class_name=label, 
-                image_name=image, 
-                detection_dict=outputs[image]["detection_dict"]
+                class_name=label,
+                image_name=image,
+                detection_dict=outputs[image]["detection_dict"],
             )
 
             # Export JSON

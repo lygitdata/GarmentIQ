@@ -10,16 +10,48 @@ logger = logging.getLogger(__name__)
 
 
 def conv3x3(in_planes, out_planes, stride=1):
-    """3x3 convolution with padding"""
+    """
+    Creates a 3x3 convolutional layer with padding.
+
+    Args:
+        in_planes (int): Number of input channels.
+        out_planes (int): Number of output channels.
+        stride (int, optional): Stride of the convolution. Defaults to 1.
+
+    Returns:
+        nn.Conv2d: 3x3 convolution layer with specified parameters.
+    """
     return nn.Conv2d(
         in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False
     )
 
 
 class BasicBlock(nn.Module):
+    """
+    Basic residual block with two 3x3 convolutional layers.
+
+    Attributes:
+        expansion (int): Expansion factor for output channels (always 1 for BasicBlock).
+        conv1 (nn.Conv2d): First convolutional layer.
+        bn1 (nn.BatchNorm2d): Batch normalization after first conv.
+        conv2 (nn.Conv2d): Second convolutional layer.
+        bn2 (nn.BatchNorm2d): Batch normalization after second conv.
+        downsample (nn.Module or None): Optional downsampling layer for residual connection.
+        stride (int): Stride of the first convolution.
+    """
+
     expansion = 1
 
     def __init__(self, inplanes, planes, stride=1, downsample=None):
+        """
+        Initializes BasicBlock.
+
+        Args:
+            inplanes (int): Number of input channels.
+            planes (int): Number of output channels.
+            stride (int, optional): Stride of the first convolution. Defaults to 1.
+            downsample (nn.Module or None, optional): Downsampling layer for residual. Defaults to None.
+        """
         super(BasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = nn.BatchNorm2d(planes, momentum=BN_MOMENTUM)
@@ -29,6 +61,15 @@ class BasicBlock(nn.Module):
         self.stride = stride
 
     def forward(self, x):
+        """
+        Forward pass of the BasicBlock.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor after residual addition and activation.
+        """
         residual = x
 
         out = self.conv1(x)
@@ -48,9 +89,33 @@ class BasicBlock(nn.Module):
 
 
 class Bottleneck(nn.Module):
+    """
+    Bottleneck residual block with 1x1, 3x3, and 1x1 convolutions.
+
+    Attributes:
+        expansion (int): Expansion factor for output channels (usually 4 for Bottleneck).
+        conv1 (nn.Conv2d): 1x1 convolution reducing channels.
+        bn1 (nn.BatchNorm2d): Batch normalization after conv1.
+        conv2 (nn.Conv2d): 3x3 convolution.
+        bn2 (nn.BatchNorm2d): Batch normalization after conv2.
+        conv3 (nn.Conv2d): 1x1 convolution expanding channels.
+        bn3 (nn.BatchNorm2d): Batch normalization after conv3.
+        downsample (nn.Module or None): Optional downsampling layer for residual connection.
+        stride (int): Stride for the 3x3 convolution.
+    """
+
     expansion = 4
 
     def __init__(self, inplanes, planes, stride=1, downsample=None):
+        """
+        Initializes Bottleneck block.
+
+        Args:
+            inplanes (int): Number of input channels.
+            planes (int): Number of output channels before expansion.
+            stride (int, optional): Stride for the 3x3 convolution. Defaults to 1.
+            downsample (nn.Module or None, optional): Downsampling layer for residual. Defaults to None.
+        """
         super(Bottleneck, self).__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes, momentum=BN_MOMENTUM)
@@ -66,6 +131,15 @@ class Bottleneck(nn.Module):
         self.stride = stride
 
     def forward(self, x):
+        """
+        Forward pass of the Bottleneck block.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor after residual addition and activation.
+        """
         residual = x
 
         out = self.conv1(x)
@@ -89,6 +163,24 @@ class Bottleneck(nn.Module):
 
 
 class HighResolutionModule(nn.Module):
+    """
+    HighResolutionModule maintains high-resolution representations through multi-branch architecture and fusion.
+
+    This module consists of several parallel branches with residual blocks, and fuse layers to combine
+    features from different resolutions.
+
+    Attributes:
+        num_branches (int): Number of parallel branches.
+        blocks (nn.Module): Residual block class (BasicBlock or Bottleneck).
+        num_blocks (list[int]): Number of residual blocks per branch.
+        num_inchannels (list[int]): Number of input channels for each branch.
+        num_channels (list[int]): Number of channels per branch before expansion.
+        fuse_method (str): Method to fuse multi-branch outputs ('SUM' supported).
+        multi_scale_output (bool): Whether to output multi-scale features.
+        branches (nn.ModuleList): The parallel branches.
+        fuse_layers (nn.ModuleList or None): Layers that fuse features from branches.
+    """
+
     def __init__(
         self,
         num_branches,
@@ -99,6 +191,21 @@ class HighResolutionModule(nn.Module):
         fuse_method,
         multi_scale_output=True,
     ):
+        """
+        Initializes HighResolutionModule.
+
+        Args:
+            num_branches (int): Number of parallel branches.
+            blocks (nn.Module): Residual block class (BasicBlock or Bottleneck).
+            num_blocks (list[int]): Number of residual blocks per branch.
+            num_inchannels (list[int]): Number of input channels for each branch.
+            num_channels (list[int]): Number of channels per branch before expansion.
+            fuse_method (str): Method to fuse multi-branch outputs.
+            multi_scale_output (bool, optional): Output multi-scale features or not. Defaults to True.
+
+        Raises:
+            ValueError: If lengths of inputs do not match num_branches.
+        """
         super(HighResolutionModule, self).__init__()
         self._check_branches(
             num_branches, blocks, num_blocks, num_inchannels, num_channels
@@ -118,6 +225,19 @@ class HighResolutionModule(nn.Module):
     def _check_branches(
         self, num_branches, blocks, num_blocks, num_inchannels, num_channels
     ):
+        """
+        Validates that lengths of num_blocks, num_inchannels, and num_channels match num_branches.
+
+        Args:
+            num_branches (int): Number of branches.
+            blocks (nn.Module): Block type.
+            num_blocks (list[int]): Number of blocks per branch.
+            num_inchannels (list[int]): Number of input channels per branch.
+            num_channels (list[int]): Number of channels per branch.
+
+        Raises:
+            ValueError: If any length mismatch occurs.
+        """
         if num_branches != len(num_blocks):
             error_msg = "NUM_BRANCHES({}) <> NUM_BLOCKS({})".format(
                 num_branches, len(num_blocks)
@@ -140,6 +260,19 @@ class HighResolutionModule(nn.Module):
             raise ValueError(error_msg)
 
     def _make_one_branch(self, branch_index, block, num_blocks, num_channels, stride=1):
+        """
+        Constructs one branch of the module consisting of sequential residual blocks.
+
+        Args:
+            branch_index (int): Index of the branch.
+            block (nn.Module): Residual block class.
+            num_blocks (int): Number of residual blocks in this branch.
+            num_channels (list[int]): Number of channels per branch.
+            stride (int, optional): Stride of the first block. Defaults to 1.
+
+        Returns:
+            nn.Sequential: Sequential container of residual blocks.
+        """
         downsample = None
         if (
             stride != 1
@@ -177,6 +310,18 @@ class HighResolutionModule(nn.Module):
         return nn.Sequential(*layers)
 
     def _make_branches(self, num_branches, block, num_blocks, num_channels):
+        """
+        Constructs all branches for the module.
+
+        Args:
+            num_branches (int): Number of branches.
+            block (nn.Module): Residual block class.
+            num_blocks (list[int]): Number of blocks per branch.
+            num_channels (list[int]): Number of channels per branch.
+
+        Returns:
+            nn.ModuleList: List of branch modules.
+        """
         branches = []
 
         for i in range(num_branches):
@@ -185,6 +330,12 @@ class HighResolutionModule(nn.Module):
         return nn.ModuleList(branches)
 
     def _make_fuse_layers(self):
+        """
+        Constructs layers to fuse multi-resolution branch outputs.
+
+        Returns:
+            nn.ModuleList or None: Fuse layers or None if single branch.
+        """
         if self.num_branches == 1:
             return None
 
@@ -251,9 +402,24 @@ class HighResolutionModule(nn.Module):
         return nn.ModuleList(fuse_layers)
 
     def get_num_inchannels(self):
+        """
+        Returns the number of input channels for each branch after block expansion.
+
+        Returns:
+            list[int]: Number of input channels per branch.
+        """
         return self.num_inchannels
 
     def forward(self, x):
+        """
+        Forward pass through the HighResolutionModule.
+
+        Args:
+            x (list[torch.Tensor]): List of input tensors for each branch.
+
+        Returns:
+            list[torch.Tensor]: List of output tensors after multi-branch fusion.
+        """
         if self.num_branches == 1:
             return [self.branches[0](x[0])]
 
@@ -278,7 +444,40 @@ blocks_dict = {"BASIC": BasicBlock, "BOTTLENECK": Bottleneck}
 
 
 class PoseHighResolutionNet(nn.Module):
+    """
+    High-Resolution Network (HRNet) tailored for garment landmark detection.
+
+    The network maintains high-resolution representations through multiple stages and branches,
+    fusing multi-scale features and finally predicting heatmaps or coordinates for landmarks.
+
+    Attributes:
+        inplanes (int): Initial number of input channels.
+        conv1 (nn.Conv2d): Initial 3x3 convolution.
+        bn1 (nn.BatchNorm2d): Batch normalization after conv1.
+        conv2 (nn.Conv2d): Second 3x3 convolution.
+        bn2 (nn.BatchNorm2d): Batch normalization after conv2.
+        relu (nn.ReLU): ReLU activation.
+        stage1_cfg (dict): Configuration for stage1.
+        stage2_cfg (dict): Configuration for stage2.
+        stage3_cfg (dict): Configuration for stage3.
+        stage4_cfg (dict): Configuration for stage4.
+        transition1 (nn.ModuleList): Transition layers between stages.
+        stage2 (HighResolutionModule): Stage 2 module.
+        transition2 (nn.ModuleList): Transition layers between stages.
+        stage3 (HighResolutionModule): Stage 3 module.
+        transition3 (nn.ModuleList): Transition layers between stages.
+        stage4 (HighResolutionModule): Stage 4 module.
+        final_layer (nn.Conv2d): Final convolution layer to output predictions.
+        target_type (str): Output format type ('gaussian' or 'coordinate').
+    """
+
     def __init__(self, **kwargs):
+        """
+        Initializes PoseHighResolutionNet with default HRNet configurations.
+
+        Args:
+            target_type (str, optional): Type of target output. Either "gaussian" or "coordinate". Defaults to "gaussian".
+        """
         self.inplanes = 64
         # Hardcoded values from YAML MODEL.EXTRA
         extra = {
@@ -382,6 +581,16 @@ class PoseHighResolutionNet(nn.Module):
         self.pretrained_layers = extra["PRETRAINED_LAYERS"]
 
     def _make_transition_layer(self, num_channels_pre_layer, num_channels_cur_layer):
+        """
+        Creates transition layers to match the number of channels between stages.
+
+        Args:
+            num_channels_pre_layer (list[int]): Channels from previous stage.
+            num_channels_cur_layer (list[int]): Channels for current stage.
+
+        Returns:
+            nn.ModuleList: List of transition layers.
+        """
         num_branches_cur = len(num_channels_cur_layer)
         num_branches_pre = len(num_channels_pre_layer)
 
@@ -426,6 +635,18 @@ class PoseHighResolutionNet(nn.Module):
         return nn.ModuleList(transition_layers)
 
     def _make_layer(self, block, planes, blocks, stride=1):
+        """
+        Creates a layer composed of sequential residual blocks.
+
+        Args:
+            block (nn.Module): Residual block type (BasicBlock or Bottleneck).
+            planes (int): Number of output channels.
+            blocks (int): Number of blocks in this layer.
+            stride (int, optional): Stride for the first block. Defaults to 1.
+
+        Returns:
+            nn.Sequential: Sequential container of residual blocks.
+        """
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
             downsample = nn.Sequential(
@@ -448,6 +669,19 @@ class PoseHighResolutionNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _make_stage(self, layer_config, num_inchannels, multi_scale_output=True):
+        """
+        Constructs a stage consisting of one or more HighResolutionModules.
+
+        Args:
+            layer_config (dict): Configuration dictionary for the stage.
+            num_inchannels (list[int]): Number of input channels for each branch.
+            multi_scale_output (bool, optional): Output multi-scale features or not. Defaults to True.
+
+        Returns:
+            tuple:
+                nn.Sequential: Stage module.
+                list[int]: Number of output channels for each branch.
+        """
         num_modules = layer_config["NUM_MODULES"]
         num_branches = layer_config["NUM_BRANCHES"]
         num_blocks = layer_config["NUM_BLOCKS"]
@@ -479,6 +713,15 @@ class PoseHighResolutionNet(nn.Module):
         return nn.Sequential(*modules), num_inchannels
 
     def forward(self, x):
+        """
+        Forward pass of the PoseHighResolutionNet.
+
+        Args:
+            x (torch.Tensor): Input tensor of shape (batch_size, 3, H, W).
+
+        Returns:
+            torch.Tensor: Output heatmaps or coordinates for landmarks.
+        """
         x = self.conv1(x)
         x = self.bn1(x)
         x = F.relu(x, inplace=True)

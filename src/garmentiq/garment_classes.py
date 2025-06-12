@@ -49,3 +49,20 @@ garment_classes = {
         "instruction": pkg_resources.resource_filename(package_name, "instruction/vest dress.json")
     }
 }
+"""dict: A comprehensive dictionary defining various garment classes and their properties for GarmentIQ.
+
+Each key in this dictionary represents a specific garment type (e.g., "long sleeve dress").
+The value associated with each garment type is a dictionary containing:
+    - "num_predefined_points" (int): The total number of predefined (detected)
+      keypoints for this garment class.
+    - "index_range" (tuple): A tuple (start_index, end_index) specifying the
+      slice of the model's output that corresponds to the predefined keypoints
+      for this garment. These indices are 0-based and exclusive of the end_index.
+    - "instruction" (str): The file path to a JSON schema that details the
+      specific landmarks (predefined and derivable) and measurements for this
+      garment type. These paths are resolved using `pkg_resources.resource_filename`
+      to ensure they are correctly located within the installed package.
+
+This dictionary serves as a central registry for the GarmentIQ system to
+understand and process different types of clothing.
+"""

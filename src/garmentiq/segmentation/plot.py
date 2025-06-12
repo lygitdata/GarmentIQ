@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def plot(image_np: np.ndarray, figsize: tuple = (6, 6)):
     """
     Displays an image using matplotlib, with optional customization of the figure size.
@@ -9,15 +10,15 @@ def plot(image_np: np.ndarray, figsize: tuple = (6, 6)):
     If the image is 2D (grayscale), it will use a grayscale colormap for visualization.
     It also provides an option to adjust the figure size via the `figsize` parameter.
 
-    :param image_np: The image to be displayed. Can be either 2D (grayscale) or 3D (color) numpy array.
-    :type image_np: numpy.ndarray
-    :param figsize: The size of the figure (width, height). Default is (6, 6).
-    :type figsize: tuple, optional
+    Args:
+        image_np (numpy.ndarray): The image to be displayed. Can be either 2D (grayscale) or 3D (color) numpy array.
+        figsize (tuple, optional): The size of the figure (width, height). Default is (6, 6).
 
-    :raises ValueError: If the image provided is not a numpy array.
+    Raises:
+        ValueError: If the image provided is not a numpy array.
 
-    :returns: None. The function directly displays the image.
-    :rtype: None
+    Returns:
+        None. The function directly displays the image.
     """
     plt.figure(figsize=figsize)
 

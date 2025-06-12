@@ -26,29 +26,23 @@ def process_and_save_images(
     optionally modifies the background of each image using the `change_background_color` function
     before saving both the masks and the modified images to disk.
 
-    :param image_dir: The directory containing the input images to process.
-    :type image_dir: str
-    :param output_dir: The directory where the processed masks and modified images will be saved.
-    :type output_dir: str
-    :param model: The pre-trained model used for image segmentation.
-    :type model: transformers.AutoModelForImageSegmentation
-    :param resize_dim: The target dimensions to resize the images before processing (width, height).
-    :type resize_dim: tuple[int, int]
-    :param normalize_mean: The mean values used for image normalization.
-    :type normalize_mean: list[float, float, float]
-    :param normalize_std: The standard deviation values used for image normalization.
-    :type normalize_std: list[float, float, float]
-    :param background_color: The background color to apply to the image (RGB tuple),
-                              or None to skip the modification. Default is None.
-    :type background_color: tuple[int, int, int], optional
-    :param high_precision: Whether to use high precision (32-bit) for image processing. Default is True.
-    :type high_precision: bool, optional
+    Args:
+        image_dir (str): The directory containing the input images to process.
+        output_dir (str): The directory where the processed masks and modified images will be saved.
+        model (transformers.AutoModelForImageSegmentation): The pre-trained model used for image segmentation.
+        resize_dim (tuple[int, int]): The target dimensions to resize the images before processing (width, height).
+        normalize_mean (list[float, float, float]): The mean values used for image normalization.
+        normalize_std (list[float, float, float]): The standard deviation values used for image normalization.
+        background_color (tuple[int, int, int], optional): The background color to apply to the image (RGB tuple),
+                                                          or None to skip the modification. Default is None.
+        high_precision (bool, optional): Whether to use high precision (32-bit) for image processing. Default is True.
 
-    :raises FileNotFoundError: If the input image directory does not exist.
-    :raises ValueError: If the `model` provided does not work correctly for image segmentation.
+    Raises:
+        FileNotFoundError: If the input image directory does not exist.
+        ValueError: If the `model` provided does not work correctly for image segmentation.
 
-    :returns: None. The processed masks and modified images are saved to the specified output directory.
-    :rtype: None
+    Returns:
+        None. The processed masks and modified images are saved to the specified output directory.
     """
     # Create output directories for masks and modified images
     mask_dir = os.path.join(output_dir, "masks")
