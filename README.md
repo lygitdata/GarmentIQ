@@ -416,7 +416,7 @@ print("Refined coordinates:\n", refined_coords)
 derived_coords, derived_detection_dict = giq.landmark.derive(
     class_name="vest dress",
     detection_dict=refined_detection_dict,
-	  derivation_dict=giq.landmark.derivation_dict.derivation_dict,
+    derivation_dict=giq.landmark.derivation_dict.derivation_dict,
     landmark_coords=refined_coords,
     np_mask=mask
 )
