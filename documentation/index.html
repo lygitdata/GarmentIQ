@@ -114,6 +114,34 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#garmentiq-python-api">GarmentIQ Python API</a>
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#overview-of-garmentiq-python-package">Overview of QarmentIQ Python Package</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#quick-start">Quick Start</a>
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#installation">Installation</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#tailor-the-whole-pipeline">Tailor (the whole pipeline)</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#classification">Classification</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#segmentation">Segmentation</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#landmark-detection">Landmark detection</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#landmark-refinement-and-derivation">Landmark refinement and derivation</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </li>
@@ -139,7 +167,417 @@
                             <section id="garmentiq-python-api">
                                 <h2>GarmentIQ Python API</h2>
                                 <p> A comprehensive set of Python libraries for integrating GarmentIQ into your own applications. The API allows you to leverage GarmentIQ's advanced algorithms and data processing capabilities in a flexible, programmatic way. </p>
-                                <a href="python/">Read the documentation (Open in a new window)</a>
+                                <a href="python/" target="_blank">Read the documentation (Open in a new window)</a>
+                                <hr>
+                                <h3 id="overview-of-garmentiq-python-package">Overview of QarmentIQ Python Package</h3>
+                                <p>The <code>gqrmentiq</code> package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction. </p>
+                                <ul>
+                                    <li>
+                                        <strong>
+                                            <code>tailor</code>
+                                        </strong>: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            <code>classification</code>
+                                        </strong>: This module is responsible for identifying the type of garment in an image. Its key functions include: <code>fine_tune_pytorch_nn</code>, <code>load_data</code>, <code>load_model</code>, <code>predict</code>, <code>test_pytorch_nn</code>, <code>train_pytorch_nn</code>, and <code>train_test_split</code>
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            <code>segmentation</code>
+                                        </strong>: This module focuses on isolating garment features from the background for improved measurement accuracy. Its key functions include: <code>change_background_color</code>, <code>extract</code>, <code>load_model</code>, and <code>process_and_save_images</code>.
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            <code>landmark</code>
+                                        </strong>: This module handles the detection, derivation, and refinement of key points on garments. Its key functions include: <code>derive</code>, <code>detect</code>, and <code>refine</code>.
+                                    </li>
+                                    <li>
+                                        <strong>Instruction Schemas</strong>: The <code>instruction/</code> folder contains 9 predefined measurement schemas in <code>.json</code> format, which are utilized by the <code>garment_classes.py</code> file <code>garment_classes</code> dictionary to define different garment types and their predefined measurement properties. Users can also define their own custom measurement instructions by creating new dictionaries formatted similarly to the existing garment classes.
+                                    </li>
+                                </ul>
+                                <h3 id="quick-start">Quick Start</h3>
+                                <p>This section provides simple examples demonstrating how to use the <code>garmentiq</code> Python API, offering users an overview of how the entire pipeline - as well as each individual step - works. </p>
+                                <p>
+                                    <a class="popup-img" href="https://garmentiq.ly.gd.edu.kg/asset/img/quick_start_sample.jpg">
+                                        <img src="https://garmentiq.ly.gd.edu.kg/asset/img/quick_start_sample.jpg" width="60%" class="img-fluid img-thumbnail" alt="GarmentIQ Example" />
+                                    </a>
+                                </p>
+                                <p class="alert alert-info"> ⚠️ Note: If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing <a href="https://garmentiq.ly.gd.edu.kg/documentation/magicbox/">MagicBox</a> on your local machine, where you can find and run these examples under <code>working/examples/</code>. </p>
+                                <h4 id="installation">Installation</h4>
+                                <p>Please install from PyPI using the following command.</p>
+                                <pre>
+                                                                                                            <code>pip install garmentiq -q</code>
+                                                                                                        </pre>
+                                <h4 id="tailor-the-whole-pipeline">Tailor (the whole pipeline)</h4>
+                                <p>The tailor agent executes the entire pipeline in sequence: classification, segmentation (if needed), landmark detection, landmark refinement (if required), and landmark derivation (if applicable). Note that the first 3 steps can also be executed independently (the last 2 steps depend on the results returned by segmentation), without the use of the tailor agent, as described in the following subsections.</p>
+                                <p>
+                                    <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/tailor_quick_start.ipynb" target="_blank">
+                                        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                                    </a>
+                                </p>
+                                <pre>
+                                                                                                            <code class="language-python">import garmentiq as giq
+from garmentiq.classification.model_definition import tinyViT
+from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
+from garmentiq.garment_classes import garment_classes
+from garmentiq.landmark.derivation.derivation_dict import derivation_dict
+
+# Download 4 test images
+# cloth_1 and cloth_2 are short sleeve tops, cloth_3 is vest dress, cloth_4 is skirt
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_1.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_1.jpg
+!wget -q -O /content/test_image/cloth_2.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_2.jpg
+!wget -q -O /content/test_image/cloth_3.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_3.jpg
+!wget -q -O /content/test_image/cloth_4.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_4.jpg
+
+# Download the classification model
+!mkdir -p models
+!wget -q -O /content/models/tiny_vit_inditex_finetuned.pt \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit_inditex_finetuned.pt
+
+# Download the landmark detection model
+!wget -q -O /content/models/hrnet.pth \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
+
+# Setup the tailor agent
+tailor = giq.tailor(
+    input_dir="/content/test_image",
+    model_dir="/content/models",
+    output_dir="/content/output",
+    class_dict=garment_classes,
+    do_derive=True,
+    derivation_dict=derivation_dict,
+    do_refine=True,
+    classification_model_path="tiny_vit_inditex_finetuned.pt",
+    classification_model_class=tinyViT,
+    classification_model_args={
+        "num_classes": len(list(garment_classes.keys())),
+        "img_size": (120, 184),
+        "patch_size": 6,
+        "resize_dim": (120, 184),
+        "normalize_mean": [0.8047, 0.7808, 0.7769],
+        "normalize_std": [0.2957, 0.3077, 0.3081],
+    },
+    segmentation_model_name="lygitdata/BiRefNet_garmentiq_backup",
+    segmentation_model_args={
+        "trust_remote_code": True,
+        "resize_dim": (1024, 1024),
+        "normalize_mean": [0.485, 0.456, 0.406],
+        "normalize_std": [0.229, 0.224, 0.225],
+        "high_precision": True,
+        "background_color": [102, 255, 102],
+    },
+    landmark_detection_model_path="hrnet.pth",
+    landmark_detection_model_class=PoseHighResolutionNet(),
+    landmark_detection_model_args={
+        "scale_std": 200.0,
+        "resize_dim": [288, 384],
+        "normalize_mean": [0.485, 0.456, 0.406],
+        "normalize_std": [0.229, 0.224, 0.225],
+    },
+)
+
+# See the tailor agent's basic information
+tailor.summary()
+
+# Start the measurement with refinement and derivation
+metadata, outputs = tailor.measure(save_segmentation_image=True, save_measurement_image=True)
+
+# See the metadata
+# It makes file access much easier
+print(metadata)
+     
+# Plot the masks
+# Go to /content/output/mask_image/ to see the high resolution images
+for image in metadata['mask_image']:
+  giq.landmark.plot(image_path=image, figsize=(3, 3))
+     
+# Plot the background modified images
+# Go to /content/output/bg_modified_image to see the high resolution images
+for image in metadata['bg_modified_image']:
+  giq.landmark.plot(image_path=image, figsize=(3, 3))
+     
+# Plot the images with desired landmarks
+# Go to /content/output/measurement_image/ to see the high resolution images
+for image in metadata['measurement_image']:
+  giq.landmark.plot(image_path=image, figsize=(3, 3))
+     
+# See the measurement results in JSON format
+# Go to /content/output/measurement_json/ to see the JSON files
+import json
+
+for json_path in metadata['measurement_json']:
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+        print(f"{json_path}:\n")
+        print(json.dumps(data, indent=4, sort_keys=True))
+        print("\n\n")</code>
+                                                                                                        </pre>
+                                <h4 id="classification">Classification</h4>
+                                <p>
+                                    <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_quick_start.ipynb" target="_blank">
+                                        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                                    </a>
+                                </p>
+                                <pre>
+                                                                                                            <code class="language-python">import garmentiq as giq
+from garmentiq.classification.model_definition import tinyViT
+from garmentiq.classification.utils import CachedDataset
+
+# Download test data and a pretrained model
+!mkdir -p models
+
+!curl -L -o /content/garmentiq-classification-set-nordstrom-and-myntra.zip \
+  https://www.kaggle.com/api/v1/datasets/download/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+
+!wget -q -O /content/models/tiny_vit_inditex_finetuned.pt \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit_inditex_finetuned.pt
+
+# Prepare test data
+DATA = giq.classification.train_test_split(
+    output_dir="data",
+    metadata_csv="metadata.csv",
+    label_column="garment",
+    train_zip_dir="garmentiq-classification-set-nordstrom-and-myntra.zip",
+    test_size=0.15,
+    verbose=True
+)
+
+test_images, test_labels, _ = giq.classification.load_data(
+    df=DATA["test_metadata"],
+    img_dir=DATA["test_images"],
+    label_column="garment",
+    resize_dim=(120, 184),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+
+# Load the pretrained model
+classifier = giq.classification.load_model(
+    model_path="/content/models/tiny_vit_inditex_finetuned.pt",
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6}
+)
+
+# Fit the model on the whole test data
+giq.classification.test_pytorch_nn(
+    model_path="/content/models/tiny_vit_inditex_finetuned.pt",
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": DATA["test_metadata"]["garment"],
+        "cached_images": test_images,
+        "cached_labels": test_labels,
+    },
+    param={"batch_size": 64},
+)
+
+# Fit the model on a single image
+img_to_test = DATA['test_metadata']['filename'][88]
+
+pred_label, pred_prob = giq.classification.predict(
+    model=classifier,
+    image_path=f"data/test/images/{img_to_test}",
+    classes=DATA['test_metadata']['garment'].unique().tolist(),
+    resize_dim=(120, 184),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+
+print(
+    "True label: ", img_to_test,
+    "\nPredicted label: ", pred_label,
+    "\nPredicted Probabilities: ", pred_prob
+)</code>
+                                                                                                        </pre>
+                                <h4 id="segmentation">Segmentation</h4>
+                                <p>
+                                    <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/segmentation_quick_start.ipynb" target="_blank">
+                                        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                                    </a>
+                                </p>
+                                <pre>
+                                                                                                            <code class="language-python">import garmentiq as giq
+
+# Download a test image
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_1.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_1.jpg
+
+# Load the pretrained model from Hugging Face
+BiRefNet = giq.segmentation.load_model(
+    pretrained_model='lygitdata/BiRefNet_garmentiq_backup',
+    pretrained_model_args={'trust_remote_code': True},
+    high_precision=True
+)
+
+# Extract the mask
+original_img, mask = giq.segmentation.extract(
+    model=BiRefNet,
+    image_path='/content/test_image/cloth_1.jpg',
+    resize_dim=(1024, 1024),
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225],
+    high_precision=True
+)
+
+# Change background color
+bg_modified_img = giq.segmentation.change_background_color(
+    image_np=original_img,
+    mask_np=mask,
+    background_color=[102, 255, 102]
+)
+
+# Plot the original image, mask, and background modified image
+giq.segmentation.plot(image_np=original_img, figsize=(3, 3))
+giq.segmentation.plot(image_np=mask, figsize=(3, 3))
+giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))</code>
+                                                                                                        </pre>
+                                <h4 id="landmark-detection">Landmark detection</h4>
+                                <p>
+                                    <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_detection_quick_start.ipynb" target="_blank">
+                                        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                                    </a>
+                                </p>
+                                <pre>
+                                                                                                            <code class="language-python">import garmentiq as giq
+from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
+from garmentiq.garment_classes import garment_classes
+
+# Download a vest dress image and a pretrained model
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_3.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_3.jpg
+
+!mkdir -p models
+!wget -q -O /content/models/hrnet.pth \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
+
+# Plot the image
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", figsize=(3, 3))
+
+# Load the pretrained model from Hugging Face
+HRNet = giq.landmark.detection.load_model(
+    model_path="/content/models/hrnet.pth",
+    model_class=PoseHighResolutionNet()
+)
+
+# Detect predefined landmarks
+coords, maxvals, detection_dict = giq.landmark.detect(
+    class_name="vest dress",
+    class_dict=garment_classes,
+    image_path="/content/test_image/cloth_3.jpg",
+    model=HRNet,
+    scale_std=200.0,
+    resize_dim=[288, 384],
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225]
+)
+
+# Plot the detected coordinates
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")</code>
+                                                                                                        </pre>
+                                <h4 id="landmark-refinement-and-derivation">Landmark refinement and derivation</h4>
+                                <p>Note that segmentation mask is required for landmark refinement and derivation and they are also based on the landmark detection results. As a result, before refining and deriving landmarks, we first need to segment the image and detect predefined landmarks.</p>
+                                <p>
+                                    <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_refinement_and_derivation_quick_start.ipynb" target="_blank">
+                                        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                                    </a>
+                                </p>
+                                <pre>
+                                                                                                            <code class="language-python">import garmentiq as giq
+from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
+from garmentiq.garment_classes import garment_classes
+     
+# Download a vest dress image and a pretrained model
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_3.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_3.jpg
+
+!mkdir -p models
+!wget -q -O /content/models/hrnet.pth \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
+     
+# Plot the image
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", figsize=(3, 3))
+
+# Load the pretrained model from Hugging Face
+HRNet = giq.landmark.detection.load_model(
+    model_path="/content/models/hrnet.pth",
+    model_class=PoseHighResolutionNet()
+)
+
+# Detect predefined landmarks
+coords, maxvals, detection_dict = giq.landmark.detect(
+    class_name="vest dress",
+    class_dict=garment_classes,
+    image_path="/content/test_image/cloth_3.jpg",
+    model=HRNet,
+    scale_std=200.0,
+    resize_dim=[288, 384],
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225]
+)
+
+# Plot the detected coordinates
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")
+     
+# Segmentation mask is required for refinement and derivation
+# So we need to do segmentation first
+BiRefNet = giq.segmentation.load_model(
+    pretrained_model='lygitdata/BiRefNet_garmentiq_backup',
+    pretrained_model_args={'trust_remote_code': True},
+    high_precision=True
+)
+original_img, mask = giq.segmentation.extract(
+    model=BiRefNet,
+    image_path='/content/test_image/cloth_3.jpg',
+    resize_dim=(1024, 1024),
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225],
+    high_precision=True
+)
+     
+# Refine the landmarks
+refined_coords, refined_detection_dict = giq.landmark.refine(
+    class_name="vest dress",
+    detection_np=coords,
+    detection_conf=maxvals,
+    detection_dict=detection_dict,
+    mask=mask,
+    window_size=5,
+    ksize=(11, 11),
+    sigmaX=0.0
+)
+# Print the original coordinates and the refined coordinates
+print("Original coordinates:\n", coords)
+print("Refined coordinates:\n", refined_coords)
+     
+# Derive custom landmarks
+derived_coords, derived_detection_dict = giq.landmark.derive(
+    class_name="vest dress",
+    detection_dict=refined_detection_dict,
+    derivation_dict=giq.landmark.derivation_dict.derivation_dict,
+    landmark_coords=refined_coords,
+    np_mask=mask
+)
+     
+import numpy as np
+
+# Plot the derived point
+giq.landmark.plot(
+    image_path="/content/test_image/cloth_3.jpg",
+    coordinate=np.concatenate((refined_coords, np.array([[derived_coords['20']]])), axis=1),
+    figsize=(3, 3),
+    color="green"
+)</code>
+                                                                                                        </pre>
                             </section>
                         </section>
                     </div>
@@ -179,5 +617,7 @@
         <!-- Custom Script -->
         <script src="https://static.gd.edu.kg/js/kb/theme.js"></script>
         <script src="https://static.gd.edu.kg/js/text2svg.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js"></script>
     </body>
 </html>
