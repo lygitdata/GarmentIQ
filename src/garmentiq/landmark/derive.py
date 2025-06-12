@@ -34,10 +34,11 @@ def derive(
         if v.get("predefined") is False
     }
     derived_coords = {}
+    detection_dict_copy = copy.deepcopy(detection_dict)
     for k, v in non_predefined_landmark.items():
         args = prepare_args(non_predefined_landmark[k], derivation_dict, **extra_args)
         derived_coord = tuple(float(x) for x in process(**args))
         derived_coords[k] = derived_coord
-        detection_dict[class_name]["landmarks"][k]["x"] = derived_coord[0]
-        detection_dict[class_name]["landmarks"][k]["y"] = derived_coord[1]
-    return derived_coords, detection_dict
+        detection_dict_copy[class_name]["landmarks"][k]["x"] = derived_coord[0]
+        detection_dict_copy[class_name]["landmarks"][k]["y"] = derived_coord[1]
+    return derived_coords, detection_dict_copy
