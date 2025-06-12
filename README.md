@@ -17,6 +17,7 @@
     - [Classification](#classification)
     - [Segmentation](#segmentation)
     - [Landmark detection](#landmark-detection)
+    - [Landmark refinement and derivation](#landmark-refinement-and-derivation)
 5. [Issues & Feedback](#issues--feedback)
 6. [License](#license)
 7. [Acknowledgements](#acknowledgements)
