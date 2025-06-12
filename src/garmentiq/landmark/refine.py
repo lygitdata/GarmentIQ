@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import copy
 from garmentiq.landmark.refinement import refine_landmark_with_blur
 from garmentiq.landmark.utils import (
     find_instruction_landmark_index,
@@ -57,10 +58,12 @@ def refine(
 
     preds = refined_detection_np[:, predefined_index, :]
 
-    detection_dict[class_name]["landmarks"] = fill_instruction_landmark_coordinate(
-        instruction_landmarks=detection_dict[class_name]["landmarks"],
+    detection_dict_copy = copy.deepcopy(detection_dict)
+
+    detection_dict_copy[class_name]["landmarks"] = fill_instruction_landmark_coordinate(
+        instruction_landmarks=detection_dict_copy[class_name]["landmarks"],
         index=predefined_index,
         fill_in_value=preds,
     )
 
-    return refined_detection_np, detection_dict
+    return refined_detection_np, detection_dict_copy
