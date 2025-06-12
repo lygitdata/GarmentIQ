@@ -336,6 +336,101 @@ coords, maxvals, detection_dict = giq.landmark.detect(
 giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")
 ```
 
+### Landmark refinement and derivation
+
+Note that segmentation mask is erquired for landmark refinement and derivation and they are also based on the landmark detection results. As a result, before refining and deriving lanrmarks, we first need to segment the image and detect predefined landmarks.
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_refinement_and_derivation_quick_start.ipynb)
+
+```python
+import garmentiq as giq
+from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
+from garmentiq.garment_classes import garment_classes
+     
+# Download a vest dress image and a pretrained model
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_3.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_3.jpg
+
+!mkdir -p models
+!wget -q -O /content/models/hrnet.pth \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
+     
+# Plot the image
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", figsize=(3, 3))
+
+# Load the pretrained model from Hugging Face
+HRNet = giq.landmark.detection.load_model(
+    model_path="/content/models/hrnet.pth",
+    model_class=PoseHighResolutionNet()
+)
+
+# Detect predefined landmarks
+coords, maxvals, detection_dict = giq.landmark.detect(
+    class_name="vest dress",
+    class_dict=garment_classes,
+    image_path="/content/test_image/cloth_3.jpg",
+    model=HRNet,
+    scale_std=200.0,
+    resize_dim=[288, 384],
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225]
+)
+
+# Plot the detected coordinates
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")
+     
+# Segmentation mask is required for refinement and derivation
+# So we need to do segmentation first
+BiRefNet = giq.segmentation.load_model(
+    pretrained_model='lygitdata/BiRefNet_garmentiq_backup',
+    pretrained_model_args={'trust_remote_code': True},
+    high_precision=True
+)
+original_img, mask = giq.segmentation.extract(
+    model=BiRefNet,
+    image_path='/content/test_image/cloth_3.jpg',
+    resize_dim=(1024, 1024),
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225],
+    high_precision=True
+)
+     
+# Refine the landmarks
+refined_coords, refined_detection_dict = giq.landmark.refine(
+    class_name="vest dress",
+    detection_np=coords,
+    detection_conf=maxvals,
+    detection_dict=detection_dict,
+    mask=mask,
+    window_size=5,
+    ksize=(11, 11),
+    sigmaX=0.0
+)
+# Print the original coordinates and the refined coordinates
+print("Original coordinates:\n", coords)
+print("Refined coordinates:\n", refined_coords)
+     
+# Derive custom landmarks
+derived_coords, derived_detection_dict = giq.landmark.derive(
+    class_name="vest dress",
+    detection_dict=refined_detection_dict,
+	  derivation_dict=giq.landmark.derivation_dict.derivation_dict,
+    landmark_coords=refined_coords,
+    np_mask=mask
+)
+     
+import numpy as np
+
+# Plot the derived point
+giq.landmark.plot(
+    image_path="/content/test_image/cloth_3.jpg",
+    coordinate=np.concatenate((refined_coords, np.array([[derived_coords['20']]])), axis=1),
+    figsize=(3, 3),
+    color="green"
+)
+```
+
 ## Trained Models for Classification
 
 We release the following models trained as part of this project. Models having `_inditex_finetuned` in their names means that they were finetuned on a small set of garment data from Inditex - Zara.
