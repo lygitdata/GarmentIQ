@@ -9,292 +9,337 @@
 
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/application/demo/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/magicbox/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/long%20sleeve%20dress.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/long%20sleeve%20top.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/short%20sleeve%20dress.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/short%20sleeve%20top.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/shorts.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/skirt.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/trousers.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/vest.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://garmentiq.ly.gd.edu.kg/asset/pdf/measurement_instructions_inditex/vest%20dress.pdf</loc>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.51</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.41</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/garment_classes.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.41</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.41</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/segmentation.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.41</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/tailor.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.41</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.41</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/fine_tune_pytorch_nn.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/load_data.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/load_model.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/model_definition.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/predict.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/test_pytorch_nn.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/train_pytorch_nn.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/train_test_split.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/classification/utils.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derive.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/detect.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/detection.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/plot.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/refine.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/refinement.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/utils.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/segmentation/change_background_color.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/segmentation/extract.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/segmentation/load_model.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/segmentation/plot.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/segmentation/process_and_save_images.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/check_filenames_metadata.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/check_unzipped_dir.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/clean_detection_dict.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/compute_measurement_distances.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/export_dict_to_json.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/unzip.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/utils/validate_garment_class_dict.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.33</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/derivation_dict.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/derive_keypoint_coord.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/line_intersect.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/mask_intersect.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/prepare_args.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/process.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/derivation/utils.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/detection/load_model.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/detection/model_definition.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/detection/utils.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 <url>
   <loc>https://garmentiq.ly.gd.edu.kg/documentation/python/garmentiq/landmark/refinement/refine_landmark_with_blur.html</loc>
-  <lastmod>2025-06-12T04:15:12+00:00</lastmod>
+  <lastmod>2025-06-13T03:21:47+00:00</lastmod>
   <priority>0.26</priority>
 </url>
 
