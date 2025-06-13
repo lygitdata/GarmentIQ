@@ -38,7 +38,7 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 
 ## Overview of QarmentIQ Python Package
 
-The `gqrmentiq` package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction.
+The `garmentiq` package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction.
 
 - `tailor`: This module acts as the central agent for the entire pipeline, orchestrating the different stages of garment measurement from classification to landmark derivation. It integrates the functionalities of other modules to provide a smooth end-to-end process.
 
