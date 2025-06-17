@@ -432,6 +432,175 @@ giq.landmark.plot(
 )
 ```
 
+## Advanced Usage
+
+### Custom Measurement Instruction
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/custom_measurement_instruction_advanced_usage.ipynb)
+
+```python
+import json
+import copy
+     
+
+# See our predefined garments and measurement instructions
+#
+# - `num_predefeined_points` and `index_range` are determined by training data -
+# DeepFashion2, change them if it is indeed necessary.
+#
+# - `instruction` is the path to a .json file, GarmentQI has predefined
+# instructions.
+#
+# Generate or see predefined instructions at:
+# https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/
+from garmentiq.garment_classes import garment_classes
+print(json.dumps(garment_classes, indent=4))
+     
+
+# Let us change the measurement instruction of skirt
+# See the predefined instruction
+# There are `waist`, `full length`, and `hips` as measurements in GarmentIQ's
+# default measurement instruction of a skirt. What if we only want `waist` and
+# `hips`? Simply create one! Recommend to use GarmentIQ instruction generation
+# tool to generate the instruciton:
+# https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/
+with open(garment_classes['skirt']['instruction'], 'r') as file:
+    data = json.load(file)
+print(json.dumps(data, indent=4))
+     
+
+# Let us create a simple instruction in python here and convert it to json
+skirt_new = {
+    "skirt": {
+        "landmarks": {
+            "1": {
+                "predefined": True,
+                "description": "waist_left",
+                "x": 60,
+                "y": 40
+            },
+            "3": {
+                "predefined": True,
+                "description": "waist_right",
+                "x": 140,
+                "y": 40
+            },
+            "4": {
+                "predefined": True,
+                "description": "side_seam_left",
+                "x": 50,
+                "y": 80
+            },
+            "8": {
+                "predefined": True,
+                "description": "side_seam_right",
+                "x": 150,
+                "y": 80
+            }
+        },
+        "measurements": {
+            "waist": {
+                "landmarks": {
+                    "start": "1",
+                    "end": "3"
+                },
+                "description": "/"
+            },
+            "hips": {
+                "landmarks": {
+                    "start": "4",
+                    "end": "8"
+                },
+                "description": "/"
+            }
+        }
+    }
+}
+
+# Save it to a JSON file with indentation
+with open('skirt_new.json', 'w') as file:
+    json.dump(skirt_new, file, indent=4)
+     
+
+# Create a new garment class metadata dictionary
+new_garment_classes = copy.deepcopy(garment_classes)
+new_garment_classes['skirt']['instruction'] = 'skirt_new.json'
+print(new_garment_classes['skirt'])
+     
+
+# Okay now we have the new instruction, let us try the detection model to see
+# the difference
+# Import necessary modules
+import garmentiq as giq
+from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
+
+# Download a skirt image and a pretrained model
+!mkdir -p test_image
+!wget -q -O /content/test_image/cloth_4.jpg \
+    https://raw.githubusercontent.com/lygitdata/GarmentIQ/refs/heads/gh-pages/asset/img/cloth_4.jpg
+
+!mkdir -p models
+!wget -q -O /content/models/hrnet.pth \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/hrnet.pth
+     
+
+# Plot the image
+giq.landmark.plot(image_path="/content/test_image/cloth_4.jpg", figsize=(3, 3))
+     
+
+# Load the pretrained model from Hugging Face
+HRNet = giq.landmark.detection.load_model(
+    model_path="/content/models/hrnet.pth",
+    model_class=PoseHighResolutionNet()
+)
+     
+
+# Detect landmarks (DEFAULT instruction)
+_, _, detection_dict = giq.landmark.detect(
+    class_name="skirt",
+    class_dict=garment_classes,
+    image_path="/content/test_image/cloth_4.jpg",
+    model=HRNet,
+    scale_std=200.0,
+    resize_dim=[288, 384],
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225]
+)
+
+# Clean the detection dictionary
+# See that we have all the three measurements
+detection_dict_cleaned = giq.utils.clean_detection_dict(
+    class_name='skirt',
+    image_name='cloth_4.jpg',
+    detection_dict=detection_dict
+)
+detection_dict_cleaned
+     
+
+# Detect landmarks (NEW instruction)
+# Note that we use `class_dict=new_garment_classes` here
+_, _, detection_dict_new = giq.landmark.detect(
+    class_name="skirt",
+    class_dict=new_garment_classes,
+    image_path="/content/test_image/cloth_4.jpg",
+    model=HRNet,
+    scale_std=200.0,
+    resize_dim=[288, 384],
+    normalize_mean=[0.485, 0.456, 0.406],
+    normalize_std=[0.229, 0.224, 0.225]
+)
+
+# Clean the detection dictionary
+# See that we only have two measurements we want
+detection_dict_new_cleaned = giq.utils.clean_detection_dict(
+    class_name='skirt',
+    image_name='cloth_4.jpg',
+    detection_dict=detection_dict_new
+)
+detection_dict_new_cleaned
+```
+
+
 ## Trained Models for Classification
 
 We release the following models trained as part of this project. Models having `_inditex_finetuned` in their names means that they were finetuned on a small set of garment data from Inditex - Zara.
