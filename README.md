@@ -30,13 +30,13 @@
 
 GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to classify garments, remove backgrounds, and detect key features with precision. It turns expert know-how into an intuitive measurement system - no intensive coding required. Fully modular and customizable, it adapts to your workflows while delivering fast, accurate results out of the box.
 
-| Feature | Web Demo |
-|---------|----------|
-| **Garment measurement instruction generation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/) |
-| **Garment image classification** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/) |
-| **Garment image segmentation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/) |
-| **Garment landmark detection** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/) |
-| **Garment landmark adjustment** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/) |
+| Feature | Web Demo | Video guide |
+|---------|----------|----------|
+| **Garment measurement instruction generation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/guide.mp4) |
+| **Garment image classification** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/guide.mp4) |
+| **Garment image segmentation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/guide.mp4) |
+| **Garment landmark detection** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/guide.mp4) |
+| **Garment landmark adjustment** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/guide.mp4) |
 
 ## Overview of QarmentIQ Python Package
 
