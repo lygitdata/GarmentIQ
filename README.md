@@ -18,6 +18,8 @@
     - [Segmentation](#segmentation)
     - [Landmark detection](#landmark-detection)
     - [Landmark refinement and derivation](#landmark-refinement-and-derivation)
+5. [Advanced Usage](#advanced-usage)
+    - [Custom measurement instruction](#custom-measurement-instruction)
 5. [Issues & Feedback](#issues--feedback)
 6. [License](#license)
 7. [Acknowledgements](#acknowledgements)
@@ -434,7 +436,7 @@ giq.landmark.plot(
 
 ## Advanced Usage
 
-### Custom Measurement Instruction
+### Custom measurement instruction
 
 [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/custom_measurement_instruction_advanced_usage.ipynb)
 
