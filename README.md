@@ -20,9 +20,9 @@
     - [Landmark refinement and derivation](#landmark-refinement-and-derivation)
 5. [Advanced Usage](#advanced-usage)
     - [Custom measurement instruction](#custom-measurement-instruction)
-5. [Issues & Feedback](#issues--feedback)
-6. [License](#license)
-7. [Acknowledgements](#acknowledgements)
+6. [Issues & Feedback](#issues--feedback)
+7. [License](#license)
+8. [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -436,6 +436,8 @@ giq.landmark.plot(
 
 ## Advanced Usage
 
+> ⚠️ Note: If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing [MagicBox](https://garmentiq.ly.gd.edu.kg/documentation/magicbox/) on your local machine, where you can find and run these examples under `working/examples/`.
+
 ### Custom measurement instruction
 
 [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/custom_measurement_instruction_advanced_usage.ipynb)
@@ -601,7 +603,6 @@ detection_dict_new_cleaned = giq.utils.clean_detection_dict(
 )
 detection_dict_new_cleaned
 ```
-
 
 ## Trained Models for Classification
 
