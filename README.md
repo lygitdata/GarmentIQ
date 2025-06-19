@@ -454,7 +454,7 @@ import copy
 # - `num_predefeined_points` and `index_range` are determined by training data -
 # DeepFashion2, change them if it is indeed necessary.
 #
-# - `instruction` is the path to a .json file, GarmentQI has predefined
+# - `instruction` is the path to a .json file, GarmentIQ has predefined
 # instructions.
 #
 # Generate or see predefined instructions at:
