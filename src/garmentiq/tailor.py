@@ -375,21 +375,30 @@ class tailor:
     ):
         """
         Executes the full garment measurement pipeline for all images in the input directory.
-
-        The pipeline includes classification, segmentation, landmark detection, optional
-        refinement, and optional derivation of landmarks. It also handles saving
-        segmentation and measurement images, and final measurement results in JSON format.
-
+    
+        The pipeline includes classification, segmentation, landmark detection, optional refinement,
+        and derivation of measurements. It also handles exporting visual and data outputs.
+    
+        By default, the method **exports a cleaned JSON file** for each image containing garment class,
+        detected landmarks, and measurements. A snapshot of exported JSON:
+        `{ "image1.jpg": { "class": ..., "landmarks": { ... }, "measurements": { ... } } }`. Optionally, 
+        you can also save segmentation andmeasurement-annotated images.
+    
         Args:
-            save_segmentation_image (bool): If True, saves the mask and background-modified images. Defaults to False.
-            save_measurement_image (bool): If True, saves images with overlaid detected landmarks. Defaults to False.
-
+            save_segmentation_image (bool): If True, saves segmentation masks and background-modified images.
+                                            Defaults to False.
+            save_measurement_image (bool): If True, saves images overlaid with detected landmarks and measurements.
+                                           Defaults to False.
+    
         Returns:
             tuple:
                 - metadata (pd.DataFrame): A DataFrame containing metadata about each processed image,
-                                           including file paths for generated outputs.
-                - outputs (dict): A dictionary containing detailed outputs for each image,
-                                  such as masks, background-modified images, and detection dictionaries.
+                                           including file paths for saved outputs.
+                - outputs (dict): A dictionary containing detailed results for each image, such as masks,
+                                  cleaned detection dictionaries, and optionally saved image paths.
+    
+        Example of exported JSON:
+            
         """
         # Some helper variables
         use_bg_color = self.segmentation_model_args.get("background_color") is not None
