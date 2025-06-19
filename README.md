@@ -20,6 +20,8 @@
     - [Landmark refinement and derivation](#landmark-refinement-and-derivation)
 5. [Advanced Usage](#advanced-usage)
     - [Custom measurement instruction](#custom-measurement-instruction)
+    - [Classification Model Training & Evaluation](#)
+    - [Classification Model Fine-tuning](#)
 6. [Issues & Feedback](#issues--feedback)
 7. [License](#license)
 8. [Acknowledgements](#acknowledgements)
