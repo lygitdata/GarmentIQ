@@ -20,8 +20,8 @@
     - [Landmark refinement and derivation](#landmark-refinement-and-derivation)
 5. [Advanced Usage](#advanced-usage)
     - [Custom measurement instruction](#custom-measurement-instruction)
-    - [Classification Model Training & Evaluation](#)
-    - [Classification Model Fine-tuning](#)
+    - [Classification model training & evaluation](#)
+    - [Classification model fine-tuning](#)
 6. [Issues & Feedback](#issues--feedback)
 7. [License](#license)
 8. [Acknowledgements](#acknowledgements)
@@ -604,6 +604,183 @@ detection_dict_new_cleaned = giq.utils.clean_detection_dict(
     detection_dict=detection_dict_new
 )
 detection_dict_new_cleaned
+```
+
+### Classification model training & evaluation
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_model_training_evaluation_advanced_usage.ipynb)
+
+```python
+import garmentiq as giq
+from garmentiq.classification.model_definition import CNN3
+from garmentiq.classification.utils import CachedDataset
+import torch.optim as optim
+import torch.nn as nn
+     
+
+# Download training data
+# To train a model using GarmentIQ framework, your data must be in a zip file
+# and the zip file should have the same structure as our data. See the link:
+# https://www.kaggle.com/datasets/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+!curl -L -o garmentiq-classification-set-nordstrom-and-myntra.zip \
+  https://www.kaggle.com/api/v1/datasets/download/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+     
+
+# Split the data into training set and testing set
+data = giq.classification.train_test_split(
+    output_dir="data",
+    train_zip_dir="garmentiq-classification-set-nordstrom-and-myntra.zip",
+    metadata_csv="metadata.csv",
+    label_column="garment",
+    test_size=0.15,
+    verbose=True
+)
+     
+
+# Load the training set into memory for faster I/O during training
+train_images, train_labels, _ = giq.classification.load_data(
+    df=data["train_metadata"],
+    img_dir=data["train_images"],
+    label_column="garment",
+    resize_dim=(60, 92),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+     
+
+# Train with GarmentIQ predefined model - CNN3
+# Note that we use `model_class=CNN3` here
+# For demonstration purpose, we only use 2 folds and 5 epochs
+# Models are saved at the folder `cnn3_models`
+# It automatically selects the model with the lowest cross entropy
+# as the best model
+giq.classification.train_pytorch_nn(
+    model_class=CNN3,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "metadata_df": data["train_metadata"],
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={
+        "optimizer_class": optim.AdamW,
+        "optimizer_args": {"lr": 0.001, "weight_decay": 1e-4},
+        "n_fold": 2,
+        "n_epoch": 5,
+        "patience": 2,
+        "batch_size": 256,
+        "model_save_dir": "cnn3_models",
+        "best_model_name": "best_cnn3_model.pt",
+    },
+)
+     
+
+# Train with a user-defined model
+class UserDefinedCNN(nn.Module):
+    def __init__(self, num_classes):
+        super(UserDefinedCNN, self).__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, 2),
+            nn.Dropout(0.2),
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, 2),
+            nn.Dropout(0.25),
+            nn.AdaptiveAvgPool2d((4, 4)),
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(64 * 4 * 4, 128),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.3),
+            nn.Linear(128, num_classes),
+        )
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+# For demonstration purpose, we only use 2 folds and 5 epochs
+# Models are saved at the folder `cnn1_models`
+# It automatically selects the model with the lowest cross entropy
+# as the best model
+giq.classification.train_pytorch_nn(
+    model_class=UserDefinedCNN,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "metadata_df": data["train_metadata"],
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={
+        "optimizer_class": optim.AdamW,
+        "optimizer_args": {"lr": 0.001, "weight_decay": 1e-4},
+        "n_fold": 2,
+        "n_epoch": 5,
+        "patience": 2,
+        "batch_size": 256,
+        "model_save_dir": "userdefined_cnn_models",
+        "best_model_name": "best_userdefined_cnn_model.pt",
+    },
+)
+     
+
+# Load the testing set for model evaluation
+test_images, test_labels, _ = giq.classification.load_data(
+    df=data["test_metadata"],
+    img_dir=data["test_images"],
+    label_column="garment",
+    resize_dim=(60, 92),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+     
+
+# Evaluate CNN3 model on the testing set
+giq.classification.test_pytorch_nn(
+    model_path="cnn3_models/best_cnn3_model.pt",
+    model_class=CNN3,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": data["test_metadata"]["garment"],
+        "cached_images": test_images,
+        "cached_labels": test_labels,
+    },
+    param={"batch_size": 64},
+)
+     
+
+# Evaluate user-defined model on the testing set
+# We can see that the CNN3 model performs better on the test set
+# than this user-defined CNN model
+giq.classification.test_pytorch_nn(
+    model_path="userdefined_cnn_models/best_userdefined_cnn_model.pt",
+    model_class=UserDefinedCNN,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": data["test_metadata"]["garment"],
+        "cached_images": test_images,
+        "cached_labels": test_labels,
+    },
+    param={"batch_size": 64},
+)
+```
+
+### Classification model fine-tuning
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)]()
+
+```python
 ```
 
 ## Trained Models for Classification
