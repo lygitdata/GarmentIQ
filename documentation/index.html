@@ -150,6 +150,12 @@
                         <li class="nav-item">
                           <a class="nav-link" href="#custom-measurement-instruction">Custom measurement instruction</a>
                         </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#classification-model-training--evaluation">Classification model training & evaluation</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#classification-model-fine-tuning">Classification model fine-tuning</a>
+                        </li>
                       </ul>
                     </li>
                   </ul>
@@ -218,8 +224,8 @@
                 <h4 id="installation">Installation</h4>
                 <p>Please install from PyPI using the following command.</p>
                 <pre>
-                                                                                                                <code>pip install garmentiq -q</code>
-                                                                                                            </pre>
+																												<code>pip install garmentiq -q</code>
+																											</pre>
                 <h4 id="tailor-the-whole-pipeline">Tailor (the whole pipeline)</h4>
                 <p>The tailor agent executes the entire pipeline in sequence: classification, segmentation (if needed), landmark detection, landmark refinement (if required), and landmark derivation (if applicable). Note that the first 3 steps can also be executed independently (the last 2 steps depend on the results returned by segmentation), without the use of the tailor agent, as described in the following subsections.</p>
                 <p>
@@ -228,7 +234,7 @@
                   </a>
                 </p>
                 <pre>
-                                                                                                                <code class="language-python">import garmentiq as giq
+																												<code class="language-python">import garmentiq as giq
 from garmentiq.classification.model_definition import tinyViT
 from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
 from garmentiq.garment_classes import garment_classes
@@ -328,7 +334,7 @@ for json_path in metadata['measurement_json']:
         print(f"{json_path}:\n")
         print(json.dumps(data, indent=4, sort_keys=True))
         print("\n\n")</code>
-                                                                                                            </pre>
+																											</pre>
                 <h4 id="classification">Classification</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_quick_start.ipynb" target="_blank">
@@ -336,7 +342,7 @@ for json_path in metadata['measurement_json']:
                   </a>
                 </p>
                 <pre>
-                                                                                                                <code class="language-python">import garmentiq as giq
+																												<code class="language-python">import garmentiq as giq
 from garmentiq.classification.model_definition import tinyViT
 from garmentiq.classification.utils import CachedDataset
 
@@ -406,7 +412,7 @@ print(
     "\nPredicted label: ", pred_label,
     "\nPredicted Probabilities: ", pred_prob
 )</code>
-                                                                                                            </pre>
+																											</pre>
                 <h4 id="segmentation">Segmentation</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/segmentation_quick_start.ipynb" target="_blank">
@@ -414,7 +420,7 @@ print(
                   </a>
                 </p>
                 <pre>
-                                                                                                                <code class="language-python">import garmentiq as giq
+																												<code class="language-python">import garmentiq as giq
 
 # Download a test image
 !mkdir -p test_image
@@ -449,7 +455,7 @@ bg_modified_img = giq.segmentation.change_background_color(
 giq.segmentation.plot(image_np=original_img, figsize=(3, 3))
 giq.segmentation.plot(image_np=mask, figsize=(3, 3))
 giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))</code>
-                                                                                                            </pre>
+																											</pre>
                 <h4 id="landmark-detection">Landmark detection</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_detection_quick_start.ipynb" target="_blank">
@@ -457,7 +463,7 @@ giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))</code>
                   </a>
                 </p>
                 <pre>
-                                                                                                                <code class="language-python">import garmentiq as giq
+																												<code class="language-python">import garmentiq as giq
 from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
 from garmentiq.garment_classes import garment_classes
 
@@ -493,7 +499,7 @@ coords, maxvals, detection_dict = giq.landmark.detect(
 
 # Plot the detected coordinates
 giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")</code>
-                                                                                                            </pre>
+																											</pre>
                 <h4 id="landmark-refinement-and-derivation">Landmark refinement and derivation</h4>
                 <p>Note that segmentation mask is required for landmark refinement and derivation and they are also based on the landmark detection results. As a result, before refining and deriving landmarks, we first need to segment the image and detect predefined landmarks.</p>
                 <p>
@@ -502,7 +508,7 @@ giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coord
                   </a>
                 </p>
                 <pre>
-                                                                                                                <code class="language-python">import garmentiq as giq
+																												<code class="language-python">import garmentiq as giq
 from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
 from garmentiq.garment_classes import garment_classes
      
@@ -588,7 +594,7 @@ giq.landmark.plot(
     figsize=(3, 3),
     color="green"
 )</code>
-                                                                                                            </pre>
+																											</pre>
                 <h3 id="advanced-usage">Advanced Usage</h3>
                 <p class="alert alert-info"> ⚠️ Note: If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing <a href="https://garmentiq.ly.gd.edu.kg/documentation/magicbox/">MagicBox</a> on your local machine, where you can find and run these examples under <code>working/examples/</code>. </p>
                 <h4 id="custom-measurement-instruction">Custom measurement instruction</h4>
@@ -598,7 +604,7 @@ giq.landmark.plot(
                   </a>
                 </p>
                 <pre>
-                                                                                                                <code class="language-python">import json
+																												<code class="language-python">import json
 import copy
      
 
@@ -607,7 +613,7 @@ import copy
 # - `num_predefeined_points` and `index_range` are determined by training data -
 # DeepFashion2, change them if it is indeed necessary.
 #
-# - `instruction` is the path to a .json file, GarmentQI has predefined
+# - `instruction` is the path to a .json file, GarmentIQ has predefined
 # instructions.
 #
 # Generate or see predefined instructions at:
@@ -757,7 +763,273 @@ detection_dict_new_cleaned = giq.utils.clean_detection_dict(
     detection_dict=detection_dict_new
 )
 detection_dict_new_cleaned</code>
-                                                                                                            </pre>
+																											</pre>
+                <h4 id="classification-model-training--evaluation">Classification model training & evaluation</h4>
+                <p>
+                  <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_model_training_evaluation_advanced_usage.ipynb" target="_blank">
+                    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                  </a>
+                </p>
+                <pre>
+																												<code class="language-python">import garmentiq as giq
+from garmentiq.classification.model_definition import CNN3
+from garmentiq.classification.utils import CachedDataset
+import torch.optim as optim
+import torch.nn as nn
+     
+
+# Download training data
+# To train a model using GarmentIQ framework, your data must be in a zip file
+# and the zip file should have the same structure as our data. See the link:
+# https://www.kaggle.com/datasets/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+!curl -L -o garmentiq-classification-set-nordstrom-and-myntra.zip \
+  https://www.kaggle.com/api/v1/datasets/download/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
+     
+
+# Split the data into training set and testing set
+data = giq.classification.train_test_split(
+    output_dir="data",
+    train_zip_dir="garmentiq-classification-set-nordstrom-and-myntra.zip",
+    metadata_csv="metadata.csv",
+    label_column="garment",
+    test_size=0.15,
+    verbose=True
+)
+     
+
+# Load the training set into memory for faster I/O during training
+train_images, train_labels, _ = giq.classification.load_data(
+    df=data["train_metadata"],
+    img_dir=data["train_images"],
+    label_column="garment",
+    resize_dim=(60, 92),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+     
+
+# Train with GarmentIQ predefined model - CNN3
+# Note that we use `model_class=CNN3` here
+# For demonstration purpose, we only use 2 folds and 5 epochs
+# Models are saved at the folder `cnn3_models`
+# It automatically selects the model with the lowest cross entropy
+# as the best model
+giq.classification.train_pytorch_nn(
+    model_class=CNN3,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "metadata_df": data["train_metadata"],
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={
+        "optimizer_class": optim.AdamW,
+        "optimizer_args": {"lr": 0.001, "weight_decay": 1e-4},
+        "n_fold": 2,
+        "n_epoch": 5,
+        "patience": 2,
+        "batch_size": 256,
+        "model_save_dir": "cnn3_models",
+        "best_model_name": "best_cnn3_model.pt",
+    },
+)
+     
+
+# Train with a user-defined model
+class UserDefinedCNN(nn.Module):
+    def __init__(self, num_classes):
+        super(UserDefinedCNN, self).__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, 2),
+            nn.Dropout(0.2),
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, 2),
+            nn.Dropout(0.25),
+            nn.AdaptiveAvgPool2d((4, 4)),
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(64 * 4 * 4, 128),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.3),
+            nn.Linear(128, num_classes),
+        )
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+# For demonstration purpose, we only use 2 folds and 5 epochs
+# Models are saved at the folder `cnn1_models`
+# It automatically selects the model with the lowest cross entropy
+# as the best model
+giq.classification.train_pytorch_nn(
+    model_class=UserDefinedCNN,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "metadata_df": data["train_metadata"],
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={
+        "optimizer_class": optim.AdamW,
+        "optimizer_args": {"lr": 0.001, "weight_decay": 1e-4},
+        "n_fold": 2,
+        "n_epoch": 5,
+        "patience": 2,
+        "batch_size": 256,
+        "model_save_dir": "userdefined_cnn_models",
+        "best_model_name": "best_userdefined_cnn_model.pt",
+    },
+)
+     
+
+# Load the testing set for model evaluation
+test_images, test_labels, _ = giq.classification.load_data(
+    df=data["test_metadata"],
+    img_dir=data["test_images"],
+    label_column="garment",
+    resize_dim=(60, 92),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+     
+
+# Evaluate CNN3 model on the testing set
+giq.classification.test_pytorch_nn(
+    model_path="cnn3_models/best_cnn3_model.pt",
+    model_class=CNN3,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": data["test_metadata"]["garment"],
+        "cached_images": test_images,
+        "cached_labels": test_labels,
+    },
+    param={"batch_size": 64},
+)
+     
+
+# Evaluate user-defined model on the testing set
+# We can see that the CNN3 model performs better on the test set
+# than this user-defined CNN model
+giq.classification.test_pytorch_nn(
+    model_path="userdefined_cnn_models/best_userdefined_cnn_model.pt",
+    model_class=UserDefinedCNN,
+    model_args={"num_classes": 9},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": data["test_metadata"]["garment"],
+        "cached_images": test_images,
+        "cached_labels": test_labels,
+    },
+    param={"batch_size": 64},
+)</code>
+																											</pre>
+                <h4 id="classification-model-fine-tuning">Classification model fine-tuning</h4>
+                <p>
+                  <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_model_fine_tuning_advanced_usage.ipynb" target="_blank">
+                    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
+                  </a>
+                </p>
+                <pre>
+																												<code class="language-python">import garmentiq as giq
+from garmentiq.classification.model_definition import tinyViT
+from garmentiq.classification.utils import CachedDataset
+import torch.optim as optim
+     
+
+# Download fine-tuning data
+# To train a model using GarmentIQ framework, your data must be in a zip file
+# and the zip file should have the same structure as our data. See the link:
+# https://www.kaggle.com/datasets/lygitdata/zara-clothes-image-data
+!curl -L -o /content/zara-clothes-image-data.zip\
+  https://www.kaggle.com/api/v1/datasets/download/lygitdata/zara-clothes-image-data
+
+# Download the base model - tinyViT - to be finetuned
+!mkdir -p models
+!wget -q -O /content/models/tiny_vit.pt \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit.pt
+     
+
+# Prepare the data for fine-tuning
+# As our data size is small, we make the testing set to be 0%
+# You can see from the test set summary that the size is 0
+data = giq.classification.train_test_split(
+    output_dir="data",
+    train_zip_dir="zara-clothes-image-data.zip",
+    metadata_csv="metadata.csv",
+    label_column="garment",
+    test_size=0,
+    verbose=True
+)
+     
+
+# Load the training set into memory for faster I/O during training
+train_images, train_labels, _ = giq.classification.load_data(
+    df=data["train_metadata"],
+    img_dir=data["train_images"],
+    label_column="garment",
+    resize_dim=(120, 184),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+     
+
+# Fine-tune the pretrained tinyViT model
+# For demonstration purpose, we only use 5 folds and 5 epochs
+# Models are saved at the folder `finetuned_models`
+# It automatically selects the model with the lowest cross entropy
+# as the best model
+giq.classification.fine_tune_pytorch_nn(
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "metadata_df": data["train_metadata"],
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={
+        "pretrained_path": "/content/models/tiny_vit.pt",
+        "freeze_layers": True,
+        "unfreeze_patterns": ["classifier", "fc"],
+        "optimizer_class": optim.AdamW,
+        "optimizer_args": {"lr": 0.00002, "weight_decay": 1e-4},
+        "n_fold": 5,
+        "n_epoch": 5,
+        "patience": 2,
+        "batch_size": 128,
+        "model_save_dir": "finetuned_models",
+        "best_model_name": "best_finetuned.pt"
+    },
+)
+     
+
+# See the performance of the finetuned model on the fine-tuning dataset
+giq.classification.test_pytorch_nn(
+    model_path="/content/finetuned_models/best_finetuned.pt",
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={"batch_size": 64},
+)</code>
+																											</pre>
               </section>
             </section>
           </div>
