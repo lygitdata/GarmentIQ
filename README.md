@@ -1,4 +1,4 @@
-# GarmentIQ MagicBox (Version 1.1)
+# GarmentIQ MagicBox (Version 1.5)
 
 *Last update: 06/09/2025*
 
