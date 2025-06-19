@@ -5,7 +5,7 @@ from garmentiq.utils import compute_measurement_distances
 def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict):
     """
     Cleans and reformats a detection dictionary, computes measurement distances,
-    and changes the top-level key for easier access.
+    and nests the cleaned data under the image name, with class name stored inside.
 
     Args:
         class_name (str): The name of the garment class.
@@ -13,8 +13,7 @@ def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict)
         detection_dict (dict): The raw detection dictionary containing landmark and measurement data.
 
     Returns:
-        dict: A new dictionary with cleaned landmark and measurement data,
-              and a top-level key formatted as "{class_name}->{image_name}".
+        dict: A dictionary structured as {image_name: {..., "class": class_name}}.
     """
 
     transformed_name = os.path.splitext(image_name)[0]
@@ -41,7 +40,9 @@ def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict)
                 k: m[k] for k in ("landmarks", "distance") if k in m
             }
 
-    # Change the top-level key
-    new_key = f"{class_name}->{image_name}"
-    final_dict = {new_key: original_data}
+    # Insert the class name as metadata
+    original_data["class"] = class_name
+
+    # Return dict keyed by image name
+    final_dict = {image_name: original_data}
     return final_dict
