@@ -21,7 +21,7 @@
 5. [Advanced Usage](#advanced-usage)
     - [Custom measurement instruction](#custom-measurement-instruction)
     - [Classification model training & evaluation](#classification-model-training--evaluation)
-    - [Classification model fine-tuning](#)
+    - [Classification model fine-tuning](#classification-model-fine-tuning)
 6. [Issues & Feedback](#issues--feedback)
 7. [License](#license)
 8. [Acknowledgements](#acknowledgements)
@@ -778,9 +778,96 @@ giq.classification.test_pytorch_nn(
 
 ### Classification model fine-tuning
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)]()
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_model_fine_tuning_advanced_usage.ipynb)
 
 ```python
+import garmentiq as giq
+from garmentiq.classification.model_definition import tinyViT
+from garmentiq.classification.utils import CachedDataset
+import torch.optim as optim
+     
+
+# Download fine-tuning data
+# To train a model using GarmentIQ framework, your data must be in a zip file
+# and the zip file should have the same structure as our data. See the link:
+# https://www.kaggle.com/datasets/lygitdata/zara-clothes-image-data
+!curl -L -o /content/zara-clothes-image-data.zip\
+  https://www.kaggle.com/api/v1/datasets/download/lygitdata/zara-clothes-image-data
+
+# Download the base model - tinyViT - to be finetuned
+!mkdir -p models
+!wget -q -O /content/models/tiny_vit.pt \
+    https://huggingface.co/lygitdata/garmentiq/resolve/main/tiny_vit.pt
+     
+
+# Prepare the data for fine-tuning
+# As our data size is small, we make the testing set to be 0%
+# You can see from the test set summary that the size is 0
+data = giq.classification.train_test_split(
+    output_dir="data",
+    train_zip_dir="zara-clothes-image-data.zip",
+    metadata_csv="metadata.csv",
+    label_column="garment",
+    test_size=0,
+    verbose=True
+)
+     
+
+# Load the training set into memory for faster I/O during training
+train_images, train_labels, _ = giq.classification.load_data(
+    df=data["train_metadata"],
+    img_dir=data["train_images"],
+    label_column="garment",
+    resize_dim=(120, 184),
+    normalize_mean=[0.8047, 0.7808, 0.7769],
+    normalize_std=[0.2957, 0.3077, 0.3081]
+)
+     
+
+# Fine-tune the pretrained tinyViT model
+# For demonstration purpose, we only use 5 folds and 5 epochs
+# Models are saved at the folder `finetuned_models`
+# It automatically selects the model with the lowest cross entropy
+# as the best model
+giq.classification.fine_tune_pytorch_nn(
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "metadata_df": data["train_metadata"],
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={
+        "pretrained_path": "/content/models/tiny_vit.pt",
+        "freeze_layers": True,
+        "unfreeze_patterns": ["classifier", "fc"],
+        "optimizer_class": optim.AdamW,
+        "optimizer_args": {"lr": 0.00002, "weight_decay": 1e-4},
+        "n_fold": 5,
+        "n_epoch": 5,
+        "patience": 2,
+        "batch_size": 128,
+        "model_save_dir": "finetuned_models",
+        "best_model_name": "best_finetuned.pt"
+    },
+)
+     
+
+# See the performance of the finetuned model on the fine-tuning dataset
+giq.classification.test_pytorch_nn(
+    model_path="/content/finetuned_models/best_finetuned.pt",
+    model_class=tinyViT,
+    model_args={"num_classes": 9, "img_size": (120, 184), "patch_size": 6},
+    dataset_class=CachedDataset,
+    dataset_args={
+        "raw_labels": data["train_metadata"]["garment"],
+        "cached_images": train_images,
+        "cached_labels": train_labels,
+    },
+    param={"batch_size": 64},
+)
 ```
 
 ## Trained Models for Classification
