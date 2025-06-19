@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
                     </a>.
                 </p>
-                <p class="text-center">Last update of this website: 06/17/2025</p>
+                <p class="text-center">Last update of this website: 06/19/2025</p>
                 <p class="text-center">
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/privacy-policy/">Privacy Policy</a>
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/cookie-policy/">Cookie Policy</a>
