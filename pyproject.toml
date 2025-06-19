@@ -1,6 +1,6 @@
 [project]
 name = "garmentiq"
-version = "0.0.4.5"
+version = "0.0.4.6"
 authors = [
   { name="Li Yuan", email="lyuan@gd.edu.kg" },
   { name="Xinrui Zhai", email="zxr86272731@gmail.com" },
