@@ -398,7 +398,84 @@ class tailor:
                                   cleaned detection dictionaries, and optionally saved image paths.
     
         Example of exported JSON:
-            
+            ```
+            {
+                "cloth_3.jpg": {
+                    "class": "vest dress",
+                    "landmarks": {
+                        "10": {
+                            "conf": 0.7269417643547058,
+                            "x": 611.0,
+                            "y": 861.0
+                        },
+                        "16": {
+                            "conf": 0.6769524812698364,
+                            "x": 1226.0,
+                            "y": 838.0
+                        },
+                        "17": {
+                            "conf": 0.7472652196884155,
+                            "x": 1213.0,
+                            "y": 726.0
+                        },
+                        "18": {
+                            "conf": 0.7360446453094482,
+                            "x": 1238.0,
+                            "y": 613.0
+                        },
+                        "2": {
+                            "conf": 0.9256571531295776,
+                            "x": 703.0,
+                            "y": 264.0
+                        },
+                        "20": {
+                            "x": 700.936,
+                            "y": 2070.0
+                        },
+                        "8": {
+                            "conf": 0.7129100561141968,
+                            "x": 563.0,
+                            "y": 613.0
+                        },
+                        "9": {
+                            "conf": 0.8203497529029846,
+                            "x": 598.0,
+                            "y": 726.0
+                        }
+                    },
+                    "measurements": {
+                        "chest": {
+                            "distance": 675.0,
+                            "landmarks": {
+                                "end": "18",
+                                "start": "8"
+                            }
+                        },
+                        "full length": {
+                            "distance": 1806.0011794281863,
+                            "landmarks": {
+                                "end": "20",
+                                "start": "2"
+                            }
+                        },
+                        "hips": {
+                            "distance": 615.4299310238331,
+                            "landmarks": {
+                                "end": "16",
+                                "start": "10"
+                            }
+                        },
+                        "waist": {
+                            "distance": 615.0,
+                            "landmarks": {
+                                "end": "17",
+                                "start": "9"
+                            }
+                        }
+                    }
+                }
+            }
+            ```
         """
         # Some helper variables
         use_bg_color = self.segmentation_model_args.get("background_color") is not None
