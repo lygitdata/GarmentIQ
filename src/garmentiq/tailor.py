@@ -376,13 +376,18 @@ class tailor:
         """
         Executes the full garment measurement pipeline for all images in the input directory.
     
-        The pipeline includes classification, segmentation, landmark detection, optional refinement,
-        and derivation of measurements. It also handles exporting visual and data outputs.
-    
-        By default, the method **exports a cleaned JSON file** for each image containing garment class,
-        detected landmarks, and measurements. A snapshot of exported JSON:
-        `{ "image1.jpg": { "class": ..., "landmarks": { ... }, "measurements": { ... } } }`. Optionally, 
-        you can also save segmentation andmeasurement-annotated images.
+        This method processes each image through a multi-stage pipeline that includes garment classification, 
+        segmentation, landmark detection, optional refinement, and measurement derivation. During classification, 
+        the system identifies the type of garment (e.g., shirt, dress, pants). Segmentation follows, producing 
+        binary or instance masks that separate the garment from the background. Landmark detection is then 
+        performed to locate anatomical or garment-specific keypoints such as shoulders or waist positions. If 
+        enabled, an optional refinement step applies post-processing or model-based corrections to improve the 
+        accuracy of detected keypoints. Finally, the system calculates key garment dimensions - such as chest width, 
+        waist width, and full length - based on the detected landmarks. In addition to this processing pipeline, 
+        the method also manages data and visual output exports. For each input image, a cleaned JSON file is 
+        generated containing the predicted garment class, landmark coordinates, and the resulting measurements. 
+        Optionally, visual outputs such as segmentation masks and images annotated with landmarks and measurements 
+        can be saved to assist in inspection or debugging.
     
         Args:
             save_segmentation_image (bool): If True, saves segmentation masks and background-modified images.
@@ -392,10 +397,15 @@ class tailor:
     
         Returns:
             tuple:
-                - metadata (pd.DataFrame): A DataFrame containing metadata about each processed image,
-                                           including file paths for saved outputs.
-                - outputs (dict): A dictionary containing detailed results for each image, such as masks,
-                                  cleaned detection dictionaries, and optionally saved image paths.
+                - metadata (pd.DataFrame): A DataFrame containing metadata for each processed image, such as:
+                    - Original image path
+                    - Paths to any saved segmentation or annotated images
+                    - Class and measurement results
+                - outputs (dict): A dictionary mapping image filenames to their detailed processing results, including:
+                    - Predicted class
+                    - Detected landmarks with coordinates and confidence scores
+                    - Calculated measurements
+                    - File paths to any saved images (if applicable)
     
         Example of exported JSON:
             ```
