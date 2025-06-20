@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
                     </a>.
                 </p>
-                <p class="text-center">This project is not directly managed by or affiliated with <a href="https://www.gd.edu.kg/" class="link-fancy" target="_blank">GitData</a>, although it utilizes a subdomain of gd.edu.kg.</p>
+                <p class="text-center">This project's website domain is provided by <a href="https://www.gd.edu.kg/" target="_blank">GitData</a>.</p>
                 <p class="text-center">Last update of this website: 06/20/2025</p>
                 <p class="text-center">
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/privacy-policy/">Privacy Policy</a>
