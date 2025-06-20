@@ -1,6 +1,6 @@
-# GarmentIQ MagicBox (Version 1.5)
+# GarmentIQ MagicBox (Version 1.6)
 
-*Last update: 06/19/2025*
+*Last update: 06/20/2025*
 
 *Navigation*:
 
