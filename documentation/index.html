@@ -223,9 +223,7 @@
                 <p class="alert alert-info"> ⚠️ Note: If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing <a href="https://garmentiq.ly.gd.edu.kg/documentation/magicbox/">MagicBox</a> on your local machine, where you can find and run these examples under <code>working/examples/</code>. </p>
                 <h4 id="installation">Installation</h4>
                 <p>Please install from PyPI using the following command.</p>
-                <pre>
-																												<code>pip install garmentiq -q</code>
-																											</pre>
+                <pre><code>pip install garmentiq -q</code></pre>
                 <h4 id="tailor-the-whole-pipeline">Tailor (the whole pipeline)</h4>
                 <p>The tailor agent executes the entire pipeline in sequence: classification, segmentation (if needed), landmark detection, landmark refinement (if required), and landmark derivation (if applicable). Note that the first 3 steps can also be executed independently (the last 2 steps depend on the results returned by segmentation), without the use of the tailor agent, as described in the following subsections.</p>
                 <p>
@@ -233,8 +231,7 @@
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 from garmentiq.classification.model_definition import tinyViT
 from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
 from garmentiq.garment_classes import garment_classes
@@ -333,16 +330,14 @@ for json_path in metadata['measurement_json']:
         data = json.load(file)
         print(f"{json_path}:\n")
         print(json.dumps(data, indent=4, sort_keys=True))
-        print("\n\n")</code>
-																											</pre>
+        print("\n\n")</code></pre>
                 <h4 id="classification">Classification</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_quick_start.ipynb" target="_blank">
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 from garmentiq.classification.model_definition import tinyViT
 from garmentiq.classification.utils import CachedDataset
 
@@ -411,16 +406,14 @@ print(
     "True label: ", img_to_test,
     "\nPredicted label: ", pred_label,
     "\nPredicted Probabilities: ", pred_prob
-)</code>
-																											</pre>
+)</code></pre>
                 <h4 id="segmentation">Segmentation</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/segmentation_quick_start.ipynb" target="_blank">
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 
 # Download a test image
 !mkdir -p test_image
@@ -454,16 +447,14 @@ bg_modified_img = giq.segmentation.change_background_color(
 # Plot the original image, mask, and background modified image
 giq.segmentation.plot(image_np=original_img, figsize=(3, 3))
 giq.segmentation.plot(image_np=mask, figsize=(3, 3))
-giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))</code>
-																											</pre>
+giq.segmentation.plot(image_np=bg_modified_img, figsize=(3, 3))</code></pre>
                 <h4 id="landmark-detection">Landmark detection</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_detection_quick_start.ipynb" target="_blank">
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
 from garmentiq.garment_classes import garment_classes
 
@@ -498,8 +489,7 @@ coords, maxvals, detection_dict = giq.landmark.detect(
 )
 
 # Plot the detected coordinates
-giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")</code>
-																											</pre>
+giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coords, figsize=(3, 3), color="green")</code></pre>
                 <h4 id="landmark-refinement-and-derivation">Landmark refinement and derivation</h4>
                 <p>Note that segmentation mask is required for landmark refinement and derivation and they are also based on the landmark detection results. As a result, before refining and deriving landmarks, we first need to segment the image and detect predefined landmarks.</p>
                 <p>
@@ -507,8 +497,7 @@ giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coord
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 from garmentiq.landmark.detection.model_definition import PoseHighResolutionNet
 from garmentiq.garment_classes import garment_classes
      
@@ -593,8 +582,7 @@ giq.landmark.plot(
     coordinate=np.concatenate((refined_coords, np.array([[derived_coords['20']]])), axis=1),
     figsize=(3, 3),
     color="green"
-)</code>
-																											</pre>
+)</code></pre>
                 <h3 id="advanced-usage">Advanced Usage</h3>
                 <p class="alert alert-info"> ⚠️ Note: If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing <a href="https://garmentiq.ly.gd.edu.kg/documentation/magicbox/">MagicBox</a> on your local machine, where you can find and run these examples under <code>working/examples/</code>. </p>
                 <h4 id="custom-measurement-instruction">Custom measurement instruction</h4>
@@ -603,8 +591,7 @@ giq.landmark.plot(
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import json
+                <pre><code class="language-python">import json
 import copy
      
 
@@ -762,16 +749,14 @@ detection_dict_new_cleaned = giq.utils.clean_detection_dict(
     image_name='cloth_4.jpg',
     detection_dict=detection_dict_new
 )
-detection_dict_new_cleaned</code>
-																											</pre>
+detection_dict_new_cleaned</code></pre>
                 <h4 id="classification-model-training--evaluation">Classification model training & evaluation</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_model_training_evaluation_advanced_usage.ipynb" target="_blank">
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 from garmentiq.classification.model_definition import CNN3
 from garmentiq.classification.utils import CachedDataset
 import torch.optim as optim
@@ -933,16 +918,14 @@ giq.classification.test_pytorch_nn(
         "cached_labels": test_labels,
     },
     param={"batch_size": 64},
-)</code>
-																											</pre>
+)</code></pre>
                 <h4 id="classification-model-fine-tuning">Classification model fine-tuning</h4>
                 <p>
                   <a href="https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/classification_model_fine_tuning_advanced_usage.ipynb" target="_blank">
                     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" />
                   </a>
                 </p>
-                <pre>
-																												<code class="language-python">import garmentiq as giq
+                <pre><code class="language-python">import garmentiq as giq
 from garmentiq.classification.model_definition import tinyViT
 from garmentiq.classification.utils import CachedDataset
 import torch.optim as optim
@@ -1028,8 +1011,7 @@ giq.classification.test_pytorch_nn(
         "cached_labels": train_labels,
     },
     param={"batch_size": 64},
-)</code>
-																											</pre>
+)</code></pre>
               </section>
             </section>
           </div>
