@@ -671,7 +671,7 @@ class tailor:
                         idx, "bg_modified_image"
                     ] = f"{self.output_dir}/bg_modified_image/{transformed_name}_bg_modified.png"
 
-        # Step 10: Save measurement image
+        # Step 11: Save measurement image
         if save_measurement_image:
             for idx, image in tqdm(
                 enumerate(metadata["filename"]),
@@ -701,7 +701,7 @@ class tailor:
                     idx, "measurement_image"
                 ] = f"{self.output_dir}/measurement_image/{transformed_name}_measurement.png"
 
-        # Step 11: Save measurement json
+        # Step 12: Save measurement json
         for idx, image in tqdm(
             enumerate(metadata["filename"]),
             total=len(metadata),
@@ -727,7 +727,7 @@ class tailor:
                 idx, "measurement_json"
             ] = f"{self.output_dir}/measurement_json/{transformed_name}_measurement.json"
 
-        # Step 12: Save metadata as a CSV
+        # Step 13: Save metadata as a CSV
         metadata.to_csv(f"{self.output_dir}/metadata.csv", index=False)
 
         return metadata, outputs
