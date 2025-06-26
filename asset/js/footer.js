@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </a>.
                 </p>
                 <p class="text-center">The website domain for this project is provided by <a class="link-fancy" href="https://www.gd.edu.kg/" target="_blank">GitData</a>, an independent academic group.</p>
-                <p class="text-center">Last update of this website: 06/20/2025</p>
+                <p class="text-center">Last update of this website: 06/26/2025</p>
                 <p class="text-center">
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/privacy-policy/">Privacy Policy</a>
                     <a class="link-fancy" target="_blank" href="https://www.gd.edu.kg/cookie-policy/">Cookie Policy</a>
