@@ -9,7 +9,7 @@
 **Content**: 
 
 1. [What Are the Key Features of GarmentIQ?](#what-are-the-key-features-of-garmentiq)
-2. [Overview of QarmentIQ Python Package](#overview-of-qarmentiq-python-package)
+2. [Overview of GarmentIQ Python Package](#overview-of-garmentiq-python-package)
 3. [Trained Models for Classification](#trained-models-for-classification)
 4. [Quick Start](#quick-start)
     - [Installation](#installation)
@@ -40,7 +40,7 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 | **Garment landmark detection** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-detection/guide.mp4) |
 | **Garment landmark adjustment** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/landmark-adjustment/guide.mp4) |
 
-## Overview of QarmentIQ Python Package
+## Overview of GarmentIQ Python Package
 
 The `garmentiq` package provides an automated solution for garment measurement from images, utilizing computer vision techniques for classification, segmentation, and landmark extraction.
 
