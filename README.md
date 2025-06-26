@@ -34,6 +34,7 @@ GarmentIQ uses computer vision and models like tinyViT, BiRefNet, and HRNet to c
 
 | Feature | Web Demo | Video guide |
 |---------|----------|----------|
+| **Tailor (the whole pipeline)** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/guide.mp4) |
 | **Garment measurement instruction generation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/guide.mp4) |
 | **Garment image classification** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/image-classification/guide.mp4) |
 | **Garment image segmentation** | [Try web demo](https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/) | [Watch video guide](https://garmentiq.ly.gd.edu.kg/application/demo/image-segmentation/guide.mp4) |
