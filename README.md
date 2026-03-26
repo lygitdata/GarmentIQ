@@ -2,7 +2,7 @@
 
 [🌐 Official website](https://garmentiq.ly.gd.edu.kg/) | [📖 Documentation](https://garmentiq.ly.gd.edu.kg/documentation/) | [⚙️ Web pipeline](https://garmentiq.ly.gd.edu.kg/application/) | [🪄 MagicBox](https://garmentiq.ly.gd.edu.kg/documentation/magicbox/) | [📄 Paper](https://archive.gd.edu.kg/abs/20250525121523/)
 
-**Free & Open Source. Precise and flexible garment measurements from images - no tape measures, no delays, just fashion - forward automation.**
+**Free & Open Source. Precise and flexible garment measurements from images—no tape measures, no delays, just fashion-forward automation.**
 
 <img src="https://github.com/user-attachments/assets/49e176e2-59c7-4e8b-b7e1-f834de965760" alt="GarmentIQ" width="600px"/>
 
@@ -62,6 +62,34 @@ This section provides simple examples demonstrating how to use the `garmentiq` P
 <img src="https://github.com/user-attachments/assets/2de8ee34-166e-42db-8428-6e376848a9ec" width="600px" alt="GarmentIQ Example"/>
 
 > ⚠️ Note: If you encounter errors while running the following examples in Colab, they are likely due to Python package version conflicts specific to the Colab environment. We recommend installing [MagicBox](https://garmentiq.ly.gd.edu.kg/documentation/magicbox/) on your local machine, where you can find and run these examples under `working/examples/`.
+
+## Local Web UI (Video upload → Body23 overlay)
+
+This repository includes a small local web app:
+
+- **Backend**: FastAPI endpoint that accepts a video upload and returns an annotated mp4.
+- **Frontend**: React UI for uploading a video and previewing/downloading the result.
+
+### Run backend (Windows / PowerShell)
+
+```powershell
+cd E:\GarmentIQ
+.\.venv\Scripts\Activate.ps1
+pip install -r backend\requirements.txt
+uvicorn app.main:app --app-dir backend --reload --port 8000
+```
+
+Check health at `http://localhost:8000/api/health`.
+
+### Run frontend
+
+```powershell
+cd E:\GarmentIQ\frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` and upload a video.
 
 ### Installation
 
@@ -344,7 +372,7 @@ giq.landmark.plot(image_path="/content/test_image/cloth_3.jpg", coordinate=coord
 
 ### Landmark refinement and derivation
 
-Note that segmentation mask is erquired for landmark refinement and derivation and they are also based on the landmark detection results. As a result, before refining and deriving lanrmarks, we first need to segment the image and detect predefined landmarks.
+Note that a segmentation mask is required for landmark refinement and derivation, and those steps also depend on landmark detection results. As a result, before refining and deriving landmarks, you first need to segment the image and detect predefined landmarks.
 
 [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lygitdata/GarmentIQ/blob/main/test/landmark_refinement_and_derivation_quick_start.ipynb)
 
@@ -469,7 +497,7 @@ print(json.dumps(garment_classes, indent=4))
 # There are `waist`, `full length`, and `hips` as measurements in GarmentIQ's
 # default measurement instruction of a skirt. What if we only want `waist` and
 # `hips`? Simply create one! Recommend to use GarmentIQ instruction generation
-# tool to generate the instruciton:
+# tool to generate the instruction:
 # https://garmentiq.ly.gd.edu.kg/application/demo/instruction-generation/
 with open(garment_classes['skirt']['instruction'], 'r') as file:
     data = json.load(file)

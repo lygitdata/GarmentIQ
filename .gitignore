@@ -1,0 +1,42 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Build / packaging
+dist/
+build/
+*.egg-info/
+
+# Data / models / outputs
+models/
+output/
+test_image/
+*.pt
+*.pth
+*.onnx
+
+# Media uploads / processed
+uploads/
+processed/
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# PDFs / misc large artifacts
+*.pdf
+*.jpg
+*.jpeg
+*.png

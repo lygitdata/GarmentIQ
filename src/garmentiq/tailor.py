@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 from tqdm.auto import tqdm
 import textwrap
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, UnidentifiedImageError
 from . import classification
 from . import segmentation
 from . import landmark
@@ -108,11 +108,10 @@ class tailor:
 
         # Refinement setup
         self.do_refine = do_refine
-        self.do_refine = do_refine
         if self.do_refine:
-            if refinement_args is None:
-                self.refinement_args = {}
-            self.refinement_args = refinement_args
+            self.refinement_args = (
+                refinement_args if refinement_args is not None else {}
+            )
         else:
             self.refinement_args = None
 
@@ -528,8 +527,26 @@ class tailor:
         ]
         columns = [col for col in columns if col is not None]
 
+        valid_filenames: list[str] = []
+        invalid_filenames: list[str] = []
+        for img in image_files:
+            try:
+                with Image.open(img) as im:
+                    im.verify()
+                valid_filenames.append(img.name)
+            except (UnidentifiedImageError, OSError):
+                invalid_filenames.append(img.name)
+
+        if invalid_filenames:
+            preview = ", ".join(invalid_filenames[:5])
+            more = "" if len(invalid_filenames) <= 5 else f" (+{len(invalid_filenames) - 5} more)"
+            raise ValueError(
+                "Some files in input_dir are not valid images (or are corrupted). "
+                f"Fix/remove them and retry. Invalid: {preview}{more}"
+            )
+
         metadata = pd.DataFrame(columns=columns)
-        metadata["filename"] = [img.name for img in image_files]
+        metadata["filename"] = valid_filenames
 
         # Step 4: Print start message and information
         print(f"Start measuring {len(metadata['filename'])} garment images ...")

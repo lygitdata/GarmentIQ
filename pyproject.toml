@@ -13,7 +13,7 @@ maintainers = [
 ]
 description = "Automated Garment Measurement for Fashion Retail"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License"
@@ -33,7 +33,8 @@ dependencies = [
     "timm==1.0.15",
     "einops==0.8.1",
     "shapely==2.1.1",
-    "opencv-python==4.11.0.86"
+    "opencv-python==4.11.0.86",
+    "open3d==0.19.0"
 ]
 
 [project.urls]
