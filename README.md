@@ -1054,4 +1054,5 @@ We gratefully acknowledge the use and adaptation of the following open-source re
 ---
 
 © 2025 - 2026 GarmentIQ
+
 "GarmentIQ" is a registered trademark. Unauthorized use, reproduction, or distribution is strictly prohibited and may result in legal action.
