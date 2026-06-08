@@ -14,18 +14,18 @@
 
 1. [What Are the Key Features of GarmentIQ?](#what-are-the-key-features-of-garmentiq)
 2. [Overview of GarmentIQ Python Package](#overview-of-garmentiq-python-package)
-3. [Trained Models for Classification](#trained-models-for-classification)
-4. [Quick Start](#quick-start)
+3. [Quick Start](#quick-start)
     - [Installation](#installation)
     - [Tailor (the whole pipeline)](#tailor-the-whole-pipeline)
     - [Classification](#classification)
     - [Segmentation](#segmentation)
     - [Landmark detection](#landmark-detection)
     - [Landmark refinement and derivation](#landmark-refinement-and-derivation)
-5. [Advanced Usage](#advanced-usage)
+4. [Advanced Usage](#advanced-usage)
     - [Custom measurement instruction](#custom-measurement-instruction)
     - [Classification model training & evaluation](#classification-model-training--evaluation)
     - [Classification model fine-tuning](#classification-model-fine-tuning)
+5. [Trained Models for Classification](#trained-models-for-classification)
 6. [Issues & Feedback](#issues--feedback)
 7. [License](#license)
 8. [Acknowledgements](#acknowledgements)
@@ -1050,3 +1050,8 @@ We gratefully acknowledge the use and adaptation of the following open-source re
 - https://www.kaggle.com/datasets/lygitdata/garmentiq-classification-set-nordstrom-and-myntra
 - https://www.kaggle.com/datasets/lygitdata/zara-clothes-image-data
 - All Python packages listed in `requirements.txt`
+
+---
+
+© 2025 - 2026 GarmentIQ
+"GarmentIQ" is a registered trademark. Unauthorized use, reproduction, or distribution is strictly prohibited and may result in legal action.
