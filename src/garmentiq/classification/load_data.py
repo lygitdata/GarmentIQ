@@ -1,3 +1,4 @@
+"""Loading and caching image data for training and evaluation."""
 from torchvision import transforms
 import os
 from PIL import Image
@@ -11,7 +12,7 @@ from garmentiq.classification.utils import (
     validate_train_param,
     validate_test_param,
 )
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 
 
 def load_data(

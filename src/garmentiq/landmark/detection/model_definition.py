@@ -1,3 +1,9 @@
+"""The HRNet pose model used for landmark detection.
+
+`PoseHighResolutionNet` maintains high-resolution feature maps throughout the network
+rather than recovering resolution at the end, which is what makes it accurate for
+precise keypoint localisation.
+"""
 import os
 import logging
 import torch

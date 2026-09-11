@@ -1,3 +1,4 @@
+"""Intersection of two lines in the image plane."""
 import numpy as np
 from typing import Tuple, Optional
 

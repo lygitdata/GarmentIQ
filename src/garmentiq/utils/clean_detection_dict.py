@@ -1,3 +1,4 @@
+"""Trimming a detection record down to its reportable fields."""
 import os
 from garmentiq.utils import compute_measurement_distances
 

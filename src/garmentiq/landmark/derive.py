@@ -1,3 +1,4 @@
+"""Deriving landmarks that the detection model does not predict."""
 import copy
 from garmentiq.landmark.derivation import (
     prepare_args,
@@ -7,7 +8,7 @@ from garmentiq.landmark.derivation import (
 
 def derive(
     class_name: str, detection_dict: dict, derivation_dict: dict, **extra_args
-) -> dict:
+) -> tuple:
     """
     Derives non-predefined landmark coordinates based on predefined landmarks and a mask.
 
@@ -25,7 +26,7 @@ def derive(
                       and `np_mask` (NumPy array of the segmentation mask).
 
     Returns:
-        dict: A tuple containing:
+        tuple: A tuple containing:
             - derived_coords (dict): A dictionary mapping the derived landmark IDs to their new (x, y) coordinates.
             - detection_dict (dict): The original `detection_dict` updated with the derived landmark coordinates.
     """

@@ -1,3 +1,8 @@
+"""The registry of available derivation functions.
+
+Maps each derivation method name to its callable and the arguments it expects. Pass a
+modified copy to `landmark.derive` to add your own derivation rules.
+"""
 derivation_dict = {
     "derive_keypoint_coord": {
         "p1_id": None,

@@ -1,3 +1,4 @@
+"""Deriving a landmark coordinate from surrounding landmarks and a mask."""
 from typing import Tuple, Optional
 import numpy as np
 from .line_intersect import _find_line_line_intersection

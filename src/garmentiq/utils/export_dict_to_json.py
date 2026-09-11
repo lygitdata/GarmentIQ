@@ -1,3 +1,4 @@
+"""Writing a measurement result to a JSON file."""
 import json
 
 

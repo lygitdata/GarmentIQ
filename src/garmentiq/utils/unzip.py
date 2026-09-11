@@ -1,5 +1,6 @@
+"""Extracting a dataset archive."""
 import zipfile
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 
 
 def unzip(zip_path, extract_to="."):

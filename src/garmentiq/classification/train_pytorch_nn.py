@@ -1,10 +1,12 @@
+"""Cross-validated training of a classification model from scratch."""
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 from typing import Callable, Type
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 import os
 from sklearn.model_selection import StratifiedKFold
+from garmentiq.utils.device import empty_cache
 from garmentiq.classification.utils import (
     CachedDataset,
     seed_worker,
@@ -44,7 +46,9 @@ def train_pytorch_nn(
                           - `optimizer_class` (type): PyTorch optimizer class (e.g., `torch.optim.Adam`).
                           - `optimizer_args` (dict): Arguments passed to the optimizer.
                       Optional Keys (with defaults and types):
-                          - `device` (torch.device): Training device. Default is `"cuda"` if available, else `"cpu"`.
+                          - `device` (Union[str, torch.device]): Training device, e.g. `"cpu"`,
+                            `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware acceleration is opt-in;
+                            pass it explicitly to use a GPU or Apple Silicon. Default: `"cpu"`.
                           - `n_fold` (int): Number of stratified folds for cross-validation. Default: 5.
                           - `n_epoch` (int): Number of training epochs per fold. Default: 100.
                           - `patience` (int): Epochs to wait before early stopping. Default: 5.
@@ -120,7 +124,7 @@ def train_pytorch_nn(
         optimizer = param["optimizer_class"](
             model.parameters(), **param["optimizer_args"]
         )
-        torch.cuda.empty_cache()
+        empty_cache(param["device"])
 
         best_fold_loss = float("inf")
         patience_counter = 0
@@ -164,6 +168,6 @@ def train_pytorch_nn(
                 break
 
     del model
-    torch.cuda.empty_cache()
+    empty_cache(param["device"])
 
     print(f"\nTraining completed. Best model saved at: {best_model_path}")

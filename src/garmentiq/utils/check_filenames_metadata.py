@@ -1,3 +1,4 @@
+"""Checking that dataset filenames agree with the metadata table."""
 import os
 import shutil
 

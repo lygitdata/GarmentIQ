@@ -1,10 +1,16 @@
+"""Fine-tuning a pretrained classification model on new data.
+
+Freezes the backbone and retrains only the layers matching `unfreeze_patterns`, so a
+model can be adapted to a new catalogue with far less data than full training.
+"""
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from typing import Callable, Type
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 import os
 from sklearn.model_selection import StratifiedKFold
+from garmentiq.utils.device import empty_cache
 from garmentiq.classification.utils import (
     CachedDataset,
     seed_worker,
@@ -47,8 +53,13 @@ def fine_tune_pytorch_nn(
                         'seed_worker', 'max_workers', 'pin_memory',
                         'persistent_workers', 'best_model_name'
 
+            The optional 'device' entry accepts either a string or a `torch.device`, e.g. `"cpu"`,
+            `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware acceleration is opt-in; pass it explicitly
+            to use a GPU or Apple Silicon. Default is `"cpu"`.
+
     Raises:
-        ValueError: If required keys are missing.
+        ValueError: If required keys are missing, or if the requested 'device' is invalid or
+                    unavailable on this machine.
         Returns: None
     """
     # Validate parameters
@@ -100,7 +111,7 @@ def fine_tune_pytorch_nn(
         )
 
         # Initialize model and load pretrained weights
-        device = param.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+        device = param["device"]
         model = model_class(**model_args).to(device)
 
         # Load pretrained weights
@@ -122,7 +133,7 @@ def fine_tune_pytorch_nn(
             filter(lambda p: p.requires_grad, model.parameters()),
             **param["optimizer_args"]
         )
-        torch.cuda.empty_cache()
+        empty_cache(device)
 
         best_fold_loss = float("inf")
         patience_counter = 0
@@ -151,5 +162,5 @@ def fine_tune_pytorch_nn(
                 print(f"Early stopping at epoch {epoch+1}")
                 break
 
-    torch.cuda.empty_cache()
+    empty_cache(param["device"])
     print(f"\nFine-tuning completed. Best model saved at: {best_model_path}")

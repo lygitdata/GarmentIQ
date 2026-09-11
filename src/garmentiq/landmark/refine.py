@@ -1,3 +1,4 @@
+"""Refining detected landmarks against a segmentation mask."""
 import numpy as np
 import cv2
 import copy

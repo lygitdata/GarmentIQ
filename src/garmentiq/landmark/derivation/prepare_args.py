@@ -1,3 +1,4 @@
+"""Assembling the arguments a derivation function needs."""
 import numpy as np
 from .derivation_dict import derivation_dict
 

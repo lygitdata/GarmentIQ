@@ -1,3 +1,4 @@
+"""Detecting the predefined landmarks of a garment."""
 import json
 import os
 from typing import Type, Union
@@ -5,6 +6,7 @@ import torch
 import requests
 import numpy as np
 from garmentiq.utils import validate_garment_class_dict
+from garmentiq.utils.device import resolve_device, empty_cache
 from garmentiq.landmark.utils import (
     find_instruction_landmark_index,
     fill_instruction_landmark_coordinate,
@@ -25,6 +27,7 @@ def detect(
     resize_dim: list[int, int] = [288, 384],
     normalize_mean: list[float, float, float] = [0.485, 0.456, 0.406],
     normalize_std: list[float, float, float] = [0.229, 0.224, 0.225],
+    device: Union[str, torch.device] = "cpu",
 ):
     """
     Detects predefined landmarks on a garment image using a specified model and class instructions.
@@ -33,6 +36,10 @@ def detect(
     instruction schema (from local file or URL), preprocesses the image, runs it through
     the landmark detection model, and then transforms the detected heatmap predictions
     into image coordinates. The detected coordinates are then filled into the instruction data.
+
+    The model and the preprocessed input tensor are placed on `device`, so the same value should
+    be passed here as was used when loading the model. Any accelerator memory cached during
+    inference is released before returning.
 
     Args:
         class_name (str): The name of the garment class (e.g., "vest dress", "trousers").
@@ -47,9 +54,14 @@ def detect(
                                                               Defaults to [0.485, 0.456, 0.406].
         normalize_std (list[float, float, float], optional): Standard deviation values for image normalization (RGB channels).
                                                              Defaults to [0.229, 0.224, 0.225].
+        device (Union[str, torch.device], optional): The device to run inference on, e.g. `"cpu"`,
+                                                     `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware
+                                                     acceleration is opt-in; pass it explicitly to
+                                                     use a GPU or Apple Silicon. Defaults to `"cpu"`.
 
     Raises:
-        ValueError: If `class_dict` is invalid or `class_name` is not found in `class_dict`.
+        ValueError: If `class_dict` is invalid, `class_name` is not found in `class_dict`, or the
+                    requested `device` is invalid or unavailable on this machine.
         FileNotFoundError: If the instruction file is not found.
         ValueError: If loading instruction JSON from URL fails or `class_name` is not found in instruction file.
 
@@ -59,6 +71,8 @@ def detect(
             - maxvals (np.array): Confidence scores for the predefined landmark predictions.
             - instruction_data (dict): The instruction dictionary updated with detected landmark coordinates and confidences.
     """
+    device = resolve_device(device)
+
     if not validate_garment_class_dict(class_dict):
         raise ValueError(
             "Provided class_dict is not in the expected garment_classes format."
@@ -97,8 +111,13 @@ def detect(
         image_path, scale_std, resize_dim, normalize_mean, normalize_std
     )
 
+    model = model.to(device)
+    input_tensor = input_tensor.to(device)
+
     with torch.no_grad():
         np_output_heatmap = model(input_tensor).detach().cpu().numpy()
+
+    empty_cache(device)
 
     preds_heatmap, maxvals = get_final_preds(
         np_output_heatmap[

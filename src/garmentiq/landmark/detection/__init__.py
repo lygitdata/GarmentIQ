@@ -1,4 +1,10 @@
 # garmentiq/landmark/detection/__init__.py
+"""Landmark detection model and its pre- and post-processing.
+
+Holds the HRNet-based pose model used to predict garment landmarks, its loader, and
+the coordinate transforms that map between the original image and the model's input
+resolution, including affine cropping and heatmap decoding.
+"""
 from .load_model import load_model
 from .model_definition import PoseHighResolutionNet
 from .utils import (

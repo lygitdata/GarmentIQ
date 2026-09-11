@@ -1,3 +1,4 @@
+"""Validating the structure of an extracted dataset."""
 import os
 
 

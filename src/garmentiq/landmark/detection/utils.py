@@ -1,3 +1,9 @@
+"""Pre- and post-processing for the landmark detection model.
+
+Covers the affine transforms that crop and scale an image to the model input size, and
+the decoding that turns predicted heatmaps back into image-space coordinates with
+confidence scores.
+"""
 import math
 import numpy as np
 import cv2

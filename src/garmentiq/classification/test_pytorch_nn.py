@@ -1,9 +1,11 @@
+"""Evaluating a classification model on a held-out dataset."""
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from typing import Callable, Type
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 from sklearn.metrics import f1_score, accuracy_score, classification_report
+from garmentiq.utils.device import empty_cache
 from garmentiq.classification.utils import (
     CachedDataset,
     seed_worker,
@@ -42,11 +44,14 @@ def test_pytorch_nn(
             - `raw_labels` (pandas.Series or array-like): Original labels for report generation.
         param (dict): Dictionary of optional configuration parameters.
                       Optional Keys:
-                          - `device` (torch.device): Device for computation. Defaults to `"cuda"` if available, else `"cpu"`.
+                          - `device` (Union[str, torch.device]): Device for computation, e.g. `"cpu"`,
+                            `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware acceleration is opt-in;
+                            pass it explicitly to use a GPU or Apple Silicon. Default is `"cpu"`.
                           - `batch_size` (int): Batch size used for testing. Default is 64.
 
     Raises:
         FileNotFoundError: If the model checkpoint cannot be loaded.
+        ValueError: If the requested `device` is invalid or unavailable on this machine.
         TypeError: If any parameter is of an incorrect type.
 
     Returns:
@@ -92,7 +97,7 @@ def test_pytorch_nn(
     test_f1 = f1_score(all_labels, all_preds, average="weighted")
 
     del model
-    torch.cuda.empty_cache()
+    empty_cache(param["device"])
 
     print(f"Test Loss: {test_loss:.4f}")
     print(f"Test Accuracy: {test_acc:.4f}")

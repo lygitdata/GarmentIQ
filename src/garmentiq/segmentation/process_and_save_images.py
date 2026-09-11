@@ -1,9 +1,11 @@
+"""Batch segmentation of a directory of images."""
 import os
+import torch
 from transformers import AutoModelForImageSegmentation
-from tqdm.notebook import tqdm
-import kornia
+from tqdm.auto import tqdm
 from PIL import Image
 import numpy as np
+from typing import Union
 from garmentiq.segmentation.extract import extract
 from garmentiq.segmentation.change_background_color import change_background_color
 
@@ -17,6 +19,7 @@ def process_and_save_images(
     normalize_std: list[float, float, float],
     background_color: tuple[int, int, int] = None,
     high_precision: bool = True,
+    device: Union[str, torch.device] = "cpu",
 ):
     """
     Processes images from a directory by extracting segmentation masks and optionally modifying
@@ -36,10 +39,15 @@ def process_and_save_images(
         background_color (tuple[int, int, int], optional): The background color to apply to the image (RGB tuple),
                                                           or None to skip the modification. Default is None.
         high_precision (bool, optional): Whether to use high precision (32-bit) for image processing. Default is True.
+        device (Union[str, torch.device], optional): The device to run inference on for every image, e.g.
+                                                     `"cpu"`, `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware
+                                                     acceleration is opt-in; pass it explicitly to use a
+                                                     GPU or Apple Silicon. Default is `"cpu"`.
 
     Raises:
         FileNotFoundError: If the input image directory does not exist.
-        ValueError: If the `model` provided does not work correctly for image segmentation.
+        ValueError: If the requested `device` is invalid or unavailable on this machine, or if the
+                    `model` provided does not work correctly for image segmentation.
 
     Returns:
         None. The processed masks and modified images are saved to the specified output directory.
@@ -72,6 +80,7 @@ def process_and_save_images(
                     normalize_mean=normalize_mean,
                     normalize_std=normalize_std,
                     high_precision=high_precision,
+                    device=device,
                 )
 
                 # Save the mask image

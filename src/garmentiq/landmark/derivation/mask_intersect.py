@@ -1,3 +1,4 @@
+"""Intersection of a line with the garment mask contour."""
 import numpy as np
 import cv2
 from typing import Optional, List, Tuple, Any

@@ -1,3 +1,9 @@
+"""Classification model architectures.
+
+Three architectures are provided: `CNN3` and `CNN4`, two convolutional networks of
+increasing depth, and `tinyViT`, a DeiT-tiny vision transformer. Any `torch.nn.Module`
+can be used instead; these are simply the ones GarmentIQ ships trained weights for.
+"""
 import torch.nn as nn
 import timm
 

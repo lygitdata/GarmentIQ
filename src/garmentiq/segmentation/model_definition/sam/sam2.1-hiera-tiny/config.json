@@ -1,0 +1,233 @@
+{
+  "architectures": [
+    "Sam2VideoModel"
+  ],
+  "enable_occlusion_spatial_embedding": true,
+  "enable_temporal_pos_encoding_for_object_pointers": true,
+  "image_size": 1024,
+  "initializer_range": 0.02,
+  "mask_decoder_config": {
+    "attention_downsample_rate": 2,
+    "dynamic_multimask_stability_delta": 0.05,
+    "dynamic_multimask_stability_thresh": 0.98,
+    "dynamic_multimask_via_stability": true,
+    "hidden_act": "gelu",
+    "hidden_size": 256,
+    "iou_head_depth": 3,
+    "iou_head_hidden_dim": 256,
+    "mlp_dim": 2048,
+    "model_type": "",
+    "num_attention_heads": 8,
+    "num_hidden_layers": 2,
+    "num_multimask_outputs": 3
+  },
+  "mask_downsampler_embed_dim": 256,
+  "mask_downsampler_hidden_act": "gelu",
+  "mask_downsampler_kernel_size": 3,
+  "mask_downsampler_padding": 1,
+  "mask_downsampler_stride": 2,
+  "mask_downsampler_total_stride": 16,
+  "max_object_pointers_in_encoder": 16,
+  "memory_attention_downsample_rate": 1,
+  "memory_attention_dropout": 0.1,
+  "memory_attention_feed_forward_hidden_act": "relu",
+  "memory_attention_feed_forward_hidden_size": 2048,
+  "memory_attention_hidden_size": 256,
+  "memory_attention_num_attention_heads": 1,
+  "memory_attention_num_layers": 4,
+  "memory_attention_rope_dropout": 0.1,
+  "memory_attention_rope_feat_sizes": [
+    64,
+    64
+  ],
+  "memory_attention_rope_theta": 10000,
+  "memory_encoder_hidden_size": 256,
+  "memory_encoder_output_channels": 64,
+  "memory_fuser_embed_dim": 256,
+  "memory_fuser_hidden_act": "gelu",
+  "memory_fuser_intermediate_dim": 1024,
+  "memory_fuser_kernel_size": 7,
+  "memory_fuser_layer_scale_init_value": 1e-06,
+  "memory_fuser_num_layers": 2,
+  "memory_fuser_padding": 3,
+  "model_type": "sam2_video",
+  "multimask_max_pt_num": 1,
+  "multimask_min_pt_num": 0,
+  "multimask_output_for_tracking": true,
+  "multimask_output_in_sam": true,
+  "num_maskmem": 7,
+  "prompt_encoder_config": {
+    "hidden_act": "gelu",
+    "hidden_size": 256,
+    "image_size": 1024,
+    "layer_norm_eps": 1e-06,
+    "mask_input_channels": 16,
+    "model_type": "",
+    "num_point_embeddings": 4,
+    "patch_size": 16,
+    "scale": 1
+  },
+  "sigmoid_bias_for_mem_enc": -10.0,
+  "sigmoid_scale_for_mem_enc": 20.0,
+  "torch_dtype": "float32",
+  "transformers_version": "4.56.0.dev0",
+  "vision_config": {
+    "backbone_channel_list": [
+      768,
+      384,
+      192,
+      96
+    ],
+    "backbone_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "architectures": null,
+      "bad_words_ids": null,
+      "begin_suppress_tokens": null,
+      "blocks_per_stage": [
+        1,
+        2,
+        7,
+        2
+      ],
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "diversity_penalty": 0.0,
+      "do_sample": false,
+      "early_stopping": false,
+      "embed_dim_per_stage": [
+        96,
+        192,
+        384,
+        768
+      ],
+      "encoder_no_repeat_ngram_size": 0,
+      "eos_token_id": null,
+      "exponential_decay_length_penalty": null,
+      "finetuning_task": null,
+      "forced_bos_token_id": null,
+      "forced_eos_token_id": null,
+      "global_attention_blocks": [
+        5,
+        7,
+        9
+      ],
+      "hidden_act": "gelu",
+      "hidden_size": 96,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "image_size": [
+        1024,
+        1024
+      ],
+      "initializer_range": 0.02,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "layer_norm_eps": 1e-06,
+      "length_penalty": 1.0,
+      "max_length": 20,
+      "min_length": 0,
+      "mlp_ratio": 4.0,
+      "model_type": "sam2_hiera_det_model",
+      "no_repeat_ngram_size": 0,
+      "num_attention_heads": 1,
+      "num_attention_heads_per_stage": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "num_beam_groups": 1,
+      "num_beams": 1,
+      "num_channels": 3,
+      "num_query_pool_stages": 3,
+      "num_return_sequences": 1,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "output_scores": false,
+      "pad_token_id": null,
+      "patch_kernel_size": [
+        7,
+        7
+      ],
+      "patch_padding": [
+        3,
+        3
+      ],
+      "patch_stride": [
+        4,
+        4
+      ],
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "query_stride": [
+        2,
+        2
+      ],
+      "remove_invalid_values": false,
+      "repetition_penalty": 1.0,
+      "return_dict": true,
+      "return_dict_in_generate": false,
+      "sep_token_id": null,
+      "suppress_tokens": null,
+      "task_specific_params": null,
+      "temperature": 1.0,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": true,
+      "tokenizer_class": null,
+      "top_k": 50,
+      "top_p": 1.0,
+      "torch_dtype": null,
+      "torchscript": false,
+      "typical_p": 1.0,
+      "use_bfloat16": false,
+      "window_positional_embedding_background_size": [
+        7,
+        7
+      ],
+      "window_size_per_stage": [
+        8,
+        4,
+        14,
+        7
+      ]
+    },
+    "backbone_feature_sizes": [
+      [
+        256,
+        256
+      ],
+      [
+        128,
+        128
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "fpn_hidden_size": 256,
+    "fpn_kernel_size": 1,
+    "fpn_padding": 0,
+    "fpn_stride": 1,
+    "fpn_top_down_levels": [
+      2,
+      3
+    ],
+    "hidden_act": "gelu",
+    "initializer_range": 0.02,
+    "layer_norm_eps": 1e-06,
+    "model_type": "sam2_vision_model",
+    "num_feature_levels": 3
+  }
+}

@@ -1,5 +1,12 @@
+"""The tailor agent, which runs the whole GarmentIQ pipeline.
+
+Processes a folder of images end to end: classification, segmentation, optional alpha
+matting, landmark detection, refinement, derivation, and measurement. Results are
+written to an output directory and summarised in a metadata table.
+"""
 import os
 from typing import List, Dict, Type, Any, Optional, Union
+import torch
 import torch.nn as nn
 import numpy as np
 from pathlib import Path
@@ -10,7 +17,14 @@ from PIL import Image, ImageDraw, ImageFont
 from . import classification
 from . import segmentation
 from . import landmark
+from . import matting
 from . import utils
+
+
+# Background colour used to composite the alpha matte for landmark detection when neither
+# the matting nor the segmentation stage specifies one. Detection needs an RGB image, and a
+# plain neutral background measurably helps the pose model compared with the raw photo.
+DEFAULT_MATTE_DETECTION_BACKGROUND = (255, 255, 255)
 
 
 class tailor:
@@ -39,6 +53,9 @@ class tailor:
         landmark_detection_model_args (Dict): Arguments for the landmark detection model.
         refinement_args (Optional[Dict]): Arguments for landmark refinement.
         derivation_dict (Optional[Dict]): Dictionary for landmark derivation rules.
+        device (torch.device): The device all models are loaded onto and run on.
+        do_matte (bool): Flag to enable the alpha matting stage.
+        matting_model_args (Optional[Dict]): Arguments for the matting model.
     """
 
     def __init__(
@@ -60,6 +77,11 @@ class tailor:
         landmark_detection_model_args: Dict,
         refinement_args: Optional[Dict] = None,
         derivation_dict: Optional[Dict] = None,
+        device: Union[str, torch.device] = "cpu",
+        do_matte: bool = False,
+        matting_model_path: Optional[str] = None,
+        matting_model_class: Optional[Type[nn.Module]] = None,
+        matting_model_args: Optional[Dict] = None,
     ):
         """
         Initializes the `tailor` agent with paths, model configurations, and processing flags.
@@ -78,6 +100,12 @@ class tailor:
             segmentation_model_path (str): The filename or relative path of the segmentation model.
             segmentation_model_class (Type[nn.Module]): The Python class of the segmentation model.
             segmentation_model_args (Dict): A dictionary of arguments for the segmentation model.
+                                            For SAM this typically holds `model_config`, `processor`,
+                                            and `prompt` (with `"points"`, `"labels"`, `"boxes"`,
+                                            and/or `"text"`), plus optional `grounding_model` and
+                                            `grounding_processor` when using a text prompt with
+                                            SAM 1 or SAM 2. An optional `background_color` triggers
+                                            background replacement.
             landmark_detection_model_path (str): The filename or relative path to the landmark detection model.
             landmark_detection_model_class (Type[nn.Module]): The Python class of the landmark detection model.
             landmark_detection_model_args (Dict): A dictionary of arguments for the landmark detection model.
@@ -85,10 +113,43 @@ class tailor:
                                               e.g., `window_size`, `ksize`, `sigmaX`. Defaults to None.
             derivation_dict (Optional[Dict]): A dictionary defining derivation rules for non-predefined landmarks.
                                                Required if `do_derive` is True.
+            device (Union[str, torch.device], optional): The device that every model in the pipeline
+                                                         is loaded onto and run on, e.g. `"cpu"`,
+                                                         `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware
+                                                         acceleration is opt-in; pass it explicitly
+                                                         to use a GPU or Apple Silicon.
+                                                         Defaults to `"cpu"`.
+            do_matte (bool, optional): If True, enables the alpha matting stage, which refines the
+                                       hard segmentation mask into a soft alpha matte. Matting in
+                                       the pipeline is deliberately built on top of segmentation:
+                                       the segmentation mask supplies the trimap (ViTMatte) or the
+                                       guidance mask (Matting Anything), so enabling this forces the
+                                       segmentation stage to run. Defaults to False.
+            matting_model_path (str, optional): The filename or relative path to the matting model
+                                                weights, relative to `model_dir`. Required when
+                                                `do_matte` is True and the model is loaded by
+                                                GarmentIQ. Defaults to None.
+            matting_model_class (Type[nn.Module], optional): The Python class of the matting model,
+                                                             e.g. `VitMatteForImageMatting`.
+                                                             Required when `do_matte` is True.
+                                                             Defaults to None.
+            matting_model_args (Dict, optional): Arguments for the matting model. For ViTMatte this
+                                                 holds `model_config` (e.g.
+                                                 `{"config": load_vitmatte_config(...)}`),
+                                                 `processor`, and optional `trimap_args` and
+                                                 `background_color`. Alternatively pass a
+                                                 preconstructed model as `model`, which is how
+                                                 Matting Anything is supplied since it pairs a
+                                                 decoder with a SAM instance. Defaults to None.
 
         Raises:
-            ValueError: If `do_derive` is True but `derivation_dict` is None.
+            ValueError: If `do_derive` is True but `derivation_dict` is None, if `do_matte` is True
+                        but no matting model is provided, or if the requested `device` is invalid
+                        or unavailable on this machine.
         """
+        # Device (resolved once and reused by every stage of the pipeline)
+        self.device = utils.resolve_device(device)
+
         # Directories
         self.input_dir = input_dir
         self.model_dir = model_dir
@@ -111,7 +172,7 @@ class tailor:
 
         # Refinement setup
         self.do_refine = do_refine
-        self.do_refine = do_refine
+
         if self.do_refine:
             if refinement_args is None:
                 self.refinement_args = {}
@@ -134,6 +195,7 @@ class tailor:
             model_path=f"{self.model_dir}/{self.classification_model_path}",
             model_class=self.classification_model_class,
             model_args=filtered_model_args,
+            device=self.device,
         )
 
         # Segmentation model setup
@@ -144,7 +206,8 @@ class tailor:
         self.segmentation_model = segmentation.load_model(
             model_path=f"{self.model_dir}/{self.segmentation_model_path}",
             model_class=self.segmentation_model_class,
-            model_args=self.segmentation_model_args.get("model_config")
+            model_args=self.segmentation_model_args.get("model_config"),
+            device=self.device,
         )
 
         # Landmark detection model setup
@@ -154,12 +217,73 @@ class tailor:
         self.landmark_detection_model = landmark.detection.load_model(
             model_path=f"{self.model_dir}/{self.landmark_detection_model_path}",
             model_class=self.landmark_detection_model_class,
+            device=self.device,
         )
+
+        # Matting setup (optional, and always layered on top of segmentation)
+        self.do_matte = do_matte
+        self.matting_model_path = matting_model_path
+        self.matting_model_class = matting_model_class
+        self.matting_model_args = matting_model_args or {}
+        self.matting_model = None
+
+        if self.do_matte:
+            # Matting refines a segmentation mask, so the pipeline cannot run it
+            # without a working segmentation stage.
+            if self.segmentation_model is None:
+                raise ValueError(
+                    "`do_matte=True` requires segmentation, because the segmentation mask "
+                    "supplies the trimap (ViTMatte) or guidance mask (Matting Anything). "
+                    "Configure the segmentation model, or set `do_matte=False`."
+                )
+
+            preloaded = self.matting_model_args.get("model")
+            if preloaded is not None:
+                # Matting Anything is assembled by the caller because it pairs a
+                # decoder with an existing SAM instance.
+                self.matting_model = preloaded.to(self.device)
+            elif matting_model_class is not None and matting_model_path is not None:
+                self.matting_model = matting.load_model(
+                    model_class=self.matting_model_class,
+                    model_path=f"{self.model_dir}/{self.matting_model_path}",
+                    model_args=self.matting_model_args.get("model_config"),
+                    device=self.device,
+                )
+            else:
+                missing = []
+                if matting_model_class is None:
+                    missing.append("`matting_model_class`")
+                if matting_model_path is None:
+                    missing.append("`matting_model_path`")
+                raise ValueError(
+                    f"`do_matte=True` requires a matting model, but {' and '.join(missing)} "
+                    f"{'was' if len(missing) == 1 else 'were'} not provided. Either pass "
+                    f"`matting_model_class` and `matting_model_path` (for ViTMatte), or pass "
+                    f"an already constructed model as `matting_model_args={{'model': ...}}` "
+                    f"(for Matting Anything)."
+                )
+
+            # ViTMatte consumes a stacked image+trimap tensor built by its processor,
+            # so a missing processor would only fail deep inside inference.
+            model_names = {c.__name__ for c in type(self.matting_model).__mro__}
+            is_mam = "MattingAnything" in model_names
+            if not is_mam and self.matting_model_args.get("processor") is None:
+                raise ValueError(
+                    "`do_matte=True` with a trimap-based model such as ViTMatte requires a "
+                    "processor. Pass it as "
+                    "`matting_model_args={'processor': load_vitmatte_processor(...)}`."
+                )
+            if is_mam and not self.matting_model_args.get("prompt"):
+                raise ValueError(
+                    "`do_matte=True` with Matting Anything requires a prompt for its internal "
+                    "SAM. Pass it as "
+                    "`matting_model_args={'prompt': {'boxes': [[[x0, y0, x1, y1]]]}}`."
+                )
 
     def summary(self):
         """
         Prints a summary of the `tailor` agent's configuration, including directory paths,
-        defined classes, processing options (refine, derive), and loaded models.
+        defined classes, processing options (refine, derive, device), and loaded models.
         """
         width = 80
         sep = "=" * width
@@ -187,6 +311,8 @@ class tailor:
         print("OPTIONS".center(width, "-"))
         print(f"{'Do refine?:':25} {self.do_refine}")
         print(f"{'Do derive?:':25} {self.do_derive}")
+        print(f"{'Do matte?:':25} {self.do_matte}")
+        print(f"{'Device:':25} {self.device}")
         print()
 
         # Models
@@ -199,6 +325,10 @@ class tailor:
         print(
             f"{'Landmark Detection Model:':25} {self.landmark_detection_model_class.__class__.__name__}"
         )
+        if self.do_matte:
+            print(f"{'Matting Model:':25} {type(self.matting_model).__name__}")
+            matte_bg = self.matting_model_args.get("background_color")
+            print(f"{'  └─ Composite BG color?:':25} {matte_bg is not None}")
         print(sep)
 
     def classify(self, image: str, verbose=False):
@@ -221,6 +351,7 @@ class tailor:
             resize_dim=self.classification_model_args.get("resize_dim"),
             normalize_mean=self.classification_model_args.get("normalize_mean"),
             normalize_std=self.classification_model_args.get("normalize_std"),
+            device=self.device,
             verbose=verbose,
         )
         return label, probablities
@@ -232,11 +363,20 @@ class tailor:
         This method acts as an intelligent router for your segmentation arguments. It automatically 
         filters out initialization keys (e.g., `model_config`) and post-processing keys 
         (e.g., `background_color`) from `self.segmentation_model_args`. The remaining arguments 
-        (such as `processor` and `input_points` for SAM or `resize_dim` for standard models such as BiRefNet) 
+        (such as `processor` and `prompt` for SAM or `resize_dim` for standard models such as BiRefNet) 
         are dynamically passed into the extraction pipeline.
+
+        For Segment Anything models the prompt is supplied via the `prompt` dictionary, which accepts
+        `"points"`, `"labels"`, `"boxes"`, and/or `"text"`. When a text prompt is used with SAM 1 or
+        SAM 2, also provide `grounding_model` and `grounding_processor` in the segmentation arguments,
+        because those families have no text encoder and need the phrase grounded into boxes first.
 
         Args:
             image (str): The filename of the image to segment, located in `self.input_dir`.
+
+        Raises:
+            ValueError: If a SAM model is configured without any prompt, or if a text prompt is used
+                        with SAM 1 or SAM 2 without a grounding model.
 
         Returns:
             tuple:
@@ -257,6 +397,7 @@ class tailor:
         original_img, mask = segmentation.extract(
             model=self.segmentation_model,
             image_path=f"{self.input_dir}/{image}",
+            device=self.device,
             **extraction_kwargs
         )
 
@@ -270,6 +411,50 @@ class tailor:
                 image_np=original_img, mask_np=mask, background_color=background_color
             )
             return original_img, mask, bg_modified_img
+
+    def matte(self, image: str, mask: np.ndarray):
+        """
+        Refines a segmentation mask into a soft alpha matte for a single image.
+
+        Matting in the pipeline is intentionally built on top of segmentation rather than
+        run standalone: the segmentation mask is what supplies the trimap for ViTMatte or
+        the guidance mask for Matting Anything. Calling this without a mask therefore
+        raises, which is why `do_matte=True` forces the segmentation stage to run.
+
+        Standalone matting has no such requirement; call `garmentiq.matting.matte` directly
+        with whatever image and trimap you already have.
+
+        Args:
+            image (str): The filename of the image to matte, located in `self.input_dir`.
+            mask (numpy.ndarray): The segmentation mask produced for the same image.
+
+        Raises:
+            ValueError: If matting is not configured, or if `mask` is None.
+
+        Returns:
+            numpy.ndarray: The alpha matte as `uint8` in `[0, 255]`, matching the image size.
+        """
+        if not self.do_matte or self.matting_model is None:
+            raise ValueError(
+                "Matting is not configured on this tailor agent. Construct it with "
+                "`do_matte=True` and a matting model."
+            )
+        if mask is None:
+            raise ValueError(
+                "Matting in the tailor pipeline requires a segmentation mask. Run the "
+                "segmentation stage first, then pass its mask here."
+            )
+
+        _, alpha = matting.matte(
+            model=self.matting_model,
+            image_path=f"{self.input_dir}/{image}",
+            processor=self.matting_model_args.get("processor"),
+            mask=mask,
+            prompt=self.matting_model_args.get("prompt"),
+            trimap_args=self.matting_model_args.get("trimap_args"),
+            device=self.device,
+        )
+        return alpha
 
     def detect(self, class_name: str, image: Union[str, np.ndarray]):
         """
@@ -297,6 +482,7 @@ class tailor:
             resize_dim=self.landmark_detection_model_args.get("resize_dim"),
             normalize_mean=self.landmark_detection_model_args.get("normalize_mean"),
             normalize_std=self.landmark_detection_model_args.get("normalize_std"),
+            device=self.device,
         )
         return coords, maxval, detection_dict
 
@@ -386,6 +572,7 @@ class tailor:
         self,
         save_segmentation_image: bool = False,
         save_measurement_image: bool = False,
+        save_matting_image: bool = False,
     ):
         """
         Executes the full garment measurement pipeline for all images in the input directory.
@@ -393,7 +580,10 @@ class tailor:
         This method processes each image through a multi-stage pipeline that includes garment classification, 
         segmentation, landmark detection, optional refinement, and measurement derivation. During classification, 
         the system identifies the type of garment (e.g., shirt, dress, pants). Segmentation follows, producing 
-        binary or instance masks that separate the garment from the background. Landmark detection is then 
+        binary or instance masks that separate the garment from the background. When matting is
+        enabled, the mask is then refined into a soft alpha matte, and the resulting alpha-composited
+        image replaces the hard background-modified image as the input to landmark detection.
+        Landmark detection is then 
         performed to locate anatomical or garment-specific keypoints such as shoulders or waist positions. If 
         enabled, an optional refinement step applies post-processing or model-based corrections to improve the 
         accuracy of detected keypoints. Finally, the system calculates key garment dimensions - such as chest width, 
@@ -408,6 +598,14 @@ class tailor:
                                             Defaults to False.
             save_measurement_image (bool): If True, saves images overlaid with detected landmarks and measurements.
                                            Defaults to False.
+            save_matting_image (bool): If True, saves the alpha mattes produced by the matting stage,
+                                       and the alpha-composited images when a `background_color` is
+                                       set in `matting_model_args`. Only has an effect when the agent
+                                       was constructed with `do_matte=True`. Defaults to False.
+
+        Raises:
+            ValueError: If `save_matting_image` is True but the agent was not constructed with
+                        `do_matte=True`, or if the matting stage cannot find a segmentation mask.
     
         Returns:
             tuple:
@@ -503,7 +701,17 @@ class tailor:
         """
         # Some helper variables
         use_bg_color = self.segmentation_model_args.get("background_color") is not None
+        use_matte_bg = (
+            self.do_matte
+            and self.matting_model_args.get("background_color") is not None
+        )
         outputs = {}
+
+        if save_matting_image and not self.do_matte:
+            raise ValueError(
+                "`save_matting_image=True` but this tailor agent was not constructed with "
+                "`do_matte=True`, so there is no matting stage to save output from."
+            )
 
         # Step 1: Create the output directory
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
@@ -523,6 +731,13 @@ class tailor:
                 parents=True, exist_ok=True
             )
 
+        if save_matting_image and self.do_matte:
+            Path(f"{self.output_dir}/matte_image").mkdir(parents=True, exist_ok=True)
+            if use_matte_bg:
+                Path(f"{self.output_dir}/matte_composite_image").mkdir(
+                    parents=True, exist_ok=True
+                )
+
         # Step 2: Collect image filenames from input_dir
         image_extensions = ["*.jpg", "*.jpeg", "*.png", "*.bmp", "*.tiff"]
         input_path = Path(self.input_dir)
@@ -537,6 +752,10 @@ class tailor:
             "class",
             "mask_image" if use_bg_color or self.do_derive or self.do_refine else None,
             "bg_modified_image" if use_bg_color else None,
+            "matte_image" if save_matting_image and self.do_matte else None,
+            "matte_composite_image"
+            if save_matting_image and use_matte_bg
+            else None,
             "measurement_image",
             "measurement_json",
         ]
@@ -548,30 +767,25 @@ class tailor:
         # Step 4: Print start message and information
         print(f"Start measuring {len(metadata['filename'])} garment images ...")
 
-        if self.do_derive and self.do_refine:
-            message = (
-                "There are 5 measurement steps: classification, segmentation, "
-                "landmark detection, landmark refinement, and landmark derivation."
-            )
-        elif self.do_derive:
-            message = (
-                "There are 4 measurement steps: classification, segmentation, "
-                "landmark detection, and landmark derivation."
-            )
-        elif self.do_refine:
-            message = (
-                "There are 4 measurement steps: classification, segmentation, "
-                "landmark detection, and landmark refinement."
-            )
-        elif use_bg_color:
-            message = (
-                "There are 3 measurement steps: classification, segmentation, "
-                "and landmark detection."
-            )
+        # Build the step list dynamically so every enabled stage is reported.
+        steps = ["classification"]
+        if use_bg_color or self.do_derive or self.do_refine or self.do_matte:
+            steps.append("segmentation")
+        if self.do_matte:
+            steps.append("matting")
+        steps.append("landmark detection")
+        if self.do_refine:
+            steps.append("landmark refinement")
+        if self.do_derive:
+            steps.append("landmark derivation")
+
+        if len(steps) == 1:
+            listed = steps[0]
+        elif len(steps) == 2:
+            listed = f"{steps[0]} and {steps[1]}"
         else:
-            message = (
-                "There are 2 measurement steps: classification and landmark detection."
-            )
+            listed = ", ".join(steps[:-1]) + f", and {steps[-1]}"
+        message = f"There are {len(steps)} measurement steps: {listed}."
 
         print(textwrap.fill(message, width=80))
 
@@ -584,7 +798,8 @@ class tailor:
             outputs[image] = {}
 
         # Step 6: Segmentation
-        if use_bg_color or (self.do_derive or self.do_refine):
+        # Matting consumes the segmentation mask, so enabling it forces this stage.
+        if use_bg_color or self.do_derive or self.do_refine or self.do_matte:
             for idx, image in tqdm(
                 enumerate(metadata["filename"]),
                 total=len(metadata),
@@ -602,29 +817,73 @@ class tailor:
                         "mask": mask,
                     }
 
+        # Step 6b: Matting (always after segmentation, using its mask as guidance)
+        if self.do_matte:
+            matte_bg_color = self.matting_model_args.get("background_color")
+            # Landmark detection needs an RGB image, so the alpha matte is always
+            # composited onto some background. The colour is chosen in order of
+            # specificity: the matting colour, then the segmentation colour, then a
+            # neutral default. Compositing always happens when matting is enabled, so
+            # that the matte genuinely drives detection even when neither stage was
+            # asked to replace the background in its saved output.
+            detect_bg_color = matte_bg_color
+            if detect_bg_color is None:
+                detect_bg_color = self.segmentation_model_args.get("background_color")
+            if detect_bg_color is None:
+                detect_bg_color = DEFAULT_MATTE_DETECTION_BACKGROUND
+
+            for idx, image in tqdm(
+                enumerate(metadata["filename"]),
+                total=len(metadata),
+                desc="Matting",
+            ):
+                if outputs[image].get("mask") is None:
+                    raise ValueError(
+                        f"Matting requires a segmentation mask, but none was produced for "
+                        f"{image!r}. The segmentation stage must run before matting."
+                    )
+                alpha = self.matte(image=image, mask=outputs[image]["mask"])
+                outputs[image]["alpha"] = alpha
+
+                composited = matting.composite(
+                    image_np=np.array(
+                        Image.open(f"{self.input_dir}/{image}").convert("RGB")
+                    ),
+                    alpha_np=alpha,
+                    background_color=detect_bg_color,
+                )
+                outputs[image]["matte_detect_image"] = composited
+                # The composited image is only offered as a saved output when the user
+                # explicitly asked for a matting background colour, keeping that output
+                # optional in the same way segmentation's background replacement is.
+                if matte_bg_color is not None:
+                    outputs[image]["matte_composite"] = composited
+
         # Step 7: Landmark detection
+        # Detection runs on a background-replaced image when one was requested, because
+        # a clean background helps the pose model. When matting is enabled its softer,
+        # more accurate composite is used in place of the hard segmentation composite.
         for idx, image in tqdm(
             enumerate(metadata["filename"]),
             total=len(metadata),
             desc="Landmark detection",
         ):
             label = metadata.loc[metadata["filename"] == image, "class"].values[0]
-            if use_bg_color:
-                coords, maxvals, detection_dict = self.detect(
-                    class_name=label, image=outputs[image]["bg_modified_image"]
-                )
-                outputs[image]["detection_dict"] = detection_dict
-                if self.do_derive or self.do_refine:
-                    outputs[image]["coords"] = coords
-                    outputs[image]["maxvals"] = maxvals
+
+            if self.do_matte and outputs[image].get("matte_detect_image") is not None:
+                detect_input = outputs[image]["matte_detect_image"]
+            elif use_bg_color:
+                detect_input = outputs[image]["bg_modified_image"]
             else:
-                coords, maxvals, detection_dict = self.detect(
-                    class_name=label, image=image
-                )
-                outputs[image]["detection_dict"] = detection_dict
-                if self.do_derive or self.do_refine:
-                    outputs[image]["coords"] = coords
-                    outputs[image]["maxvals"] = maxvals
+                detect_input = image
+
+            coords, maxvals, detection_dict = self.detect(
+                class_name=label, image=detect_input
+            )
+            outputs[image]["detection_dict"] = detection_dict
+            if self.do_derive or self.do_refine:
+                outputs[image]["coords"] = coords
+                outputs[image]["maxvals"] = maxvals
 
         # Step 8: Landmark refinement
         if self.do_refine:
@@ -684,6 +943,30 @@ class tailor:
                     metadata.at[
                         idx, "bg_modified_image"
                     ] = f"{self.output_dir}/bg_modified_image/{transformed_name}_bg_modified.png"
+
+        # Step 10b: Save matting image
+        if save_matting_image and self.do_matte:
+            for idx, image in tqdm(
+                enumerate(metadata["filename"]),
+                total=len(metadata),
+                desc="Save matting image",
+            ):
+                transformed_name = os.path.splitext(image)[0]
+                alpha_path = (
+                    f"{self.output_dir}/matte_image/{transformed_name}_matte.png"
+                )
+                Image.fromarray(outputs[image]["alpha"]).save(alpha_path)
+                metadata.at[idx, "matte_image"] = alpha_path
+
+                if use_matte_bg:
+                    composite_path = (
+                        f"{self.output_dir}/matte_composite_image/"
+                        f"{transformed_name}_matte_composite.png"
+                    )
+                    Image.fromarray(outputs[image]["matte_composite"]).save(
+                        composite_path
+                    )
+                    metadata.at[idx, "matte_composite_image"] = composite_path
 
         # Step 11: Save measurement image
         if save_measurement_image:

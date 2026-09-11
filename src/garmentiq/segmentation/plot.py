@@ -1,3 +1,4 @@
+"""Displaying an image, mask, or background-modified result."""
 import matplotlib.pyplot as plt
 import numpy as np
 

@@ -1,3 +1,4 @@
+"""Replacing the background of an image using a segmentation mask."""
 import numpy as np
 
 

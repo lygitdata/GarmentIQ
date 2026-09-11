@@ -1,3 +1,4 @@
+"""Dispatching a derivation request to its registered function."""
 from .derive_keypoint_coord import derive_keypoint_coord
 
 

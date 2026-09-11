@@ -1,3 +1,4 @@
+"""Snapping a landmark onto a blurred mask boundary."""
 import cv2
 
 

@@ -1,3 +1,4 @@
+"""Unpacking a dataset archive and splitting it into train and test sets."""
 import os
 import pandas as pd
 import shutil

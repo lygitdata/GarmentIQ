@@ -1,3 +1,4 @@
+"""Validating a garment class dictionary."""
 def validate_garment_class_dict(class_dict: dict) -> bool:
     """
     Validates the structure and content of a garment class dictionary.

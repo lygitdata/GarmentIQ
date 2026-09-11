@@ -1,13 +1,20 @@
+"""Training helpers for the classification module.
+
+Holds the in-memory dataset wrapper, the per-epoch train and validation loops,
+checkpoint saving, and the parameter validators that apply defaults to the `param`
+dictionary, including normalising `device`.
+"""
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from typing import Callable
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 import os
 from sklearn.metrics import f1_score, accuracy_score
 import random
 import numpy as np
+from garmentiq.utils.device import resolve_device
 
 
 class CachedDataset(Dataset):
@@ -94,7 +101,8 @@ def train_epoch(model, train_loader, optimizer, param):
         train_loader (torch.utils.data.DataLoader): DataLoader for the training data.
         optimizer (torch.optim.Optimizer): The optimizer used for updating model weights.
         param (dict): A dictionary containing training parameters, including:
-            - "device" (torch.device): The device (e.g., 'cuda' or 'cpu') to use for training.
+            - "device" (torch.device): The device to use for training, e.g. `"cpu"`,
+              `"cuda"`, `"cuda:0"`, or `"mps"`. Normalised by `validate_train_param`.
 
     Returns:
         float: The average loss for the epoch.
@@ -135,7 +143,8 @@ def validate_epoch(model, val_loader, param):
         model (torch.nn.Module): The PyTorch model to validate.
         val_loader (torch.utils.data.DataLoader): DataLoader for the validation data.
         param (dict): A dictionary containing training parameters, including:
-            - "device" (torch.device): The device (e.g., 'cuda' or 'cpu') to use for validation.
+            - "device" (torch.device): The device to use for validation, e.g. `"cpu"`,
+              `"cuda"`, `"cuda:0"`, or `"mps"`. Normalised by `validate_train_param`.
 
     Returns:
         tuple: A tuple containing:
@@ -233,24 +242,30 @@ def validate_train_param(param: dict):
 
     This function checks for the presence and correct types of required
     parameters for training, and applies default values for optional parameters
-    if they are not provided.
+    if they are not provided. The `device` entry is normalised in place into a
+    `torch.device`, so callers may supply either a string or a `torch.device`.
 
     Args:
         param (dict): The dictionary of training parameters to validate.
+                      Optional Keys:
+                          - `device` (Union[str, torch.device]): The device to train on, e.g.
+                            `"cpu"`, `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware acceleration is
+                            opt-in; pass it explicitly to use a GPU or Apple Silicon.
+                            Default is `"cpu"`.
 
     Raises:
-        ValueError: If a required parameter is missing.
+        ValueError: If a required parameter is missing, or if the requested `device` is invalid
+                    or unavailable on this machine.
         TypeError: If a parameter has an incorrect type.
     """
     # --- Required fields and types
     required_keys = {"optimizer_class": type, "optimizer_args": dict}
 
+    # --- Normalise the requested device (accepts str or torch.device, defaults to CPU)
+    param["device"] = resolve_device(param.get("device", "cpu"))
+
     # --- Optional fields with default values and expected types
     optional_keys = {
-        "device": (
-            torch.device,
-            torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-        ),
         "n_fold": (int, 5),
         "n_epoch": (int, 100),
         "patience": (int, 5),
@@ -289,19 +304,26 @@ def validate_test_param(param: dict):
 
     This function checks for the presence and correct types of optional
     parameters for testing, and applies default values if they are not provided.
+    The `device` entry is normalised in place into a `torch.device`, so callers
+    may supply either a string or a `torch.device`.
 
     Args:
         param (dict): The dictionary of testing parameters to validate.
+                      Optional Keys:
+                          - `device` (Union[str, torch.device]): The device to evaluate on, e.g.
+                            `"cpu"`, `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware acceleration is
+                            opt-in; pass it explicitly to use a GPU or Apple Silicon.
+                            Default is `"cpu"`.
 
     Raises:
+        ValueError: If the requested `device` is invalid or unavailable on this machine.
         TypeError: If a parameter has an incorrect type.
     """
+    # --- Normalise the requested device (accepts str or torch.device, defaults to CPU)
+    param["device"] = resolve_device(param.get("device", "cpu"))
+
     # --- Optional fields with default values and expected types
     optional_keys = {
-        "device": (
-            torch.device,
-            torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-        ),
         "batch_size": (int, 64),
     }
 
@@ -321,19 +343,26 @@ def validate_pred_param(param: dict):
 
     This function checks for the presence and correct types of optional
     parameters for prediction, and applies default values if they are not provided.
+    The `device` entry is normalised in place into a `torch.device`, so callers
+    may supply either a string or a `torch.device`.
 
     Args:
         param (dict): The dictionary of prediction parameters to validate.
+                      Optional Keys:
+                          - `device` (Union[str, torch.device]): The device to predict on, e.g.
+                            `"cpu"`, `"cuda"`, `"cuda:0"`, or `"mps"`. Hardware acceleration is
+                            opt-in; pass it explicitly to use a GPU or Apple Silicon.
+                            Default is `"cpu"`.
 
     Raises:
+        ValueError: If the requested `device` is invalid or unavailable on this machine.
         TypeError: If a parameter has an incorrect type.
     """
+    # --- Normalise the requested device (accepts str or torch.device, defaults to CPU)
+    param["device"] = resolve_device(param.get("device", "cpu"))
+
     # --- Optional fields with default values and expected types
     optional_keys = {
-        "device": (
-            torch.device,
-            torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-        ),
         "batch_size": (int, 64),
     }
 

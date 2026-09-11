@@ -1,4 +1,14 @@
 # garmentiq/classification/__init__.py
+"""Garment type classification.
+
+Identifies which category a garment image belongs to, such as a short sleeve top, a
+vest dress, or a skirt. This is the first pipeline stage, because the garment type
+decides which landmarks and which measurement instructions apply downstream.
+
+Beyond inference, this module covers the full model lifecycle: splitting a dataset,
+caching it in memory, training a model from scratch, fine-tuning a pretrained one, and
+evaluating the result.
+"""
 from .train_test_split import train_test_split
 from .load_data import load_data
 from .load_model import load_model

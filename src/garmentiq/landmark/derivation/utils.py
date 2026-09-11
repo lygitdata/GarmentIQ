@@ -1,3 +1,4 @@
+"""Geometric helpers used by the derivation functions."""
 import numpy as np
 from typing import Tuple, Optional, List
 

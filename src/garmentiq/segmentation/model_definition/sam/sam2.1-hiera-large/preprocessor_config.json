@@ -1,0 +1,36 @@
+{
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "image_processor_type": "Sam2ImageProcessorFast",
+  "image_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "input_data_format": null,
+  "mask_size": {
+    "height": 256,
+    "width": 256
+  },
+  "processor_class": "Sam2VideoProcessor",
+  "resample": 2,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "height": 1024,
+    "width": 1024
+  }
+}

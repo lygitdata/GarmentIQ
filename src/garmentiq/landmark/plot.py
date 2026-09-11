@@ -1,3 +1,4 @@
+"""Displaying an image with landmark coordinates overlaid."""
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
