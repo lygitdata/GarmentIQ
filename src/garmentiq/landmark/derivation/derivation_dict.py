@@ -11,6 +11,7 @@ derivation_dict = {
         "p4_id": None,
         "p5_id": None,
         "direction": ["parallel", "perpendicular"],
+        "intersection_mode": ["exact", "nearest_edge"],
     }
 }
 """dict: A dictionary defining the schemas for various landmark derivation functions.
@@ -29,5 +30,6 @@ Example structure for "derive_keypoint_coord":
         "p4_id": None,  # Required: Integer ID of the fourth point.
         "p5_id": None,  # Required: Integer ID of the fifth point.
         "direction": ["parallel", "perpendicular"], # Required: How to derive line 1's direction.
+        "intersection_mode": ["exact", "nearest_edge"], # Optional; defaults to nearest_edge.
     }
 """

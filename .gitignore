@@ -1,0 +1,9 @@
+.venv/
+.local-demo/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.DS_Store

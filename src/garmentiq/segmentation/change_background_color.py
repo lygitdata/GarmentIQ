@@ -13,15 +13,19 @@ def change_background_color(
 
     Args:
         image_np (numpy.ndarray): The original image as a numpy array (RGB).
-        mask_np (numpy.ndarray): A binary mask where background pixels are labeled as 0 and foreground as 1.
+        mask_np (numpy.ndarray): A binary, normalized soft, or 8-bit mask. Soft
+                                 masks are thresholded at 0.5 (127 for 8-bit masks).
         background_color (tuple[int, int, int]): A tuple representing the RGB color to replace the background with,
                                                  e.g., (255, 255, 255) for white.
 
     Returns:
         numpy.ndarray: A new image with the background color changed.
     """
-    # Create a mask where the background (black) is 1, and the foreground is 0
-    background_mask = mask_np == 0  # Mask values of 0 represent background
+    if mask_np.ndim != 2 or mask_np.shape != image_np.shape[:2]:
+        raise ValueError("The mask must be 2D and match the image dimensions.")
+    # BiRefNet includes near-zero background probabilities, not just exact zeros.
+    threshold = 0.5 if mask_np.max() <= 1 else 127
+    background_mask = mask_np <= threshold
 
     # Create a copy of the original image to modify
     modified_image = image_np.copy()

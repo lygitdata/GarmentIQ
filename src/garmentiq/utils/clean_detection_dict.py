@@ -1,5 +1,6 @@
 """Trimming a detection record down to its reportable fields."""
 import os
+import copy
 from garmentiq.utils import compute_measurement_distances
 
 
@@ -20,7 +21,7 @@ def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict)
     transformed_name = os.path.splitext(image_name)[0]
 
     # Compute distances and get a fresh copy of detection_dict
-    _, clean_dict = compute_measurement_distances(detection_dict)
+    _, clean_dict = compute_measurement_distances(copy.deepcopy(detection_dict))
 
     # Safely extract and clean the content under the class_name
     original_data = clean_dict.get(class_name, {})
@@ -30,7 +31,7 @@ def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict)
         for lm_id in list(original_data["landmarks"].keys()):
             lm = original_data["landmarks"][lm_id]
             original_data["landmarks"][lm_id] = {
-                k: lm[k] for k in ("x", "y", "conf") if k in lm
+                k: lm[k] for k in ("x", "y", "conf", "description", "predefined", "derivation") if k in lm
             }
 
     # Clean measurements
@@ -38,7 +39,7 @@ def clean_detection_dict(class_name: str, image_name: str, detection_dict: dict)
         for m_id in list(original_data["measurements"].keys()):
             m = original_data["measurements"][m_id]
             original_data["measurements"][m_id] = {
-                k: m[k] for k in ("landmarks", "distance") if k in m
+                k: m[k] for k in ("landmarks", "distance", "description") if k in m
             }
 
     # Insert the class name as metadata

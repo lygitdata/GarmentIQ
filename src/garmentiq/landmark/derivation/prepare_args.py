@@ -71,6 +71,10 @@ def prepare_args(
         elif not isinstance(extra_args["landmark_coords"], np.ndarray):
             raise ValueError("'landmark_coords' must be a 'np.ndarray'")
 
+        if entry.get("intersection_mode", "nearest_edge") == "exact":
+            args["np_mask"] = extra_args.get("np_mask")
+            args["landmark_coords"] = extra_args["landmark_coords"]
+            return {"derive_keypoint_coord": args}
         if "np_mask" not in extra_args:
             raise ValueError("'np_mask' is required for 'derive_keypoint_coord'")
         elif not isinstance(extra_args["np_mask"], np.ndarray):

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Measure garments with your local GarmentIQ pipeline.">
+  <title>GarmentIQ · Local studio</title>
+  <link rel="icon" type="image/svg+xml" href="/static/brand/logo.svg">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/viewer.js" defer></script>
+  <script src="/static/app.js" defer></script>
+  <script src="/static/editor.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="GarmentIQ home"><img src="/static/brand/logo.svg" alt="" width="32" height="32"><span>GarmentIQ</span></a>
+    <span class="environment">LOCAL STUDIO</span>
+    <a class="docs-link" href="https://garmentiq.ly.gd.edu.kg/documentation/" target="_blank" rel="noreferrer">Documentation ↗</a>
+  </header>
+  <main>
+    <div class="intro">
+      <div class="intro-copy"><p class="eyebrow">THE MEASUREMENT STUDIO</p><h1>Every detail, measured.</h1><p>From a garment image to the dimensions that matter.</p></div>
+      <div class="workflow" aria-label="Measurement workflow"><span><b>01</b> Upload</span><i aria-hidden="true">→</i><span><b>02</b> Configure</span><i aria-hidden="true">→</i><span><b>03</b> Inspect</span></div>
+    </div>
+    <details id="instruction-editor" class="panel instruction-editor">
+      <summary><span class="editor-summary-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 6h14M5 18h14M7 6v12m10-12v12M7 11h10"/><circle cx="7" cy="6" r="2"/><circle cx="17" cy="18" r="2"/></svg></span><span class="editor-summary-copy"><strong>Define your measurements</strong><small>Choose landmarks, set geometric rules, and save your category defaults.</small></span><span class="editor-summary-action">Customize <span aria-hidden="true">↗</span></span></summary>
+      <div class="editor-content">
+        <div class="editor-toolbar"><label>Garment category<select id="editor-category"><option value="">Choose a category…</option></select></label><button id="editor-reload" type="button" class="secondary-button" disabled>Reload from disk</button></div>
+        <p class="small muted editor-introduction">Changes apply to subsequent images in this category. Saving replaces its defaults in <code>src/garmentiq/instruction/</code> and keeps a local backup.</p>
+        <p id="editor-status" class="small" role="status">Choose a garment category to begin.</p>
+        <div id="editor-body" hidden>
+          <div class="editor-grid">
+            <div class="diagram-column"><div class="diagram-heading"><p class="eyebrow">YOUR LANDMARK MAP</p><div class="diagram-legend"><span><i class="legend-detected"></i>Detected</span><span><i class="legend-derived"></i>Derived</span></div></div><div id="editor-diagram" class="editor-diagram"></div><p class="small muted diagram-help">Click two points to choose a measurement’s start and end. This diagram is a guide; the pipeline computes actual coordinates from your image.</p></div>
+            <div class="derived-controls">
+              <div class="panel-title"><h3>Derived landmarks</h3><button id="derived-new" type="button" class="text-button">+ New point</button></div>
+              <label>Point to edit<select id="derived-choice"></select></label>
+              <form id="derived-form">
+                <label>Landmark name<input id="derived-name" maxlength="120" required></label>
+                <div class="field-pair"><label>Direction<select id="derived-direction"><option value="parallel">Parallel to points 2–3</option><option value="perpendicular">Perpendicular to points 2–3</option></select></label><label>Landmark placement<select id="derived-mode"><option value="nearest_edge">Nearest edge</option><option value="exact">Exact intersection</option></select></label></div>
+                <p id="derived-mode-help" class="field-help">Use the contour crossing nearest the two lines’ intersection.</p>
+                <fieldset class="reference-group"><legend><span>1</span> Starting point</legend><label>Point 1<select id="derived-p1" required></select><small>The derived line passes through this point.</small></label></fieldset>
+                <fieldset class="reference-group"><legend><span>2–3</span> Direction reference</legend><p>Run parallel or perpendicular to the line between these two points.</p><div class="field-pair"><label>Point 2<select id="derived-p2" required></select></label><label>Point 3<select id="derived-p3" required></select></label></div></fieldset>
+                <fieldset class="reference-group"><legend><span>4–5</span> Intersection reference</legend><p>These points define the second line used to find the intersection.</p><div class="field-pair"><label>Point 4<select id="derived-p4" required></select></label><label>Point 5<select id="derived-p5" required></select></label></div></fieldset>
+                <p id="rule-explanation" class="rule-explanation">The pipeline finds where the line through point 1 meets the garment contour, choosing the crossing nearest its intersection with the line through points 4–5. Reference points must be detected landmarks.</p>
+                <div class="editor-actions"><button class="secondary-button" type="submit">Apply point to draft</button><button id="derived-remove" class="text-button" type="button">Remove point</button></div>
+              </form>
+            </div>
+          </div>
+          <div class="measurement-editor-heading"><div><p class="eyebrow">CONNECT THE POINTS</p><h3>Your measurements</h3></div><p class="small muted">Name each dimension and choose its two endpoints.</p></div>
+          <div class="editor-table-wrap"><table class="editor-table"><thead><tr><th>Name</th><th>Start</th><th>End</th><th>Description</th><th></th></tr></thead><tbody id="editor-measurements"></tbody></table></div>
+          <form id="new-measurement" class="new-measurement"><label>Name<input id="measurement-name" placeholder="e.g. chest width" maxlength="120" required></label><label>Start<select id="measurement-start"></select></label><label>End<select id="measurement-end"></select></label><button class="secondary-button" type="submit">Add measurement</button></form>
+          <div class="editor-save"><button id="editor-save" class="primary-button" type="button">Save & replace category defaults</button><a id="editor-download" class="text-button" download>Download instruction JSON ↗</a></div>
+        </div>
+      </div>
+    </details>
+    <div class="workspace">
+      <aside>
+        <section class="panel runtime-panel">
+          <div class="panel-title"><h2>Runtime</h2><button id="refresh" type="button" class="text-button">Refresh</button></div>
+          <p id="runtime-status" role="status"><span class="dot"></span>Checking local runtime…</p>
+          <p class="muted small" id="runtime-detail">Connecting to the measurement engine.</p>
+        </section>
+        <form id="measurement-form" class="panel settings">
+          <p class="eyebrow">02 / CONFIGURE</p><h2>Make it your measure.</h2>
+          <label class="toggle-row"><span><strong>Derive extra landmarks</strong><small>Find custom points along the garment contour.</small></span><input id="derive" type="checkbox" checked></label>
+          <label class="toggle-row"><span><strong>Refine landmarks</strong><small>Adjust detected points using the garment mask.</small></span><input id="refine" type="checkbox" checked></label>
+          <label class="toggle-row"><span><strong>Replace background</strong><small>Use a clean backdrop for landmark detection.</small></span><input id="replace-background" type="checkbox" checked></label>
+          <label class="colour-row" id="colour-row"><span>Background colour</span><input id="background" type="color" value="#66ff66"></label>
+          <p class="settings-note">Derivation uses the selected category’s saved geometric rules. Optional image dimensions convert pixel distances to cm.</p>
+          <button id="measure" class="primary-button" type="submit" disabled>Measure garments <span aria-hidden="true">↗</span></button>
+          <p id="run-status" class="small muted" role="status">Add images to get started.</p>
+        </form>
+        <div class="model-note"><span class="eyebrow">MADE FOR YOUR WORKFLOW</span><p>9 garment categories <span>·</span> Pixel + cm</p><small>Processed locally, on your machine.</small></div>
+      </aside>
+      <div class="work-area">
+        <section class="panel upload-panel">
+          <div class="panel-title"><div><p class="eyebrow">01 / UPLOAD</p><h2>Your garments</h2></div><button id="clear" type="button" class="text-button" hidden>Clear images</button></div>
+          <label class="dropzone" id="dropzone" for="images">
+            <span class="upload-art" aria-hidden="true"><svg viewBox="0 0 88 88" fill="none"><rect x="1" y="1" width="86" height="86" rx="22"/><path d="M31 24l-13 8 7 15 8-4v23h22V43l8 4 7-15-13-8c-3 7-9 9-13 9s-10-2-13-9z"/><path class="upload-measure" d="M33 53h22M33 49v8m22-8v8"/><circle cx="33" cy="53" r="2"/><circle cx="55" cy="53" r="2"/></svg></span>
+            <span class="upload-copy"><strong>A new perspective on your garments.</strong><span>Drop your images here, or <u>browse files</u></span><small>Up to 12 images · 32 MB total · PNG, JPG and other image formats</small></span>
+            <input id="images" type="file" accept="image/*" multiple>
+          </label>
+          <div id="previews" class="previews"></div>
+          <p id="calibration-note" class="small muted" hidden>Optional calibration: enter the real width and height of the <strong>entire image frame</strong> in cm for each image, not the garment’s dimensions. Use the orientation shown above. Leave both blank for pixels only. Assumes a flat, front-facing measurement plane.</p>
+        </section>
+        <section class="panel setup-panel" id="setup-panel" hidden>
+          <p class="eyebrow">ONE-TIME SETUP</p><h2>Prepare your measurement engine.</h2>
+          <p id="setup-reason">The interface is ready. Install the package and download the model weights to measure images.</p>
+          <pre><code>uv pip install -e ".[web]"
+.venv/bin/python -m demo.download_models</code></pre>
+          <p class="small muted">Run these commands from the repository root, then refresh the runtime. The checkpoints are large; you only need to download them once.</p>
+        </section>
+        <div id="error" class="error" role="alert" hidden></div>
+        <section id="results-section" aria-labelledby="results-title">
+          <div class="results-heading"><div><p class="eyebrow">03 / INSPECT</p><h2 id="results-title">The finer details.</h2></div><a id="download-csv" class="text-button" download hidden>Download CSV ↗</a></div>
+          <div id="empty-results" class="empty-results"><span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M11 13h26v22H11zM11 24h26M24 13v22"/><circle cx="11" cy="13" r="3"/><circle cx="37" cy="35" r="3"/></svg></span><div><h3>A place for every detail.</h3><p>Your garment’s landmarks, dimensions and downloadable<br class="desktop-break"> results will appear here after measurement.</p><div class="result-tags"><span>Landmarks</span><span>Measurements</span><span>Exports</span></div></div></div>
+          <div id="results"></div>
+        </section>
+      </div>
+    </div>
+    <footer><span>GARMENTIQ</span><p>Automated garment measurement. Built for a closer fit.</p><span>LOCAL / PRIVATE</span></footer>
+  </main>
+</body>
+</html>

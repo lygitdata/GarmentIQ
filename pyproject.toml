@@ -71,6 +71,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+web = [
+    "Flask>=3.1,<4",
+]
 dev = [
     "build>=1.2.0",
     "twine>=5.0.0",

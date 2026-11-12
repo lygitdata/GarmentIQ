@@ -4,44 +4,74 @@
       "2": {
         "predefined": true,
         "description": "neck_left_outer",
-        "x": 83,
-        "y": 15
+        "x": 83.0,
+        "y": 15.0
+      },
+      "4": {
+        "predefined": true,
+        "description": "neck_bottom",
+        "x": 99.0,
+        "y": 50.0
+      },
+      "6": {
+        "predefined": true,
+        "description": "neck_right_outer",
+        "x": 116.0,
+        "y": 15.0
       },
       "8": {
         "predefined": true,
         "description": "side_seam_left_upper",
-        "x": 59,
-        "y": 70
+        "x": 59.0,
+        "y": 70.0
       },
       "9": {
         "predefined": true,
         "description": "waist_left",
         "x": 57.5,
-        "y": 100
+        "y": 100.0
       },
       "10": {
         "predefined": true,
         "description": "hip_left",
-        "x": 56,
-        "y": 122
+        "x": 56.0,
+        "y": 122.0
+      },
+      "12": {
+        "predefined": true,
+        "description": "hem_left",
+        "x": 43.0,
+        "y": 240.0
+      },
+      "13": {
+        "predefined": true,
+        "description": "hem_center",
+        "x": 99.0,
+        "y": 246.0
+      },
+      "14": {
+        "predefined": true,
+        "description": "hem_right",
+        "x": 161.0,
+        "y": 239.0
       },
       "16": {
         "predefined": true,
         "description": "hip_right",
-        "x": 145,
-        "y": 122
+        "x": 145.0,
+        "y": 122.0
       },
       "17": {
         "predefined": true,
         "description": "wast_right",
-        "x": 143,
-        "y": 100
+        "x": 143.0,
+        "y": 100.0
       },
       "18": {
         "predefined": true,
         "description": "side_seam_right_upper",
-        "x": 141,
-        "y": 70
+        "x": 141.0,
+        "y": 70.0
       },
       "20": {
         "predefined": false,
@@ -50,30 +80,40 @@
         "y": 245.21800231933594,
         "derivation": {
           "function": "derive_keypoint_coord",
+          "direction": "parallel",
+          "intersection_mode": "nearest_edge",
           "p1_id": "2",
           "p2_id": "4",
           "p3_id": "13",
           "p4_id": "12",
-          "p5_id": "14",
-          "direction": "parallel"
-        },
-        "neighbors": {
-          "12": {
-            "predefined": true,
-            "description": "hem_left",
-            "x": 43,
-            "y": 240
-          },
-          "13": {
-            "predefined": true,
-            "description": "hem_center",
-            "x": 99,
-            "y": 246
-          }
+          "p5_id": "14"
+        }
+      },
+      "21": {
+        "predefined": false,
+        "description": "custom_landmark",
+        "x": 116.0,
+        "y": 70.0,
+        "derivation": {
+          "function": "derive_keypoint_coord",
+          "direction": "perpendicular",
+          "intersection_mode": "exact",
+          "p1_id": "6",
+          "p2_id": "8",
+          "p3_id": "18",
+          "p4_id": "8",
+          "p5_id": "18"
         }
       }
     },
     "measurements": {
+      "chest": {
+        "landmarks": {
+          "start": "8",
+          "end": "18"
+        },
+        "description": "/"
+      },
       "full length": {
         "landmarks": {
           "start": "2",
@@ -81,10 +121,10 @@
         },
         "description": "20: intersection of vertical line from 2 to bottom contour"
       },
-      "chest": {
+      "hips": {
         "landmarks": {
-          "start": "8",
-          "end": "18"
+          "start": "10",
+          "end": "16"
         },
         "description": "/"
       },
@@ -95,12 +135,12 @@
         },
         "description": "/"
       },
-      "hips": {
+      "shoulder height": {
         "landmarks": {
-          "start": "10",
-          "end": "16"
+          "start": "6",
+          "end": "21"
         },
-        "description": "/"
+        "description": "21: intersection of vertical line from right collar tip to chest line"
       }
     }
   }

@@ -14,8 +14,9 @@ def derive_keypoint_coord(
     p5_id: int,
     direction: str,
     landmark_coords: np.array,
-    np_mask: np.array,
+    np_mask: Optional[np.ndarray] = None,
     line_length_factor: float = 10000.0,
+    intersection_mode: str = "nearest_edge",
 ) -> Optional[Tuple[float, float]]:
     """
     Derives the coordinate of a new keypoint based on intersections of lines defined by
@@ -27,7 +28,8 @@ def derive_keypoint_coord(
        (parallel or perpendicular to the line formed by p2 and p3).
     3. The second line is defined by `p4_id` and `p5_id`.
     4. An initial intersection point is found between Line 1 and Line 2.
-    5. The boundary of the `np_mask` is extracted.
+    5. In `exact` mode, the line-line intersection is returned immediately.
+       Otherwise, the boundary of the `np_mask` is extracted.
     6. Intersections between Line 1 and the `np_mask` boundary are found.
     7. The final derived point is the mask intersection point closest to the line-line intersection,
        or the line-line intersection itself if no mask intersections are found or an error occurs.
@@ -45,11 +47,18 @@ def derive_keypoint_coord(
         np_mask (np.array): NumPy array of the segmentation mask.
         line_length_factor (float, optional): Factor to extend lines for intersection calculations.
                                               Defaults to 10000.0.
+        intersection_mode (str, optional): `"exact"` returns the mathematical
+                                           intersection of the two lines, without
+                                           consulting the mask. `"nearest_edge"`
+                                           chooses the nearest contour crossing
+                                           along Line 1. Defaults to `"nearest_edge"`.
 
     Returns:
         Optional[Tuple[float, float]]: The (x, y) coordinates of the derived keypoint, or None if
                                       derivation fails (e.g., parallel lines, no valid mask boundary).
     """
+    if intersection_mode not in ("exact", "nearest_edge"):
+        raise ValueError("intersection_mode must be 'exact' or 'nearest_edge'.")
     p1_coord = landmark_coords[:, p1_id - 1, :].reshape(2)
     p2_coord = landmark_coords[:, p2_id - 1, :].reshape(2)
     p3_coord = landmark_coords[:, p3_id - 1, :].reshape(2)
@@ -76,6 +85,9 @@ def derive_keypoint_coord(
             "Info: Line 1 and Line 2 are parallel or collinear. No unique intersection."
         )
         return None
+
+    if intersection_mode == "exact":
+        return line_intersection_point
 
     # 6. Load Mask Boundary
     mask_boundary_geom = _get_mask_boundary(np_mask)

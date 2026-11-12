@@ -91,6 +91,10 @@ Each tutorial is a self-contained Colab notebook covering one part of the `garme
 
 ### Installation
 
+To run and improve the web interface on your own machine, see the
+[local web demo setup](demo/README.md). It serves the frontend and measurement API
+from `http://127.0.0.1:5002` using this source checkout.
+
 Please install from PyPI using the following command.
 
 ```bash

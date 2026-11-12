@@ -978,7 +978,12 @@ class tailor:
                 label = metadata.loc[metadata["filename"] == image, "class"].values[0]
                 transformed_name = os.path.splitext(image)[0]
 
-                image_to_save = Image.open(f"{self.input_dir}/{image}").convert("RGB")
+                if self.do_matte:
+                    image_to_save = Image.fromarray(outputs[image]["matte_detect_image"])
+                elif use_bg_color:
+                    image_to_save = Image.fromarray(outputs[image]["bg_modified_image"])
+                else:
+                    image_to_save = Image.open(f"{self.input_dir}/{image}").convert("RGB")
                 draw = ImageDraw.Draw(image_to_save)
                 font = ImageFont.load_default()
                 landmarks = outputs[image]["detection_dict"][label]["landmarks"]

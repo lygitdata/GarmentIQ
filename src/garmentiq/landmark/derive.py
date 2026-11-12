@@ -1,5 +1,6 @@
 """Deriving landmarks that the detection model does not predict."""
 import copy
+import math
 from garmentiq.landmark.derivation import (
     prepare_args,
     process,
@@ -39,7 +40,16 @@ def derive(
     detection_dict_copy = copy.deepcopy(detection_dict)
     for k, v in non_predefined_landmark.items():
         args = prepare_args(non_predefined_landmark[k], derivation_dict, **extra_args)
-        derived_coord = tuple(float(x) for x in process(**args))
+        result = process(**args)
+        if result is None:
+            raise ValueError(
+                f"Cannot derive landmark {k} for {class_name}: its reference lines "
+                "are parallel or a reference pair has coincident coordinates. "
+                "Edit that landmark's derivation rule."
+            )
+        derived_coord = tuple(float(x) for x in result)
+        if len(derived_coord) != 2 or not all(math.isfinite(x) for x in derived_coord):
+            raise ValueError(f"Derivation of landmark {k} for {class_name} did not produce a finite coordinate.")
         derived_coords[k] = derived_coord
         detection_dict_copy[class_name]["landmarks"][k]["x"] = derived_coord[0]
         detection_dict_copy[class_name]["landmarks"][k]["y"] = derived_coord[1]
